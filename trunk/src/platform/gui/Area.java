@@ -14,92 +14,113 @@ import sdljavax.guichan.sdl.SDLGraphics;
 
 public class Area {
 
-	private SDLSurface target;
+	private SDLSurface surface;
+	private Image image;
+	private Color color;
 	private SDLGraphics graphicEngine;
+	private Type type;
 	
-	public Area(Graphics graphics) throws SDLException{
+	/*public Area(Graphics graphics) throws SDLException{
 		
 		graphicEngine = (SDLGraphics) graphics;
 		
-		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
-			
-		graphicEngine.setTarget(target);
-		
-	}
+	}*/
 	
 	public Area(String filename, Graphics graphics) throws SDLException, GUIException {
 		
 		graphicEngine = (SDLGraphics) graphics;
-		
-		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
-		SDLSurface tmpSurface = SDLImage.load(filename);
-		
-		//TODO convert here an image into Surface format?
-		graphicEngine.setTarget(target);
-		
-		//TODO create function taking surface to load
-					
-			graphicEngine.beginDraw();
-			graphicEngine.drawSDLSurface(tmpSurface, tmpSurface.getRect(), target.getRect() );
-			graphicEngine.endDraw();
-			
-		tmpSurface.freeSurface();
-		
+		surface= SDLImage.load(filename);
+		type = Type.SURFACE;
+
 	}
 
 	
 	public Area(Image image, Graphics graphics) throws SDLException, GUIException {
 		
 		graphicEngine = (SDLGraphics) graphics;
-		
-		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
-		
+		this.image = image;
+		type = Type.IMAGE;
 		//TODO convert here an image into Surface format?
 		
-		graphicEngine.setTarget(target);
-		
-		graphicEngine.beginDraw();
-		graphicEngine.drawImage(image, 0 , 0);
-		graphicEngine.endDraw();
-		
+				
 	}
 	
 	
 	public Area(Color color, Graphics graphics) throws SDLException, GUIException{
 
 		this.graphicEngine = (SDLGraphics) graphics;
-
-		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
-		//SDLSurface tmpSurface = SDLImage.load(filename);
-		
-		graphicEngine.setTarget(target);
-		graphicEngine.setColor(color);
-		
-		SDLRect tmpRectangle = target.getRect();
-		
-		graphicEngine.fillRectangle(new Rectangle(tmpRectangle.x, tmpRectangle.y, tmpRectangle.width, tmpRectangle.height));
-		
-		graphicEngine.endDraw();
+		this.color = color;
+		type = Type.COLOR;
 		
 	}
 	
-	
-	public SDLSurface getTarget() {
-		return target;
-	}
-
-	public void setTarget(SDLSurface target) {
-		this.target = target;
-	}
-
-	public void refreshArea() throws SDLException{
+	public void refreshArea() throws GUIException, SDLException{
 		
-		target.flip();
+		switch(type){
+		
+		case SURFACE: drawSurface();
+			break;
+			
+		case IMAGE: drawImage();
+			break;
+			
+		case COLOR: drawRectangle();
+			break;
+			
+		default: 	//should never happen
+			break;
+			
+			
+		}
+		
 	}
+	
+	public SDLSurface getSurface() {
+		return surface;
+	}
+
+	public void setSurface(SDLSurface surface) {
+		this.surface = surface;
+	}
+
+	//TODO refreshing function depending on the tile changed
 	
 	public void refreshTile(int tileIndex){
 		
 		
 	}
+	
+	private void drawSurface() throws GUIException, SDLException{
+		
+		//TODO convert here an image into Surface format?
+		graphicEngine.beginDraw();
+		graphicEngine.drawSDLSurface(surface, surface.getRect(), graphicEngine.getTarget().getRect() );
+		graphicEngine.endDraw();
+	
+	}
+
+	private void drawRectangle() throws GUIException{
+		
+		graphicEngine.setColor(color);
+		
+		SDLRect tmpRectangle = graphicEngine.getTarget().getRect();
+		
+		graphicEngine.beginDraw();
+		graphicEngine.fillRectangle(new Rectangle(tmpRectangle.x, tmpRectangle.y, tmpRectangle.width, tmpRectangle.height));
+		graphicEngine.endDraw();
+		
+	}
+	
+	private void drawImage() throws GUIException{
+		
+		//TODO convert here an image into Surface format?
+		graphicEngine.beginDraw();
+		graphicEngine.drawImage(image, 0 , 0);
+		graphicEngine.endDraw();
+		
+	}
+	
+	private enum Type { SURFACE, IMAGE, COLOR }
+	
 	
 }

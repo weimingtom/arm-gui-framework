@@ -1,9 +1,11 @@
 package platform.gui;
 
 import sdljava.SDLException;
+import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Input;
+import sdljavax.guichan.sdl.SDLGraphics;
 
 public class Screen {
 
@@ -18,10 +20,10 @@ public class Screen {
 	private Area foreground;
 	private Area background;
 	private Input inputSource;
+	private SDLSurface target;
+	private SDLGraphics graphics;
 	
-	
-	
-	public static Screen getScreen(){
+	public static Screen getScreen() throws SDLException{
 		
 		if(_soleInstance == null){
 			
@@ -31,6 +33,15 @@ public class Screen {
 					
 			return _soleInstance;
 	}
+	
+	public void refresh() throws GUIException, SDLException{
+		
+		//TODO add logic to distinguish whether refreshing really needed - Message pattern ?
+		background.refreshArea();
+		foreground.refreshArea();
+		target.flip();
+		
+	}
 
 	public void handleEvents() throws GUIException {
 		
@@ -38,6 +49,22 @@ public class Screen {
 		
 	}
 	
+	public SDLSurface getTarget() {
+		return target;
+	}
+
+	public void setTarget(SDLSurface target) {
+		this.target = target;
+	}
+
+	public SDLGraphics getGraphics() {
+		return graphics;
+	}
+
+	public void setGraphics(SDLGraphics graphics) {
+		this.graphics = graphics;
+	}
+
 	public void setForeground(Area foreground) {
 		this.foreground = foreground;
 	}
@@ -64,11 +91,13 @@ public class Screen {
 	
 	public void setAreaAlpha(Area area, int alphaIndex) throws SDLException{
 		
-		area.getTarget().setAlpha(alphaFlags, alphaIndex);
+		area.getSurface().setAlpha(alphaFlags, alphaIndex);
 		
 	}
 	
-	private Screen(){
-		
+	private Screen() throws SDLException{
+		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
+		graphics = new SDLGraphics();
+		graphics.setTarget(target);
 	}
 }
