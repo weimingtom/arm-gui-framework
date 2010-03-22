@@ -32,33 +32,31 @@ public class SimpleBackgorundTest {
 				Image.setImageLoader(imageLoader);
 				
 								
-			    backgroundArea = new Area( new String("resource" + File.separator + "tree_small.png" ), new SDLGraphics() );
-
-			    foregroundArea = new Area( new String("resource" + File.separator + "islands_small.png" ), new SDLGraphics() );
-
+			    backgroundArea = new Area( new String("resource" + File.separator + "tree_small.png" ), screen.getGraphics() );
+			    		    			    
+			    foregroundArea = new Area( new String("resource" + File.separator + "islands_small.png" ), screen.getGraphics() );
 			    //TODO implement new ImageLoader based on SDLImageLoader
 			    //Image image = new Image(new String("resource" + File.separator + "tree_small.png" ));
 			    //backgroundArea = new Area( image , new SDLGraphics() );
 
 				screen.setBackground(backgroundArea);
-				screen.getBackground().refreshArea();
-				
 				screen.setForeground(foregroundArea);
 				screen.setAreaAlpha(foregroundArea, 0);
-				screen.getForeground().refreshArea();
 				
-				int i =0;
+				
+				
+				int i = 0;
 				while(i<255){
 					
 					i+=10;
 					screen.setAreaAlpha(foregroundArea, i);
-					screen.getForeground().refreshArea();
+					screen.refresh();
+					
+					//screen.getForeground().refreshArea();
 					SDLTimer.delay(500);
 				}
-				screen.getBackground().refreshArea();
-				SDLTimer.delay(2000);
-				
-				
+				screen.refresh();						
+				SDLTimer.delay(500);
 				
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
