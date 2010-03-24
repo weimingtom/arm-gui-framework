@@ -2,23 +2,21 @@ package platform.gui;
 
 import sdljava.SDLException;
 import sdljava.image.SDLImage;
-import sdljava.video.SDLRect;
+import sdljava.video.SDLColor;
 import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Color;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
-import sdljavax.guichan.gfx.Rectangle;
 import sdljavax.guichan.sdl.SDLGraphics;
+import sdljavax.guichan.sdl.SDLUtils;
 
 public class Area {
 
 	private SDLSurface surface;
-	private Image image;
 	private Color color;
 	private SDLGraphics graphicEngine;
-	private Type type;
 	
 	/*public Area(Graphics graphics) throws SDLException{
 		
@@ -26,52 +24,78 @@ public class Area {
 		
 	}*/
 	
-	public Area(String filename, Graphics graphics) throws SDLException, GUIException {
+		
+	public Area(String filename, Graphics graphics) throws GUIException {
 		
 		graphicEngine = (SDLGraphics) graphics;
-		surface= SDLImage.load(filename);
-		type = Type.SURFACE;
+		
+		try {
+			surface= SDLImage.load(filename);
+		} 
+		catch (SDLException e) {
+			e.printStackTrace();
+			throw new GUIException("Unable to load image");
+			
+		}
+		
 
 	}
 
 	
-	public Area(Image image, Graphics graphics) throws SDLException, GUIException {
+	public Area(Image image, Graphics graphics) throws GUIException {
 		
+	
 		graphicEngine = (SDLGraphics) graphics;
-		this.image = image;
-		type = Type.IMAGE;
-		//TODO convert here an image into Surface format?
+		surface = (SDLSurface) image.getData();
 		
+		if(surface == null){
+			throw new GUIException("Unable to create surface from image");
+		}
+				
 				
 	}
 	
 	
-	public Area(Color color, Graphics graphics) throws SDLException, GUIException{
+	public Area(SDLColor color, Graphics graphics) throws GUIException{
 
+		int rmask,gmask,bmask,amask;
+		
+		
 		this.graphicEngine = (SDLGraphics) graphics;
-		this.color = color;
-		type = Type.COLOR;
+		
+		if (SDLUtils.SDL_BYTEORDER == SDLUtils.SDL_BIG_ENDIAN) {
+			rmask = 0xff000000;
+			gmask = 0x00ff0000;
+			bmask = 0x0000ff00;
+			amask = 0x000000ff;
+		} else {
+			rmask = 0x000000ff;
+			gmask = 0x0000ff00;
+			bmask = 0x00ff0000;
+			amask = 0xff000000;
+		}
+		
+		
+		try {
+			
+			//TODO mask problem and transparency
+			surface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
+			surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 0));
+		
+		} 
+		catch (SDLException e) {
+			e.printStackTrace();
+			throw new GUIException("Unable to create surface from color");
+		}
+		
+		
 		
 	}
 	
-	public void refreshArea() throws GUIException, SDLException{
+	public void refreshArea() throws GUIException{
 		
-		switch(type){
-		
-		case SURFACE: drawSurface();
-			break;
-			
-		case IMAGE: drawImage();
-			break;
-			
-		case COLOR: drawRectangle();
-			break;
-			
-		default: 	//should never happen
-			break;
-			
-			
-		}
+		//TODO refreshing function depending on the area changed 
+		drawSurface();
 		
 	}
 	
@@ -83,44 +107,30 @@ public class Area {
 		this.surface = surface;
 	}
 
-	//TODO refreshing function depending on the tile changed
+	
 	
 	public void refreshTile(int tileIndex){
 		
 		
 	}
 	
-	private void drawSurface() throws GUIException, SDLException{
+	private void drawSurface() throws GUIException{
 		
-		//TODO convert here an image into Surface format?
-		graphicEngine.beginDraw();
-		graphicEngine.drawSDLSurface(surface, surface.getRect(), graphicEngine.getTarget().getRect() );
-		graphicEngine.endDraw();
+		
+		try {
+			graphicEngine.beginDraw();
+			graphicEngine.drawSDLSurface(surface, surface.getRect(), graphicEngine.getTarget().getRect() );
+			graphicEngine.endDraw();
+		} 
+		catch (SDLException e) {
+			
+			e.printStackTrace();
+			throw new GUIException("Exception while drawing on target surface");
+		}
+		
 	
 	}
 
-	private void drawRectangle() throws GUIException{
 		
-		graphicEngine.setColor(color);
 		
-		SDLRect tmpRectangle = graphicEngine.getTarget().getRect();
-		
-		graphicEngine.beginDraw();
-		graphicEngine.fillRectangle(new Rectangle(tmpRectangle.x, tmpRectangle.y, tmpRectangle.width, tmpRectangle.height));
-		graphicEngine.endDraw();
-		
-	}
-	
-	private void drawImage() throws GUIException{
-		
-		//TODO convert here an image into Surface format?
-		graphicEngine.beginDraw();
-		graphicEngine.drawImage(image, 0 , 0);
-		graphicEngine.endDraw();
-		
-	}
-	
-	private enum Type { SURFACE, IMAGE, COLOR }
-	
-	
 }
