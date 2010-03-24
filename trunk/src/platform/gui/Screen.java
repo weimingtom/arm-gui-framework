@@ -37,7 +37,7 @@ public class Screen {
 	public void refresh() throws GUIException, SDLException{
 		
 		//TODO add logic to distinguish whether refreshing really needed - Message pattern ?
-		background.refreshArea();
+		//background.refreshArea();
 		foreground.refreshArea();
 		target.flip();
 		
@@ -47,6 +47,14 @@ public class Screen {
 		
 		
 		
+	}
+	
+	public void setAreaAlpha(Area area, int alphaIndex) throws SDLException{
+		
+		//TODO fast alpha blitting 
+		area.getSurface().setAlpha(alphaFlags, alphaIndex);
+		//SDLSurface optimizedAlphaSurface = area.getSurface().displayFormatAlpha();
+		//area.setSurface(optimizedAlphaSurface);
 	}
 	
 	public SDLSurface getTarget() {
@@ -89,15 +97,13 @@ public class Screen {
 		return inputSource;
 	}
 	
-	public void setAreaAlpha(Area area, int alphaIndex) throws SDLException{
-		
-		area.getSurface().setAlpha(alphaFlags, alphaIndex);
-		
-	}
+	
 	
 	private Screen() throws SDLException{
+		//TODO change that for normal variables ?
 		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
 		graphics = new SDLGraphics();
 		graphics.setTarget(target);
+	
 	}
 }
