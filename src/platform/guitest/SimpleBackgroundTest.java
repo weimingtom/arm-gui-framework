@@ -1,22 +1,19 @@
-package platform.gui;
+package platform.guitest;
 
 import java.io.File;
 
+import platform.gui.Area;
+import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.SDLTimer;
-import sdljava.video.SDLColor;
-import sdljava.video.SDLSurface;
-import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
-import sdljavax.guichan.sdl.SDLGraphics;
 import sdljavax.guichan.sdl.SDLImageLoader;
 
-public class SimpleBackgorundTest {
+public class SimpleBackgroundTest {
 
-	
 	/**
 	 * @param args
 	 */
@@ -24,9 +21,7 @@ public class SimpleBackgorundTest {
 		// TODO Auto-generated method stub
 			Area backgroundArea = null;
 			Area foregroundArea = null;
-			SDLSurface surface;
-			SDLSurface surface2;
-			SDLGraphics graphics;
+			
 			
 			try {
 				SDLMain.init(SDLMain.SDL_INIT_VIDEO);
@@ -38,14 +33,14 @@ public class SimpleBackgorundTest {
 				Image.setImageLoader(imageLoader);
 				
 								
-			    backgroundArea = new Area( new String("resource" + File.separator + "tree_small.png" ), screen.getGraphics() );
+			    backgroundArea = new Area( new String("resource" + File.separator + "tree_small.png" ));
 			    		    			    
 			   // foregroundArea = new Area( new String("resource" + File.separator + "islands_small.png" ), screen.getGraphics() );
 			    //TODO implement new ImageLoader based on SDLImageLoader
 			    Image image = new Image(new String("resource" + File.separator + "islands_small.png" ));
-			    foregroundArea = new Area( image , screen.getGraphics() );
+			    foregroundArea = new Area( image);
 
-			    foregroundArea = new Area(new SDLColor(100,100,100) , screen.getGraphics());
+			    //foregroundArea = new Area(new SDLColor(100,100,100) , screen.getGraphics());
 				screen.setBackground(backgroundArea);
 				screen.setForeground(foregroundArea);
 				
@@ -79,15 +74,3 @@ public class SimpleBackgorundTest {
 	}
 
 }
-/*
-surface = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
-graphics = new SDLGraphics();
-graphics.setTarget(surface);
-surface2 = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0 ,0 );
-surface2.fillRect(surface.mapRGB(0 , 250 , 100));
-
-graphics.beginDraw();
-graphics.drawSDLSurface(surface2, surface.getRect(),surface.getRect());
-graphics.endDraw();
-surface.flip();
-*/
