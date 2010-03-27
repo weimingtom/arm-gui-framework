@@ -37,7 +37,7 @@ public class Screen {
 	public void refresh() throws GUIException, SDLException{
 		
 		//TODO add logic to distinguish whether refreshing really needed - Message pattern ?
-		//background.refreshArea();
+		background.refreshArea();
 		foreground.refreshArea();
 		target.flip();
 		

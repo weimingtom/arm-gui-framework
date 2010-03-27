@@ -15,22 +15,19 @@ import sdljavax.guichan.sdl.SDLUtils;
 public class Area {
 
 	private SDLSurface surface;
-	private Color color;
-	private SDLGraphics graphicEngine;
 	
-	/*public Area(Graphics graphics) throws SDLException{
-		
-		graphicEngine = (SDLGraphics) graphics;
-		
-	}*/
 	
+	//TODO list of Widgets here , every Widget should contain xOffset, yOffset, 
+	//TODO extends Container?
+	private SDLGraphics surfaceGraphics;
+	
+	public Area(String filename) throws GUIException {
 		
-	public Area(String filename, Graphics graphics) throws GUIException {
-		
-		graphicEngine = (SDLGraphics) graphics;
-		
+				
 		try {
 			surface= SDLImage.load(filename);
+			surfaceGraphics = new SDLGraphics();
+			surfaceGraphics.setTarget(surface);
 		} 
 		catch (SDLException e) {
 			e.printStackTrace();
@@ -42,26 +39,27 @@ public class Area {
 	}
 
 	
-	public Area(Image image, Graphics graphics) throws GUIException {
+	public Area(Image image) throws GUIException {
 		
 	
-		graphicEngine = (SDLGraphics) graphics;
+		
 		surface = (SDLSurface) image.getData();
 		
 		if(surface == null){
 			throw new GUIException("Unable to create surface from image");
 		}
 				
-				
+		surfaceGraphics = new SDLGraphics();
+		surfaceGraphics.setTarget(surface);		
 	}
 	
 	
-	public Area(SDLColor color, Graphics graphics) throws GUIException{
+	public Area(SDLColor color) throws GUIException{
 
 		int rmask,gmask,bmask,amask;
 		
 		
-		this.graphicEngine = (SDLGraphics) graphics;
+		
 		
 		if (SDLUtils.SDL_BYTEORDER == SDLUtils.SDL_BIG_ENDIAN) {
 			rmask = 0xff000000;
@@ -81,7 +79,9 @@ public class Area {
 			//TODO mask problem and transparency
 			surface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
 			surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 0));
-		
+			surfaceGraphics = new SDLGraphics();
+			surfaceGraphics.setTarget(surface);
+				
 		} 
 		catch (SDLException e) {
 			e.printStackTrace();
@@ -118,10 +118,14 @@ public class Area {
 		
 		
 		try {
-			graphicEngine.beginDraw();
-			graphicEngine.drawSDLSurface(surface, surface.getRect(), graphicEngine.getTarget().getRect() );
-			graphicEngine.endDraw();
+			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
+				
+			screenGraphics.beginDraw();
+			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
+			screenGraphics.endDraw();
+			
 		} 
+		
 		catch (SDLException e) {
 			
 			e.printStackTrace();
