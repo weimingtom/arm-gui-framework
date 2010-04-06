@@ -1,19 +1,17 @@
 package platform.gui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Graphics;
-import sdljavax.guichan.sdl.SDLGraphics;
 import sdljavax.guichan.widgets.Widget;
 
 public class Panel extends Widget {
 
-	
-	protected List<Widget> listOfWidgets ;//= new ArrayList<Widget>();
-	protected List<Boolean> cells ;
+	protected Map<Widget, Set<Integer> > widgetMap = new HashMap<Widget , Set<Integer> >();
 	
 	protected int xGrid, yGrid;
 	protected int xCellDimension, yCellDimension;
@@ -26,10 +24,7 @@ public class Panel extends Widget {
 		xGrid = defXGrid;
 		yGrid = defYGrid;
 		
-		listOfWidgets = new ArrayList<Widget>( xGrid * yGrid);
-		cells = new ArrayList<Boolean> ( xGrid * yGrid );
 		calculateCellDimension();
-		
 	}
 	
 	public Panel(int xGrid,int yGrid){
@@ -39,8 +34,6 @@ public class Panel extends Widget {
 		this.xGrid = xGrid;
 		this.yGrid = yGrid;
 	
-		listOfWidgets = new ArrayList<Widget>( xGrid * yGrid);
-		cells = new ArrayList<Boolean> ( xGrid * yGrid );
 		calculateCellDimension();
 		
 	}
@@ -49,35 +42,50 @@ public class Panel extends Widget {
 	
 		int returnValue,xCellNeeded,yCellNeeded;
 		
-		//xCellNeeded = (widget.getWidth() / xCellDimension);
-		//xCellNeeded = (returnValue > 0) ? returnValue : 1;
-		
-		//yCellNeeded = (widget.getHeight() / yCellDimension);
-		//yCellNeeded = (returnValue > 0) ? returnValue : 1;
 		if(widget == null){
 			
 			throw new GUIException("Widget doesn't exist");
 		}
+
+		returnValue= (widget.getWidth() / xCellDimension);
+		xCellNeeded = (returnValue > 0) ? returnValue : 1;
 		
-		listOfWidgets.add(offset, widget);
+		returnValue = (widget.getHeight() / yCellDimension);
+		yCellNeeded = (returnValue > 0) ? returnValue : 1;
 		
-		widget.setPosition(100, 100);
-		//widget.setPosition( (offset % xGrid)* xCellDimension ,(offset / xGrid) * yCellDimension);
+		Set<Integer> cellsNr = new HashSet<Integer>();
+		
+		for(int xIndex=offset; xIndex<= offset+xCellNeeded; xIndex ++){
+			
+			for(int yIndex= 0; yIndex<= yCellNeeded; yIndex++){
+				
+				cellsNr.add(new Integer(yIndex*xGrid + xIndex));
+								
+			}
+			
+		}
+		
+		widgetMap.put(widget, cellsNr);
+			
+		
+		//widget.setPosition(, 100);
+		widget.setPosition( (offset % xGrid)* xCellDimension ,(offset / xGrid) * yCellDimension);
 		
 		
 	}
 	
 	public void removeFromPanel(Widget widget) throws GUIException{
 		
-		for (Iterator<Widget> it = listOfWidgets.iterator(); it.hasNext(); ){
+		for( Widget theWidget: widgetMap.keySet()){
 			
-			if(it.next().equals(widget)){
+			if(theWidget.equals(widget)){
 				
-				listOfWidgets.remove(widget);
+				widgetMap.remove(widget);
 				return;
 			}
 			
 		}
+		
 		
 		throw new GUIException("No such widget in this container");
 		
@@ -87,7 +95,7 @@ public class Panel extends Widget {
 	public void draw(Graphics arg0) throws GUIException {
 		
 			
-		for ( Widget widgetToDraw : listOfWidgets){
+		for ( Widget widgetToDraw : widgetMap.keySet()){
 	
 			//TODO if it needs to be updated
 			 widgetToDraw.draw(arg0);
