@@ -1,5 +1,7 @@
 package platform.gui;
 
+import java.io.File;
+
 import sdljava.SDLException;
 import sdljava.image.SDLImage;
 import sdljava.video.SDLColor;
@@ -14,16 +16,17 @@ import sdljavax.guichan.sdl.SDLUtils;
 
 public class Area {
 
-	private SDLSurface surface;
-	
+	protected SDLSurface surface;
+	protected Panel panel;
 	
 	//TODO list of Widgets here , every Widget should contain xOffset, yOffset, 
 	//TODO extends Container?
-	private SDLGraphics surfaceGraphics;
+	protected SDLGraphics surfaceGraphics;
+	
 	
 	public Area(String filename) throws GUIException {
 		
-				
+	
 		try {
 			surface= SDLImage.load(filename);
 			surfaceGraphics = new SDLGraphics();
@@ -41,8 +44,6 @@ public class Area {
 	
 	public Area(Image image) throws GUIException {
 		
-	
-		
 		surface = (SDLSurface) image.getData();
 		
 		if(surface == null){
@@ -58,9 +59,6 @@ public class Area {
 
 		int rmask,gmask,bmask,amask;
 		
-		
-		
-		
 		if (SDLUtils.SDL_BYTEORDER == SDLUtils.SDL_BIG_ENDIAN) {
 			rmask = 0xff000000;
 			gmask = 0x00ff0000;
@@ -72,7 +70,6 @@ public class Area {
 			bmask = 0x00ff0000;
 			amask = 0xff000000;
 		}
-		
 		
 		try {
 			
@@ -92,11 +89,28 @@ public class Area {
 		
 	}
 	
-	public void refreshArea() throws GUIException{
+	public void refreshArea() throws GUIException, SDLException{
 		
 		//TODO refreshing function depending on the area changed 
+				
+		if(panel != null){
+				
+		surfaceGraphics.beginDraw();	
+		panel.draw(surfaceGraphics);
+		surfaceGraphics.endDraw();
+		
+		}
+					
 		drawSurface();
 		
+	}
+	
+	public void setAlpha(int alphaIndex) throws SDLException{
+		
+		//TODO fast alpha blitting 
+		surface.setAlpha(Screen._alphaFlags, alphaIndex);
+		//SDLSurface optimizedAlphaSurface = area.getSurface().displayFormatAlpha();
+		//area.setSurface(optimizedAlphaSurface);
 	}
 	
 	public SDLSurface getSurface() {
@@ -109,12 +123,22 @@ public class Area {
 
 	
 	
+	public Panel getPanel() {
+		return panel;
+	}
+
+
+	public void setPanel(Panel panel) {
+		this.panel = panel;
+	}
+
+
 	public void refreshTile(int tileIndex){
 		
 		
 	}
 	
-	private void drawSurface() throws GUIException{
+	protected void drawSurface() throws GUIException{
 		
 		
 		try {

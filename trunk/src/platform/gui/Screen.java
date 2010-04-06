@@ -14,9 +14,10 @@ public class Screen {
 	public static final int _screenWidth = 320;
 	public static final int _screenHeight = 240;
 	public static final long _screenflags = SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF | SDLVideo.SDL_HWACCEL | SDLVideo.SDL_ANYFORMAT ;
+	public static final long _alphaFlags = SDLVideo.SDL_SRCALPHA | SDLVideo.SDL_RLEACCEL ; 
 	
 	private static Screen _soleInstance = null;
- 	private final long alphaFlags = SDLVideo.SDL_SRCALPHA | SDLVideo.SDL_RLEACCEL ; 
+ 	
 	private Area foreground;
 	private Area background;
 	private Input inputSource;
@@ -49,13 +50,7 @@ public class Screen {
 		
 	}
 	
-	public void setAreaAlpha(Area area, int alphaIndex) throws SDLException{
-		
-		//TODO fast alpha blitting 
-		area.getSurface().setAlpha(alphaFlags, alphaIndex);
-		//SDLSurface optimizedAlphaSurface = area.getSurface().displayFormatAlpha();
-		//area.setSurface(optimizedAlphaSurface);
-	}
+	
 	
 	public SDLSurface getTarget() {
 		return target;

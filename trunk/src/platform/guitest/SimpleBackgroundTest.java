@@ -33,11 +33,11 @@ public class SimpleBackgroundTest {
 				Image.setImageLoader(imageLoader);
 				
 								
-			    backgroundArea = new Area( new String("resource" + File.separator + "tree_small.png" ));
+			    backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ));
 			    		    			    
 			   // foregroundArea = new Area( new String("resource" + File.separator + "islands_small.png" ), screen.getGraphics() );
 			    //TODO implement new ImageLoader based on SDLImageLoader
-			    Image image = new Image(new String("resource" + File.separator + "islands_small.png" ));
+			    Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 			    foregroundArea = new Area( image);
 
 			    //foregroundArea = new Area(new SDLColor(100,100,100) , screen.getGraphics());
@@ -49,7 +49,7 @@ public class SimpleBackgroundTest {
 				while(i<255){
 					
 					i+=5;
-					screen.setAreaAlpha(foregroundArea, i);
+					foregroundArea.setAlpha(i);
 					screen.refresh();
 					
 					
