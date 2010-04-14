@@ -9,8 +9,6 @@ import sdljavax.guichan.sdl.SDLGraphics;
 
 public class Screen {
 
-	
-	
 	public static final int _screenWidth = 320;
 	public static final int _screenHeight = 240;
 	public static final long _screenflags = SDLVideo.SDL_HWSURFACE | SDLVideo.SDL_DOUBLEBUF | SDLVideo.SDL_HWACCEL | SDLVideo.SDL_ANYFORMAT ;
@@ -37,7 +35,6 @@ public class Screen {
 	
 	public void refresh() throws GUIException, SDLException{
 		
-		//TODO add logic to distinguish whether refreshing really needed - Message pattern ?
 		background.refreshArea();
 		foreground.refreshArea();
 		target.flip();

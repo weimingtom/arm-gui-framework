@@ -22,10 +22,7 @@ public class SimplePanelTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Area backgroundArea = null;
-		Area foregroundArea = null;
-		
-		
+				
 		try {
 			SDLMain.init(SDLMain.SDL_INIT_VIDEO);
 			
@@ -36,17 +33,17 @@ public class SimplePanelTest {
 			Image.setImageLoader(imageLoader);
 			
 			
-			backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
+			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
-		    foregroundArea = new Area( image,5,4);
+		    Area foregroundArea = new Area( image,5,4);
+		
+		    Panel panel = new Panel(2,2);
+		    backgroundArea.add(panel, 6);
 		    
-			//PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
-		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "PNG" + File.separator + "2x2_Widget_Frame_Portrait.png")));
-
-		    icon.setAlpha(80);
-		    
-		    backgroundArea.add(icon, 0);
+		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "PNG" + File.separator + "Music_widget_button_states_default.png")));
+		    //PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
+		    panel.add(icon, 3);
 		    		    
 			screen.setBackground(backgroundArea);
 			screen.setForeground(foregroundArea);
