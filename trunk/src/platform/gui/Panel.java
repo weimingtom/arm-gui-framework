@@ -1,59 +1,93 @@
 package platform.gui;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Graphics;
+import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.widgets.Widget;
 
 public class Panel extends Widget {
 
+	protected Image frame;
+	protected List<Widget> widgetList = new ArrayList<Widget>();
+	protected Integer xFormat, yFormat;
+	
+	private final int horizontalPixelShift = 10;
+	private final int verticalPixelShift = 10;
+	
+	public Panel(int xFormat,int yFormat) throws GUIException{
 		
-	public Panel(){
 		super();
 		
+		this.xFormat = new Integer( ( xFormat > 3 ) ? 3 : xFormat );
+		this.yFormat = new Integer( ( xFormat > 3 ) ? 3 : yFormat );
 		
+		String commonFramesName="_Widget_Frame_Landscape.png";
+			
+		String frameName = "resource" + File.separator+ "PNG" + File.separator + this.xFormat.toString() + "x" + this.yFormat.toString() + commonFramesName;
 		
-		calculateCellDimension();
+		frame = new Image(frameName);
+		setHeight(frame.getHeight());
+		setWidth(frame.getWidth());
 	}
 	
-	public Panel(int xGrid,int yGrid){
-		
-		super();
-		
-		
-		calculateCellDimension();
-		
-	}
+	public void add(Widget widget, int offset) throws GUIException{
 	
-	public void addToPanel(Widget widget, int offset) throws GUIException{
+		if(widget == null){
+			
+			throw new GUIException("Widget doesn't exist");
+		}
+		
+		else if ( offset > xFormat.intValue() * yFormat.intValue() - 1 ){
+			
+			throw new GUIException("Offset out of range for the panel.");
+		}
+		
+		int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
+		
+		int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
+		
+		widgetList.add(widget);
 	
+		widget.setPosition(horizontalShift, verticalShift);
 			
 	}
 	
-	public void removeFromPanel(Widget widget) throws GUIException{
+	public void remove(Widget widget) throws GUIException{
 		
+		for( Widget theWidget: widgetList){
+			
+			if(widget.equals(theWidget)){
+				
+				widgetList.remove(widget);
+				return;
+			}
+			
+		}
 		
+		throw new GUIException("No such widget in this panel");
 	}
 	
 	@Override
 	public void draw(Graphics arg0) throws GUIException {
 		
+			drawBorder(arg0);
 			
+			for ( Widget widget : widgetList){
+				
+				widget.draw(arg0);
+			}
 				
 	}
 
 	@Override
 	public void drawBorder(Graphics arg0) throws GUIException {
-		// nothing here
-		
+	
+			arg0.drawImage(frame, getX(), getY() );
 	}
 
-	private void calculateCellDimension(){
-		
-		
-	}
 }

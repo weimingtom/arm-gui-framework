@@ -16,6 +16,9 @@ public class PlatformIcon extends Widget implements MouseListener{
 	public PlatformIcon(Image image){
 		super();
 		iconImage = image;
+		
+		setHeight(image.getHeight());
+		setWidth(image.getWidth());
 	}
 	@Override
 	public void draw(Graphics arg0) throws GUIException {

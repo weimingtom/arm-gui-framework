@@ -43,7 +43,7 @@ public class Area {
 					
 		} 
 		
-			
+	
 		catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to load image");
@@ -111,6 +111,11 @@ public class Area {
 			
 			throw new GUIException("Widget doesn't exist");
 		}
+		
+		else if ( offset > grid[0] * grid[1] - 1 ){
+			
+			throw new GUIException("Offset out of range for the area.");
+		}
 
 		returnValue= (widget.getWidth() / xCellDimension);
 		xCellNeeded = (returnValue > 0) ? returnValue : 1;
@@ -150,13 +155,14 @@ public class Area {
 		}
 		
 		
-		throw new GUIException("No such widget in this container");
+		throw new GUIException("No such widget in this area");
 		
 	}
 	
 	public void refreshArea() throws GUIException, SDLException{
 		
-		//TODO refreshing function depending on the area changed 
+		//TODO refreshing function if really needed
+		
 		surfaceGraphics.beginDraw();
 		
 		for ( Widget widgetToDraw : widgetMap.keySet()){
@@ -172,7 +178,7 @@ public class Area {
 	
 	public void setAlpha(int alphaIndex) throws SDLException{
 		
-		//TODO fast alpha blitting 
+		//TODO fast alpha blitting? 
 		surface.setAlpha(Screen._alphaFlags, alphaIndex);
 		//SDLSurface optimizedAlphaSurface = area.getSurface().displayFormatAlpha();
 		//area.setSurface(optimizedAlphaSurface);
