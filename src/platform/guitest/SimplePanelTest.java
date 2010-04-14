@@ -36,19 +36,18 @@ public class SimplePanelTest {
 			Image.setImageLoader(imageLoader);
 			
 			
-			backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ));
+			backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
-		    foregroundArea = new Area( image);
+		    foregroundArea = new Area( image,5,4);
 		    
-			PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
+			//PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
+		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "PNG" + File.separator + "2x2_Widget_Frame_Portrait.png")));
 
+		    icon.setAlpha(80);
+		    
+		    backgroundArea.add(icon, 0);
 		    		    
-		    Panel panel = new Panel(5, 4);
-		    panel.addToPanel(icon, 0);
-		    
-		    backgroundArea.setPanel(panel);
-		    
 			screen.setBackground(backgroundArea);
 			screen.setForeground(foregroundArea);
 			foregroundArea.setAlpha(0);
@@ -61,7 +60,7 @@ public class SimplePanelTest {
 				screen.refresh();
 				
 				
-				SDLTimer.delay(3000);
+				SDLTimer.delay(1000);
 			}
 			
 			screen.refresh();						
