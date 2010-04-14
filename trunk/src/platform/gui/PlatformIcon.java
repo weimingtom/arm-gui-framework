@@ -29,7 +29,14 @@ public class PlatformIcon extends Widget implements MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public void setAlpha(int alphaIndex) throws SDLException{
+	
+		((SDLSurface)iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
+				
+		
+	}
+	
 	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
 			throws GUIException {
 		// TODO Auto-generated method stub
