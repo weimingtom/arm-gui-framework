@@ -125,6 +125,7 @@ public class Area {
 		
 		Set<Integer> cellsNr = new HashSet<Integer>();
 		
+		//TODO check here if cells are not reserved
 		for(int xIndex=offset; xIndex<= offset+xCellNeeded; xIndex ++){
 			
 			for(int yIndex= 0; yIndex<= yCellNeeded; yIndex++){

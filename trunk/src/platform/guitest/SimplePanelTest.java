@@ -9,6 +9,7 @@ import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.SDLTimer;
+import sdljava.ttf.SDLTTF;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
@@ -25,8 +26,7 @@ public class SimplePanelTest {
 				
 		try {
 			SDLMain.init(SDLMain.SDL_INIT_VIDEO);
-			
-							
+													
 			Screen screen = Screen.getScreen();
 			ImageLoader imageLoader = new SDLImageLoader();
 			

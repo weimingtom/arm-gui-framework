@@ -24,7 +24,7 @@ public class Panel extends Widget {
 		super();
 		
 		this.xFormat = new Integer( ( xFormat > 3 ) ? 3 : xFormat );
-		this.yFormat = new Integer( ( xFormat > 3 ) ? 3 : yFormat );
+		this.yFormat = new Integer( ( yFormat > 3 ) ? 3 : yFormat );
 		
 		String commonFramesName="_Widget_Frame_Landscape.png";
 			
@@ -47,8 +47,8 @@ public class Panel extends Widget {
 			throw new GUIException("Offset out of range for the panel.");
 		}
 		
-		int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
 		
+		int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
 		int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
 		
 		widgetList.add(widget);
