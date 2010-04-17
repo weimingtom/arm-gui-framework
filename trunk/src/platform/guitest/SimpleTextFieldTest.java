@@ -12,9 +12,11 @@ import sdljava.SDLMain;
 import sdljava.SDLTimer;
 import sdljava.ttf.SDLTTF;
 import sdljavax.guichan.GUIException;
+import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
+import sdljavax.guichan.sdl.SDLInput;
 
 public class SimpleTextFieldTest {
 
@@ -30,14 +32,16 @@ public class SimpleTextFieldTest {
 			ImageLoader imageLoader = new SDLImageLoader();
 			
 			Image.setImageLoader(imageLoader);
+			Input input = new SDLInput();
 			
+			screen.setInputSource(input);
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,5,4);
 		
-		    TextField googleSearch = new TextField("googling");
+		    TextField googleSearch = new TextField("google");
 		    
 		    
 		    Panel panel = new Panel(2,2);
@@ -56,6 +60,7 @@ public class SimpleTextFieldTest {
 				
 				i+=50;
 				//foregroundArea.setAlpha(i);
+				screen.handleEvents();
 				screen.refresh();
 				
 				

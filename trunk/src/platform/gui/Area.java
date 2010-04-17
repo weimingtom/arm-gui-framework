@@ -1,6 +1,5 @@
 package platform.gui;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,8 +11,10 @@ import sdljava.video.SDLColor;
 import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.gfx.Color;
-import sdljavax.guichan.gfx.Graphics;
+import sdljavax.guichan.evt.FocusHandler;
+import sdljavax.guichan.evt.Input;
+import sdljavax.guichan.evt.Key;
+import sdljavax.guichan.evt.KeyInput;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.sdl.SDLGraphics;
 import sdljavax.guichan.sdl.SDLUtils;
@@ -23,6 +24,7 @@ public class Area {
 
 	protected SDLSurface surface;
 	protected SDLGraphics surfaceGraphics;
+	protected FocusHandler focusHandler = new FocusHandler();
 	
 	protected Map<Widget, Set<Integer> > widgetMap = new HashMap<Widget , Set<Integer> >();
 	
@@ -137,7 +139,25 @@ public class Area {
 		}
 		
 		widgetMap.put(widget, cellsNr);
+		
+		Class<? extends Widget> c = widget.getClass();
+		
+		
+		if( !c.getName().equals("platform.gu.Panel")){
+		
+			widget.setFocusHandler(focusHandler);
+			((Panel)widget).setWidgetsFocusHandler(focusHandler);
 			
+		}
+		
+		else{
+		
+		widget.setFocusHandler(focusHandler);
+		widget.setFocusable(true);
+		widget.requestFocus();
+		
+		}
+		
 		widget.setPosition( (offset % grid[0])* xCellDimension ,(offset / grid[1] ) * yCellDimension);
 		
 		
@@ -175,6 +195,39 @@ public class Area {
 		surfaceGraphics.endDraw();
 		drawSurface();
 		
+	}
+	
+	public void handleEvents() throws SDLException, GUIException{
+		
+		Input inputSource = Screen.getScreen().getInputSource();
+		
+		while (false == inputSource.isKeyQueueEmpty()) {
+			
+			KeyInput ki = inputSource.dequeueKeyInput();
+
+			if (Key.TAB == ki.getKey().getValue() && KeyInput.PRESS == ki.getType()) {
+				if (ki.getKey().isShiftPressed()) {
+					focusHandler.tabPrevious();
+				} else {
+					focusHandler.tabNext();
+				}
+			} 
+			else {
+				
+				// Send key inputs to the focused widgets
+				if (null != focusHandler.getFocused()) {
+					if (focusHandler.getFocused().isFocusable()) {
+						
+						focusHandler.getFocused().keyInputMessage(ki);
+						
+					} else {
+						focusHandler.focusNone();
+					}
+				}
+			}
+
+			focusHandler.applyChanges();
+		}
 	}
 	
 	public void setAlpha(int alphaIndex) throws SDLException{
