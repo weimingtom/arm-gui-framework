@@ -46,6 +46,7 @@ public class CalibriFont implements Font{
 	}
 
 	public int getStringIndexAt(String strText, int x) {
+		
 		int size = 0;
 		
 		for (int i = 0; i < strText.length(); ++i) {
@@ -70,9 +71,12 @@ public class CalibriFont implements Font{
 		return glyphMetrics.getMaxX() - glyphMetrics.getMinX();
 	}
 	
-	public int getWidth(String arg0) {
+	public int getWidth(String string) {
 		
-		int width=0;
+		return 16* string.length() + 2;
+		
+	//TODO get this to work!
+	/*	int width=0;
 		
 		char [] stringChars = arg0.toCharArray();
 			
@@ -87,7 +91,7 @@ public class CalibriFont implements Font{
 			}
 		}
 			
-		return width;
+		return width;*/
 	}
 
 	public void setColor(SDLColor color){

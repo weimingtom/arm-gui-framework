@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdljavax.guichan.GUIException;
+import sdljavax.guichan.evt.FocusHandler;
+import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.widgets.Widget;
 
-public class Panel extends Widget {
+public class Panel extends Widget implements MouseListener {
 
 	protected Image frame;
 	protected List<Widget> widgetList = new ArrayList<Widget>();
@@ -54,6 +56,13 @@ public class Panel extends Widget {
 		widgetList.add(widget);
 	
 		widget.setPosition(horizontalShift, verticalShift);
+		
+		if( this.getFocusHandler() != null){
+			
+			widget.setFocusHandler(getFocusHandler());
+			widget.setFocusable(true);
+			widget.requestFocus();
+		}
 			
 	}
 	
@@ -89,5 +98,59 @@ public class Panel extends Widget {
 	
 			arg0.drawImage(frame, getX(), getY() );
 	}
+
+	public void setWidgetsFocusHandler(FocusHandler focusHandler) throws GUIException{
+		
+		
+		for( Widget widget : widgetList){
+			
+			widget.setFocusHandler(focusHandler);
+			widget.setFocusable(true);
+			widget.requestFocus();
+		}
+	}
+	
+	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
+			throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseIn() throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseMotion(int arg0, int arg1) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseOut() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseWheelDown(int arg0, int arg1) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseWheelUp(int arg0, int arg1) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }
