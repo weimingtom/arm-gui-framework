@@ -15,12 +15,13 @@ import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.widgets.Widget;
 
-public class TextField extends Widget implements MouseListener, KeyListener{
+public class TextField extends Widget implements  KeyListener{
 
 	protected Image textField;
 	protected String displayedText;
 	protected Font textFont;
 	protected int cursorPosition;
+	protected int onScreenCursorPosition;
 	protected SDLColor cursorColor;
 	
 	public TextField() throws GUIException, SDLException{
@@ -39,7 +40,9 @@ public class TextField extends Widget implements MouseListener, KeyListener{
 		setWidth(textField.getWidth());
 		setHeight(textField.getHeight());
 		
-		cursorPosition= getXTextPosition() + textFont.getWidth(text);
+		cursorPosition = text.length();
+		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(text);
+		
 		
 		addKeyListener(this);
 	}
@@ -47,12 +50,16 @@ public class TextField extends Widget implements MouseListener, KeyListener{
 	public void draw(Graphics graphics) throws GUIException {
 		
 		drawBorder(graphics);
-		textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
+		drawText(graphics);
 		drawCursor(graphics);
 		
 		
 	}
 
+	
+	public void drawText(Graphics graphics) throws GUIException{
+		textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
+	}
 	
 	public void drawBorder(Graphics graphics) throws GUIException {
 	
@@ -63,7 +70,7 @@ public class TextField extends Widget implements MouseListener, KeyListener{
 	public void drawCursor(Graphics graphics) throws GUIException{
 		
 		graphics.setColor(new Color(cursorColor.getRed(), cursorColor.getGreen(), cursorColor.getBlue(), 255));
-		graphics.drawLine(cursorPosition, getYTextPosition(), cursorPosition, getYTextPosition() +  textFont.getHeight());
+		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
 		
 	}
 	
@@ -85,68 +92,46 @@ public class TextField extends Widget implements MouseListener, KeyListener{
 		return getY() + (int)(getHeight() * 0.3);
 	}
 
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
-			throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseIn() throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseMotion(int arg0, int arg1) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseOut() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseWheelDown(int arg0, int arg1) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseWheelUp(int arg0, int arg1) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	public void keyPress(Key key) throws GUIException {
-		
+		//TODO add here notification of a change being made
 
 		if (key.getValue() == Key.LEFT && cursorPosition > 0) {
-			cursorPosition-=17;
+			cursorPosition--;
+			onScreenCursorPosition-=17;
+			
 		} else if (key.getValue() == Key.RIGHT && cursorPosition < displayedText.length()) {
-			cursorPosition+=17;
+			
+			
+			cursorPosition++;
+			onScreenCursorPosition+=17;
+			
 		} else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
+			
 			displayedText = displayedText.substring(0, cursorPosition) + displayedText.substring(cursorPosition + 1);
+			
+			
 		} else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 			displayedText = displayedText.substring(0, cursorPosition - 1) + displayedText.substring(cursorPosition);
-			cursorPosition-=17;
+			
+			cursorPosition--;
+			onScreenCursorPosition-=17;
+			
 		} else if (key.getValue() == Key.ENTER) {
 			generateAction();
+			
 		} else if (key.getValue() == Key.HOME) {
-			cursorPosition = getXTextPosition();
+			cursorPosition = 0;
+			onScreenCursorPosition=getXTextPosition();
+			
 		} else if (key.getValue() == Key.END) {
 			cursorPosition = displayedText.length();
+			onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
+			
 		} else if (key.isCharacter()) {
 			displayedText = displayedText.substring(0, cursorPosition) + (char) key.getValue() + displayedText.substring(cursorPosition);
-			cursorPosition+=17;;
+			cursorPosition++;
+			onScreenCursorPosition+=17;
 		}
 				
 	}

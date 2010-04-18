@@ -55,20 +55,15 @@ public class SimpleTextFieldTest {
 			screen.setForeground(foregroundArea);
 			foregroundArea.setAlpha(0);
 			
-			int i = 0;
-			while(i<255){
+		
+			while(screen.isRunning()){
 				
-				i+=50;
-				//foregroundArea.setAlpha(i);
-				screen.handleEvents();
 				screen.refresh();
-				
+				System.out.println("Screen refresh");
 				
 				SDLTimer.delay(1000);
 			}
 			
-			screen.refresh();						
-			SDLTimer.delay(100);
 			
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block

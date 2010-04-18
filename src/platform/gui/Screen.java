@@ -1,9 +1,8 @@
 package platform.gui;
 
+import platform.thread.EventCapturer;
+import platform.thread.EventDispatcher;
 import sdljava.SDLException;
-import sdljava.event.SDLEvent;
-import sdljava.event.SDLKey;
-import sdljava.event.SDLKeyboardEvent;
 import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
@@ -23,7 +22,6 @@ public class Screen {
 	private Area foreground;
 	private Area background;
 	private Input inputSource;
-	private SDLEvent event;
 	private SDLSurface target;
 	private SDLGraphics graphics;
 	private boolean running;
@@ -47,29 +45,7 @@ public class Screen {
 		
 	}
 
-	public void handleEvents() throws GUIException, SDLException {
-		
-		if( inputSource == null ){
 			
-			throw new GUIException("Cannot handle events - no input source set");
-		}
-		
-		if(eventTriggered()){
-			inputSource.pollInput();
-			
-			background.handleEvents();
-			foreground.handleEvents();
-		}
-	}
-		
-	public SDLSurface getTarget() {
-		return target;
-	}
-
-	public void setTarget(SDLSurface target) {
-		this.target = target;
-	}
-
 	public SDLGraphics getGraphics() {
 		return graphics;
 	}
@@ -112,6 +88,7 @@ public class Screen {
 	}
 
 	private Screen() throws SDLException{
+		
 		//TODO change that for normal variables ?
 		
 		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
@@ -119,44 +96,11 @@ public class Screen {
 		graphics.setTarget(target);
 		inputSource = new SDLInput();
 		running = true;
-		// We want unicode
-		SDLEvent.enableUNICODE(1);
-		// We want to enable key repeat
-		SDLEvent.enableKeyRepeat(SDLEvent.SDL_DEFAULT_REPEAT_DELAY, SDLEvent.SDL_DEFAULT_REPEAT_INTERVAL);
+		
+		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
+		EventCapturer eventCapturer = new EventCapturer((SDLInput)inputSource, eventDispatcher);
 	
 	}
 	
-	private boolean eventTriggered() throws SDLException{
-		
-		boolean hadEvent = false;
-		/*
-		 * Poll SDL events
-		 */
-
-		while (null != (event = SDLEvent.pollEvent())) {
-			if (event.getType() == SDLEvent.SDL_KEYDOWN) {
-				if (((SDLKeyboardEvent) event).getSym() == SDLKey.SDLK_ESCAPE) {
-					running = false;
-				}
-				if (((SDLKeyboardEvent) event).getSym() == SDLKey.SDLK_f) {
-					if (((SDLKeyboardEvent) event).getMod().ctrl()) {
-						// Works with X11 only
-						// SDL_WM_ToggleFullScreen(screen);
-					}
-				}
-			} else if (event.getType() == SDLEvent.SDL_QUIT) {
-				running = false;
-			}
-
-			/*
-			 * Now that we are done polling and using SDL events we pass the leftovers to the
-			 * SDLInput object to later be handled by the Gui.
-			 */
-			((SDLInput) inputSource).pushInput(event);
-			hadEvent = true;
-		}
-		
-		return hadEvent;
-		
-	}
+	
 }
