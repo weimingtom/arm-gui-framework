@@ -24,16 +24,18 @@ public class SimpleTextFieldTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		
+		
 		try {
 			SDLMain.init(SDLMain.SDL_INIT_VIDEO);
 			SDLTTF.init();
 			
 			Screen screen = Screen.getScreen();
 			ImageLoader imageLoader = new SDLImageLoader();
-			
 			Image.setImageLoader(imageLoader);
-			Input input = new SDLInput();
 			
+			Input input = new SDLInput();
 			screen.setInputSource(input);
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
@@ -44,15 +46,11 @@ public class SimpleTextFieldTest {
 		    TextField googleSearch = new TextField("google");
 		    
 		    
-		    Panel panel = new Panel(2,2);
+		    Panel panel= new Panel(2,2);
 		    panel.add(googleSearch, 0);
 		    backgroundArea.add(panel, 6);
-		    
-		    
-		    
 		    		    
-			screen.setBackground(backgroundArea);
-			screen.setForeground(foregroundArea);
+			screen.setAreas(backgroundArea, foregroundArea);
 			foregroundArea.setAlpha(0);
 			
 		
@@ -63,8 +61,11 @@ public class SimpleTextFieldTest {
 				
 				SDLTimer.delay(1000);
 			}
+			googleSearch.delete();
+			panel.delete();
 			
-			
+			SDLTimer.delay(1000);
+			SDLMain.quit();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +75,11 @@ public class SimpleTextFieldTest {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally{
+								
 		}
+		
+		
 
 	}
 

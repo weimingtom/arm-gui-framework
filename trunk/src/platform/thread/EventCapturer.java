@@ -38,24 +38,10 @@ public class EventCapturer extends Thread{
 				 */
 				while (null != (event = SDLEvent.pollEvent())) {
 					
-					
-					
 					if (event.getType() == SDLEvent.SDL_KEYDOWN) {
-						
 							if (((SDLKeyboardEvent) event).getSym() == SDLKey.SDLK_ESCAPE) {
-							
-								Screen.getScreen().setRunning(false);
-							
-							}
-							
-							else if (((SDLKeyboardEvent) event).getSym() == SDLKey.SDLK_f) {
-							
-								if (((SDLKeyboardEvent) event).getMod().ctrl()) {
-									// Works with X11 only
-									// SDL_WM_ToggleFullScreen(screen);
-								}
-							}
-					
+										Screen.getScreen().setRunning(false);
+							}		
 						eventCaptured = true;
 					} 
 						
@@ -64,8 +50,7 @@ public class EventCapturer extends Thread{
 							Screen.getScreen().setRunning(false);
 							
 					}
-			
-											/*
+														/*
 						 * Now that we are done polling and using SDL events we pass the leftovers to the
 						 * SDLInput object to later be handled by the Gui.
 						 */
