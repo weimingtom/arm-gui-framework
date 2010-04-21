@@ -196,40 +196,7 @@ public class Area {
 		drawSurface();
 		
 	}
-	
-	public void handleEvents() throws SDLException, GUIException{
 		
-		Input inputSource = Screen.getScreen().getInputSource();
-		
-		while (false == inputSource.isKeyQueueEmpty()) {
-			
-			KeyInput ki = inputSource.dequeueKeyInput();
-
-			if (Key.TAB == ki.getKey().getValue() && KeyInput.PRESS == ki.getType()) {
-				if (ki.getKey().isShiftPressed()) {
-					focusHandler.tabPrevious();
-				} else {
-					focusHandler.tabNext();
-				}
-			} 
-			else {
-				
-				// Send key inputs to the focused widgets
-				if (null != focusHandler.getFocused()) {
-					if (focusHandler.getFocused().isFocusable()) {
-						
-						focusHandler.getFocused().keyInputMessage(ki);
-						
-					} else {
-						focusHandler.focusNone();
-					}
-				}
-			}
-
-			focusHandler.applyChanges();
-		}
-	}
-	
 	public void setAlpha(int alphaIndex) throws SDLException{
 		
 		//TODO fast alpha blitting? 
@@ -245,13 +212,18 @@ public class Area {
 	public void setSurface(SDLSurface surface) {
 		this.surface = surface;
 	}
-
 	
-	public void refreshTile(int tileIndex){
-		
-		
+	
+	public FocusHandler getFocusHandler() {
+		return focusHandler;
 	}
-	
+
+
+	public void setFocusHandler(FocusHandler focusHandler) {
+		this.focusHandler = focusHandler;
+	}
+
+
 	protected void drawSurface() throws GUIException{
 		
 		

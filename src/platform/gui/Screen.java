@@ -24,7 +24,10 @@ public class Screen {
 	private Input inputSource;
 	private SDLSurface target;
 	private SDLGraphics graphics;
+	private EventDispatcher eventDispatcher;
 	private boolean running;
+	
+	
 	
 	public static Screen getScreen() throws SDLException{
 		
@@ -45,7 +48,14 @@ public class Screen {
 		
 	}
 
-			
+	public void setAreas(Area background, Area foreground) throws SDLException{
+		
+		this.background = background;
+		this.foreground = foreground;
+		
+		startEventHandling();
+	}
+				
 	public SDLGraphics getGraphics() {
 		return graphics;
 	}
@@ -87,6 +97,12 @@ public class Screen {
 		this.running = running;
 	}
 
+	private void startEventHandling() throws SDLException{
+		
+		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
+		EventCapturer eventCapturer = new EventCapturer((SDLInput)inputSource, eventDispatcher);
+	
+	}
 	private Screen() throws SDLException{
 		
 		//TODO change that for normal variables ?
@@ -97,8 +113,7 @@ public class Screen {
 		inputSource = new SDLInput();
 		running = true;
 		
-		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
-		EventCapturer eventCapturer = new EventCapturer((SDLInput)inputSource, eventDispatcher);
+		
 	
 	}
 	
