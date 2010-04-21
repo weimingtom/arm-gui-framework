@@ -31,11 +31,12 @@ public class SimpleTextFieldTest {
 			SDLMain.init(SDLMain.SDL_INIT_VIDEO);
 			SDLTTF.init();
 			
-			Screen screen = Screen.getScreen();
 			ImageLoader imageLoader = new SDLImageLoader();
 			Image.setImageLoader(imageLoader);
 			
 			Input input = new SDLInput();
+			
+			Screen screen = Screen.getScreen();
 			screen.setInputSource(input);
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
@@ -44,7 +45,7 @@ public class SimpleTextFieldTest {
 		    Area foregroundArea = new Area( image,5,4);
 		
 		    TextField googleSearch = new TextField("google");
-		    
+		    //TextField googleSearch = new TextField();
 		    
 		    Panel panel= new Panel(2,2);
 		    panel.add(googleSearch, 0);
@@ -58,12 +59,13 @@ public class SimpleTextFieldTest {
 				
 				screen.refresh();
 				
-				SDLTimer.delay(5);
+				SDLTimer.delay(100);
 			}
 			googleSearch.delete();
 			panel.delete();
 			
-			SDLTimer.delay(1000);
+			
+			SDLTTF.quit();
 			SDLMain.quit();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block

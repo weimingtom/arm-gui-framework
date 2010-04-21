@@ -61,28 +61,22 @@ public class CalibriFont implements Font{
 	public int getCharacterWidth(char character) throws SDLException{		
 		GlyphMetrics glyphMetrics = calibriFont.glyphMetrics(character);
 		
-		return glyphMetrics.getMaxX() - glyphMetrics.getMinX();
+		return glyphMetrics.getMaxX() - glyphMetrics.getMinX() + 2 ;
 	}
 	
 	public int getWidth(String string) {
-		return 16* string.length() + 2;
-	//TODO get this to work!
-	/*	int width=0;
-		
-		char [] stringChars = arg0.toCharArray();
+		int width=0;
+		char [] stringChars = string.toCharArray();
 			
 		for( char character: stringChars ){
-			
 			try {
 				width+= getCharacterWidth(character);
-			} 
-			
-			catch (SDLException e) {
+			}catch (SDLException e) {
 				e.printStackTrace();
 			}
 		}
-			
-		return width;*/
+		System.out.println(width);	
+		return width;
 	}
 
 	public void setColor(SDLColor color){
