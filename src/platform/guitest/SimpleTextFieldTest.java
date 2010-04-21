@@ -57,9 +57,8 @@ public class SimpleTextFieldTest {
 			while(screen.isRunning()){
 				
 				screen.refresh();
-				System.out.println("Screen refresh");
 				
-				SDLTimer.delay(1000);
+				SDLTimer.delay(5);
 			}
 			googleSearch.delete();
 			panel.delete();

@@ -20,15 +20,12 @@ public class CalibriFont implements Font{
 	protected SDLColor fontColor;
 	
 	public CalibriFont(int size , SDLColor color) throws SDLException{
-		
 		calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "calibri.ttf", size); 
 		text = new String("");
 		fontColor = color; 
 	}
 	
-	public void drawString(Graphics graphics, String string, int x, int y)
-			throws GUIException {
-
+	public void drawString(Graphics graphics, String string, int x, int y)throws GUIException {
 		try {
 			SDLSurface textSurface = calibriFont.renderTextSolid(string, fontColor);
 			SDLGraphics sdlGraphics = (SDLGraphics) graphics;
@@ -41,12 +38,10 @@ public class CalibriFont implements Font{
 	}
 
 	public int getHeight() {
-		
 		return calibriFont.fontHeight();
 	}
 
 	public int getStringIndexAt(String strText, int x) {
-		
 		int size = 0;
 		
 		for (int i = 0; i < strText.length(); ++i) {
@@ -60,21 +55,17 @@ public class CalibriFont implements Font{
 				return i;
 			}
 		}
-		
 		return strText.length();
 	}
 
-	public int getCharacterWidth(char character) throws SDLException{
-		
+	public int getCharacterWidth(char character) throws SDLException{		
 		GlyphMetrics glyphMetrics = calibriFont.glyphMetrics(character);
 		
 		return glyphMetrics.getMaxX() - glyphMetrics.getMinX();
 	}
 	
 	public int getWidth(String string) {
-		
 		return 16* string.length() + 2;
-		
 	//TODO get this to work!
 	/*	int width=0;
 		
@@ -95,19 +86,16 @@ public class CalibriFont implements Font{
 	}
 
 	public void setColor(SDLColor color){
-		
 		fontColor = color;
 		return;
 	}
 	
-	public SDLColor getColor(){
-		
+	public SDLColor getColor(){	
 		return fontColor;
 	}
 	
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
 	
 }

@@ -17,7 +17,6 @@ public class EventDispatcher extends Thread{
 	private ActiveArea activeArea;
 	
 	public EventDispatcher(SDLInput input) throws SDLException{
-	
 		super("EventDispatcher");
 		eventTriggered = false;
 		inputSource = input;
@@ -30,26 +29,19 @@ public class EventDispatcher extends Thread{
 	}
 	
 	public void run(){
-	
 		try{
-			
 			while(!Thread.interrupted()){
 			
-				synchronized(this){
-					
+				synchronized(this){		
 					while(eventTriggered == false){ 	//waiting for an event to be triggered
 						wait(); 
 					}
 					eventTriggered = false;
-					
 				}
-				
 				inputSource.pollInput();
-
 				Area active = (activeArea == ActiveArea.BACKGROUND) ? background : foreground;
 					
-				while (false == inputSource.isKeyQueueEmpty()) {
-					
+				while (false == inputSource.isKeyQueueEmpty()) {	
 					KeyInput ki = inputSource.dequeueKeyInput();
 
 					if (Key.TAB == ki.getKey().getValue() && KeyInput.PRESS == ki.getType()) {
@@ -60,12 +52,10 @@ public class EventDispatcher extends Thread{
 						}
 					} 
 					else {
-						
 						// Send key inputs to the focused widgets
 						if (null != active.getFocusHandler().getFocused()) {
 							if (active.getFocusHandler().getFocused().isFocusable()) {
-								
-								active.getFocusHandler().getFocused().keyInputMessage(ki);
+									active.getFocusHandler().getFocused().keyInputMessage(ki);
 								
 							} else {
 								active.getFocusHandler().focusNone();
@@ -78,16 +68,12 @@ public class EventDispatcher extends Thread{
 				
 			}
 			
-		}
-		
-		catch(InterruptedException e){
-			
+		} catch(InterruptedException e){
 			e.printStackTrace();
 		} catch (GUIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	
 	

@@ -23,16 +23,13 @@ public class TextField extends Widget implements  KeyListener{
 	protected int cursorPosition;
 	protected int onScreenCursorPosition;
 	protected SDLColor cursorColor;
+	protected ElementChanged elementChanged;
 	
-	public TextField() throws GUIException, SDLException{
-		
+	public TextField() throws GUIException, SDLException{				
 		this("");
-				
-		
 	}
 	
 	public TextField(String text) throws GUIException, SDLException{
-		
 		displayedText = text;
 		textField = new Image(new String("resource" + File.separator + "images" + File.separator + "google_search.png"));
 		cursorColor = new SDLColor(255,255,255,0);
@@ -42,18 +39,14 @@ public class TextField extends Widget implements  KeyListener{
 		
 		cursorPosition = text.length();
 		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(text);
-		
-		
+			
 		addKeyListener(this);
 	}
 	
 	public void draw(Graphics graphics) throws GUIException {
-		
 		drawBorder(graphics);
 		drawText(graphics);
 		drawCursor(graphics);
-		
-		
 	}
 
 	
@@ -62,16 +55,13 @@ public class TextField extends Widget implements  KeyListener{
 	}
 	
 	public void drawBorder(Graphics graphics) throws GUIException {
-	
 		graphics.drawImage(textField, getX(), getY());
 	}
 
 	
 	public void drawCursor(Graphics graphics) throws GUIException{
-		
 		graphics.setColor(new Color(cursorColor.getRed(), cursorColor.getGreen(), cursorColor.getBlue(), 255));
-		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
-		
+		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());	
 	}
 	
 	public String getDisplayedText() {
@@ -83,47 +73,37 @@ public class TextField extends Widget implements  KeyListener{
 	}
 	
 	public int getXTextPosition(){
-		
-		return getX() + (int)(getWidth() * 0.2 );
+			return getX() + (int)(getWidth() * 0.2 );
 	}
 	
 	public int getYTextPosition(){
-		
 		return getY() + (int)(getHeight() * 0.3);
 	}
 
-	
 	public void keyPress(Key key) throws GUIException {
 		//TODO add here notification of a change being made
-
 		if (key.getValue() == Key.LEFT && cursorPosition > 0) {
 			cursorPosition--;
 			onScreenCursorPosition-=17;
 			
 		} else if (key.getValue() == Key.RIGHT && cursorPosition < displayedText.length()) {
-			
-			
 			cursorPosition++;
 			onScreenCursorPosition+=17;
 			
 		} else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
-			
 			displayedText = displayedText.substring(0, cursorPosition) + displayedText.substring(cursorPosition + 1);
-			
 			
 		} else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 			displayedText = displayedText.substring(0, cursorPosition - 1) + displayedText.substring(cursorPosition);
 			
 			cursorPosition--;
 			onScreenCursorPosition-=17;
-			
 		} else if (key.getValue() == Key.ENTER) {
 			generateAction();
 			
 		} else if (key.getValue() == Key.HOME) {
 			cursorPosition = 0;
 			onScreenCursorPosition=getXTextPosition();
-			
 		} else if (key.getValue() == Key.END) {
 			cursorPosition = displayedText.length();
 			onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
@@ -133,13 +113,12 @@ public class TextField extends Widget implements  KeyListener{
 			cursorPosition++;
 			onScreenCursorPosition+=17;
 		}
-				
 	}
 
 	public void keyRelease(Key arg0) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
 	
-
+	enum ElementChanged { BORDER, TEXT, CURSOR , NONE };
+	
 }
