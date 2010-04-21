@@ -21,15 +21,13 @@ public class Panel extends Widget implements MouseListener {
 	private final int horizontalPixelShift = 10;
 	private final int verticalPixelShift = 10;
 	
-	public Panel(int xFormat,int yFormat) throws GUIException{
-		
+	public Panel(int xFormat,int yFormat) throws GUIException{		
 		super();
 		
 		this.xFormat = new Integer( ( xFormat > 3 ) ? 3 : xFormat );
 		this.yFormat = new Integer( ( yFormat > 3 ) ? 3 : yFormat );
 		
 		String commonFramesName="_Widget_Frame_Landscape.png";
-			
 		String frameName = "resource" + File.separator+ "PNG" + File.separator + this.xFormat.toString() + "x" + this.yFormat.toString() + commonFramesName;
 		
 		frame = new Image(frameName);
@@ -38,82 +36,61 @@ public class Panel extends Widget implements MouseListener {
 	}
 	
 	public void add(Widget widget, int offset) throws GUIException{
-	
 		if(widget == null){
 			
 			throw new GUIException("Widget doesn't exist");
-		}
-		
+		} 
 		else if ( offset > xFormat.intValue() * yFormat.intValue() - 1 ){
 			
 			throw new GUIException("Offset out of range for the panel.");
 		}
-		
-		
 		int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
 		int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
 		
 		widgetList.add(widget);
-	
 		widget.setPosition(horizontalShift, verticalShift);
 		
-		if( this.getFocusHandler() != null){
-			
+		if( this.getFocusHandler() != null){	
 			widget.setFocusHandler(getFocusHandler());
 			widget.setFocusable(true);
 			widget.requestFocus();
 		}
-			
 	}
 	
 	public void remove(Widget widget) throws GUIException{
-		
 		for( Widget theWidget: widgetList){
-			
 			if(widget.equals(theWidget)){
-				
 				widgetList.remove(widget);
 				return;
 			}
-			
 		}
-		
 		throw new GUIException("No such widget in this panel");
 	}
 	
 	@Override
 	public void draw(Graphics arg0) throws GUIException {
-		
 			drawBorder(arg0);
 			
 			for ( Widget widget : widgetList){
-				
 				widget.draw(arg0);
 			}
-				
 	}
 
 	@Override
 	public void drawBorder(Graphics arg0) throws GUIException {
-	
 			arg0.drawImage(frame, getX(), getY() );
 	}
 
 	public void setWidgetsFocusHandler(FocusHandler focusHandler) throws GUIException{
-		
-		
 		for( Widget widget : widgetList){
-			
 			widget.setFocusHandler(focusHandler);
 			widget.setFocusable(true);
 			widget.requestFocus();
 		}
 	}
 	
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
-			throws GUIException {
+	public void mouseClick(int arg0, int arg1, int arg2, int arg3) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void mouseIn() throws GUIException {
@@ -150,7 +127,4 @@ public class Panel extends Widget implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	
-
 }

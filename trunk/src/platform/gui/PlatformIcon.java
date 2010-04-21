@@ -22,9 +22,7 @@ public class PlatformIcon extends Widget implements MouseListener{
 	}
 	@Override
 	public void draw(Graphics arg0) throws GUIException {
-	
 		arg0.drawImage(iconImage, getX(), getY());
-							
 	}
 
 	@Override
@@ -34,10 +32,7 @@ public class PlatformIcon extends Widget implements MouseListener{
 	}
 	
 	public void setAlpha(int alphaIndex) throws SDLException{
-	
 		((SDLSurface)iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
-				
-		
 	}
 	
 	public void mouseClick(int arg0, int arg1, int arg2, int arg3)

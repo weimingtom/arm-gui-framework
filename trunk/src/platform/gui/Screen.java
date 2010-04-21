@@ -27,29 +27,20 @@ public class Screen {
 	private EventDispatcher eventDispatcher;
 	private boolean running;
 	
-	
-	
-	public static Screen getScreen() throws SDLException{
-		
+	public static Screen getScreen() throws SDLException{	
 		if(_soleInstance == null){
-			
 			_soleInstance = new Screen();
-			
 		}
-					
 			return _soleInstance;
 	}
 	
-	public void refresh() throws GUIException, SDLException{
-		
+	public void refresh() throws GUIException, SDLException{	
 		background.refreshArea();
 		foreground.refreshArea();
 		target.flip();
-		
 	}
 
-	public void setAreas(Area background, Area foreground) throws SDLException{
-		
+	public void setAreas(Area background, Area foreground) throws SDLException{		
 		this.background = background;
 		this.foreground = foreground;
 		
@@ -98,23 +89,17 @@ public class Screen {
 	}
 
 	private void startEventHandling() throws SDLException{
-		
 		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
 		EventCapturer eventCapturer = new EventCapturer((SDLInput)inputSource, eventDispatcher);
-	
 	}
-	private Screen() throws SDLException{
-		
+	
+	private Screen() throws SDLException{	
 		//TODO change that for normal variables ?
-		
 		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
 		graphics = new SDLGraphics();
 		graphics.setTarget(target);
 		inputSource = new SDLInput();
 		running = true;
-		
-		
-	
 	}
 	
 	

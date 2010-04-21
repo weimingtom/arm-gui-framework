@@ -34,30 +34,18 @@ public class Area {
 	private final int defYGrid = 4;
 	
 	public Area(String filename, int... args ) throws GUIException {
-		
-	
 		try {
 			surface= SDLImage.load(filename);
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
-
-					
-		} 
-		
-	
-		catch (SDLException e) {
+		}  catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to load image");
-			
 		}
-		
-
 	}
-
 	
-	public Area(Image image, int... args) throws GUIException {
-		
+	public Area(Image image, int... args) throws GUIException {	
 		surface = (SDLSurface) image.getData();
 		
 		if(surface == null){
@@ -71,7 +59,6 @@ public class Area {
 	
 	
 	public Area(SDLColor color, int... args) throws GUIException{
-
 		int rmask,gmask,bmask,amask;
 		
 		if (SDLUtils.SDL_BYTEORDER == SDLUtils.SDL_BIG_ENDIAN) {
@@ -86,8 +73,7 @@ public class Area {
 			amask = 0xff000000;
 		}
 		
-		try {
-			
+		try {	
 			//TODO mask problem and transparency
 			surface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
 			surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 0));
@@ -99,23 +85,16 @@ public class Area {
 		catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to create surface from color");
-		}
-		
-		
-		
+		}	
 	}
 	
 	public void add(Widget widget, int offset) throws GUIException{
-		
 		int returnValue,xCellNeeded,yCellNeeded;
 		
-		if(widget == null){
-			
+		if(widget == null){	
 			throw new GUIException("Widget doesn't exist");
 		}
-		
-		else if ( offset > grid[0] * grid[1] - 1 ){
-			
+		else if ( offset > grid[0] * grid[1] - 1 ){	
 			throw new GUIException("Offset out of range for the area.");
 		}
 
@@ -128,77 +107,50 @@ public class Area {
 		Set<Integer> cellsNr = new HashSet<Integer>();
 		
 		//TODO check here if cells are not reserved
-		for(int xIndex=offset; xIndex<= offset+xCellNeeded; xIndex ++){
-			
+		for(int xIndex=offset; xIndex<= offset+xCellNeeded; xIndex ++){	
 			for(int yIndex= 0; yIndex<= yCellNeeded; yIndex++){
-				
 				cellsNr.add(new Integer(yIndex*grid[0] + xIndex));
-								
 			}
-			
 		}
 		
 		widgetMap.put(widget, cellsNr);
 		
 		Class<? extends Widget> c = widget.getClass();
-		
-		
 		if( !c.getName().equals("platform.gu.Panel")){
-		
 			widget.setFocusHandler(focusHandler);
-			((Panel)widget).setWidgetsFocusHandler(focusHandler);
-			
+			((Panel)widget).setWidgetsFocusHandler(focusHandler);		
 		}
-		
 		else{
-		
-		widget.setFocusHandler(focusHandler);
-		widget.setFocusable(true);
-		widget.requestFocus();
-		
-		}
-		
+			widget.setFocusHandler(focusHandler);
+			widget.setFocusable(true);
+			widget.requestFocus();
+		}	
 		widget.setPosition( (offset % grid[0])* xCellDimension ,(offset / grid[1] ) * yCellDimension);
-		
-		
 	}
 	
-	public void remove(Widget widget) throws GUIException{
-		
+	public void remove(Widget widget) throws GUIException{	
 		for( Widget theWidget: widgetMap.keySet()){
-			
 			if(theWidget.equals(widget)){
-				
 				widgetMap.remove(widget);
 				return;
-			}
-			
+			}		
 		}
-		
-		
 		throw new GUIException("No such widget in this area");
-		
 	}
 	
 	public void refreshArea() throws GUIException, SDLException{
-		
 		//TODO refreshing function if really needed
-		
 		surfaceGraphics.beginDraw();
 		
 		for ( Widget widgetToDraw : widgetMap.keySet()){
-			
 			//TODO if it needs to be updated
 			 widgetToDraw.draw(surfaceGraphics);
 		}
-		
 		surfaceGraphics.endDraw();
-		drawSurface();
-		
+		drawSurface();	
 	}
 		
 	public void setAlpha(int alphaIndex) throws SDLException{
-		
 		//TODO fast alpha blitting? 
 		surface.setAlpha(Screen._alphaFlags, alphaIndex);
 		//SDLSurface optimizedAlphaSurface = area.getSurface().displayFormatAlpha();
@@ -225,37 +177,25 @@ public class Area {
 
 
 	protected void drawSurface() throws GUIException{
-		
-		
 		try {
 			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
 				
 			screenGraphics.beginDraw();
 			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
 			screenGraphics.endDraw();
-			
-		} 
-		
-		catch (SDLException e) {
-			
+		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
 		}
-		
-	
 	}
 
-	private void calculateCellDimension(){
-		
+	private void calculateCellDimension(){		
 		xCellDimension = Screen._screenWidth / grid[0] ;
-		yCellDimension = Screen._screenHeight / grid[1] ;
-		
+		yCellDimension = Screen._screenHeight / grid[1] ;	
 	}
 	
 	private void setGrid(int []args){
-		
 		int index=0;
-		
 		grid = new int[2];
 		
 		grid[0] = defXGrid;
@@ -265,9 +205,7 @@ public class Area {
 			grid[index] = i;
 			index++;
 		}
-		
 		calculateCellDimension();
-	}
-		
+	}	
 		
 }
