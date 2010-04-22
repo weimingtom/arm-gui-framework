@@ -29,41 +29,48 @@ public class EventCapturer extends Thread{
 	
 	public void run(){
 		//TODO implement handling mousekeydown etc.
-		while(!Thread.interrupted()){
-			try {
-				/*
-				 * Poll SDL events
-				 */
-				while (null != (event = SDLEvent.pollEvent())) {	
-					if (event.getType() == SDLEvent.SDL_KEYDOWN) {
-							if (((SDLKeyboardEvent) event).getSym() == SDLKey.SDLK_ESCAPE) {
-										Screen.getScreen().setRunning(false);
-							}		
-						eventCaptured = true;
-					} 
-					else if (event.getType() == SDLEvent.SDL_QUIT) {
-						Screen.getScreen().setRunning(false);		
+		try {
+			while(!Thread.interrupted()){
+					/*
+					 * Poll SDL events
+					 */
+					while (null != (event = SDLEvent.pollEvent())) {	
+						if (event.getType() == SDLEvent.SDL_KEYDOWN) {
+								if (((SDLKeyboardEvent) event).getSym() == SDLKey.SDLK_ESCAPE) {
+											Screen.getScreen().setRunning(false);
+											return;
+								}		
+							eventCaptured = true;
+						} 
+						else if (event.getType() == SDLEvent.SDL_QUIT) {
+							Screen.getScreen().setRunning(false);	
+							return;
+						}
+							/*
+							 * Now that we are done polling and using SDL events we pass the leftovers to the
+							 * SDLInput object to later be handled by the Gui.
+							 */
+							 inputSource.pushInput(event);	
 					}
-						/*
-						 * Now that we are done polling and using SDL events we pass the leftovers to the
-						 * SDLInput object to later be handled by the Gui.
-						 */
-						 inputSource.pushInput(event);	
-				}
-				if(eventCaptured){
-					eventCaptured = false;
-					
-					synchronized(eventDispatcher){
-						eventDispatcher.eventTriggered = true;
-						eventDispatcher.notify();
+					if(eventCaptured){
+						eventCaptured = false;
+						
+						synchronized(eventDispatcher){
+							eventDispatcher.eventTriggered = true;
+							eventDispatcher.notify();
+						}
 					}
-				}
-				Thread.yield();
-			} catch (SDLException e) {
+					//Thread.yield();
+					Thread.sleep(200);
+			}
+		}	
+		catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			}
-		}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 }	

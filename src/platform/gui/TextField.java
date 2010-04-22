@@ -57,12 +57,14 @@ public class TextField extends Widget implements  KeyListener{
 			break;
 			
 			case TEXT:
-				drawBorder(graphics);
+				
+				drawTextLine(graphics);
 				drawText(graphics);
 				drawCursor(graphics);
 			break;
 			
 			case CURSOR:
+				eraseCursor(graphics);
 				drawCursor(graphics);
 			break;
 			
@@ -73,7 +75,21 @@ public class TextField extends Widget implements  KeyListener{
 		
 		elementChanged = ElementChanged.NONE;
 	}
-
+	
+	public void eraseCursor(Graphics graphics) throws GUIException{
+		
+		if(prevOnScreenCursorPosition!=0){
+			graphics.setColor(new Color(0, 0, 0, 255));
+			graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
+			}
+		prevOnScreenCursorPosition=onScreenCursorPosition;
+	}
+	
+	/*public void eraseText(Graphics graphics) throws GUIException{
+		
+		textFont.drawString(graphics, "               ", getXTextPosition(), getYTextPosition() );
+		
+	}*/
 	
 	public void drawText(Graphics graphics) throws GUIException{
 	
@@ -83,20 +99,22 @@ public class TextField extends Widget implements  KeyListener{
 		}
 	}
 	
+	public void drawTextLine(Graphics graphics) throws GUIException{
+		//TODO change an argument 150 for visible text length
+		graphics.drawImage(textField, (int)(getWidth() * 0.2) , (int)(getHeight() * 0.3), getXTextPosition(), getYTextPosition(), 150, textFont.getHeight() + 1 ); 
+		
+	}
+	
 	public void drawBorder(Graphics graphics) throws GUIException {
 		graphics.drawImage(textField, getX(), getY());
 	}
 
 	
 	public void drawCursor(Graphics graphics) throws GUIException{
+		
 		graphics.setColor(new Color(cursorColor.getRed(), cursorColor.getGreen(), cursorColor.getBlue(), 255));
 		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
 		
-		if(prevOnScreenCursorPosition!=0){
-		graphics.setColor(new Color(0, 0, 0, 255));
-		graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
-		}
-		prevOnScreenCursorPosition=onScreenCursorPosition;
 	}
 	
 	public String getDisplayedText() {
@@ -150,7 +168,7 @@ public class TextField extends Widget implements  KeyListener{
 			} 
 			else if (key.getValue() == Key.HOME) {
 				cursorPosition = 0;
-				onScreenCursorPosition=getXTextPosition();
+				onScreenCursorPosition=getXTextPosition() + 15;
 				elementChanged = ElementChanged.CURSOR; //TODO distinguish here if text is longer than window
 			} 
 			else if (key.getValue() == Key.END) {

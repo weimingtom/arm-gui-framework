@@ -25,7 +25,7 @@ public class Screen {
 	private SDLSurface target;
 	private SDLGraphics graphics;
 	private EventDispatcher eventDispatcher;
-	private boolean running;
+	private volatile boolean running;
 	
 	public static Screen getScreen() throws SDLException{	
 		if(_soleInstance == null){

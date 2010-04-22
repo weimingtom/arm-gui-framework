@@ -30,7 +30,7 @@ public class EventDispatcher extends Thread{
 	
 	public void run(){
 		try{
-			while(!Thread.interrupted()){
+			while(Screen.getScreen().isRunning()){
 			
 				synchronized(this){		
 					while(eventTriggered == false){ 	//waiting for an event to be triggered
@@ -65,12 +65,15 @@ public class EventDispatcher extends Thread{
 
 					active.getFocusHandler().applyChanges();
 				}
-				
+				Thread.sleep(200);
 			}
 			
 		} catch(InterruptedException e){
 			e.printStackTrace();
 		} catch (GUIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -59,7 +59,7 @@ public class SimpleTextFieldTest {
 				
 				screen.refresh();
 				
-				SDLTimer.delay(100);
+				Thread.sleep(200);
 			}
 			googleSearch.delete();
 			panel.delete();
@@ -77,7 +77,7 @@ public class SimpleTextFieldTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
-								
+			System.exit(0);					
 		}
 		
 		
