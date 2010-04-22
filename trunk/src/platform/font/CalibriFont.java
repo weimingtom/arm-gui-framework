@@ -61,7 +61,7 @@ public class CalibriFont implements Font{
 	public int getCharacterWidth(char character) throws SDLException{		
 		GlyphMetrics glyphMetrics = calibriFont.glyphMetrics(character);
 		
-		return glyphMetrics.getMaxX() - glyphMetrics.getMinX() + 2 ;
+		return glyphMetrics.getMaxX() - glyphMetrics.getMinX() + 2;
 	}
 	
 	public int getWidth(String string) {
@@ -75,7 +75,6 @@ public class CalibriFont implements Font{
 				e.printStackTrace();
 			}
 		}
-		System.out.println(width);	
 		return width;
 	}
 
