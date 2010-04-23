@@ -75,5 +75,13 @@ public class PlatformIcon extends Widget implements MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void delete() throws GUIException {
+		// TODO Auto-generated method stub
+		iconImage.delete();
+		super.delete();
+	}
+	
+	
 
 }
