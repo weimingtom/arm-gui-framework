@@ -32,7 +32,7 @@ public class TextField extends Widget implements  KeyListener{
 	
 	public TextField(String text) throws GUIException, SDLException{
 		displayedText = text;
-		textField = new Image(new String("resource" + File.separator + "images" + File.separator + "google_search.png"));
+		textField = new Image("resource" + File.separator + "images" + File.separator + "google_search.png");
 		cursorColor = new SDLColor(255,255,255,0);
 		textFont = new CalibriFont((int) (textField.getHeight() * 0.45), new SDLColor(255,255,255,0));
 		setWidth(textField.getWidth());
