@@ -61,7 +61,6 @@ public class SimpleTextFieldTest {
 				
 				Thread.sleep(200);
 			}
-			googleSearch.delete();
 			panel.delete();
 			
 			

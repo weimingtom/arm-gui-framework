@@ -194,6 +194,11 @@ public class TextField extends Widget implements  KeyListener{
 		// TODO Auto-generated method stub
 	}
 	
+	public void delete() throws GUIException {
+		textField.delete();
+		textFont.delete();
+		super.delete();
+	}
 	enum ElementChanged { TEXT, CURSOR , NONE, ALL };
 	
 }

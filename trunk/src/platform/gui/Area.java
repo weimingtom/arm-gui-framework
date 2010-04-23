@@ -42,6 +42,7 @@ public class Area {
 		}  catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to load image");
+			
 		}
 	}
 	
@@ -115,8 +116,7 @@ public class Area {
 		
 		widgetMap.put(widget, cellsNr);
 		
-		Class<? extends Widget> c = widget.getClass();
-		if( !c.getName().equals("platform.gu.Panel")){
+		if( widget instanceof Panel ){
 			widget.setFocusHandler(focusHandler);
 			((Panel)widget).setWidgetsFocusHandler(focusHandler);		
 		}

@@ -88,7 +88,12 @@ public class CalibriFont implements Font{
 	}
 	
 	public void delete() throws GUIException {
-		// TODO Auto-generated method stub
+		try {
+			calibriFont.closeFont();
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
