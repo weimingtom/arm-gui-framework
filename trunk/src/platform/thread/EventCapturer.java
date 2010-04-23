@@ -28,7 +28,7 @@ public class EventCapturer extends Thread{
 	}
 	
 	public void run(){
-		//TODO implement handling mousekeydown etc.
+
 		try {
 			while(!Thread.interrupted()){
 					/*
@@ -40,17 +40,18 @@ public class EventCapturer extends Thread{
 											Screen.getScreen().setRunning(false);
 											return;
 								}		
-							eventCaptured = true;
 						} 
 						else if (event.getType() == SDLEvent.SDL_QUIT) {
 							Screen.getScreen().setRunning(false);	
 							return;
 						}
+						
 							/*
 							 * Now that we are done polling and using SDL events we pass the leftovers to the
 							 * SDLInput object to later be handled by the Gui.
 							 */
-							 inputSource.pushInput(event);	
+						eventCaptured = true;
+						 inputSource.pushInput(event);	
 					}
 					if(eventCaptured){
 						eventCaptured = false;

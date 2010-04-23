@@ -115,7 +115,7 @@ public class Area {
 		}
 		
 		widgetMap.put(widget, cellsNr);
-		
+	
 		if( widget instanceof Panel ){
 			widget.setFocusHandler(focusHandler);
 			((Panel)widget).setWidgetsFocusHandler(focusHandler);		
@@ -166,6 +166,35 @@ public class Area {
 	}
 	
 	
+	public Map<Widget, Set<Integer>> getWidgetMap() {
+		return widgetMap;
+	}
+
+
+	public SDLGraphics getSurfaceGraphics() {
+		return surfaceGraphics;
+	}
+
+	public int[] getGrid() {
+		return grid;
+	}
+
+	public int getxCellDimension() {
+		return xCellDimension;
+	}
+
+	public int getyCellDimension() {
+		return yCellDimension;
+	}
+
+	public int getDefXGrid() {
+		return defXGrid;
+	}
+
+	public int getDefYGrid() {
+		return defYGrid;
+	}
+
 	public FocusHandler getFocusHandler() {
 		return focusHandler;
 	}
@@ -177,12 +206,12 @@ public class Area {
 	
 	public void delete() throws GUIException, SDLException{
 		
-		surface.freeSurface();
 		for (Widget widget: widgetMap.keySet() ){
-			
 			widget.delete();
+			System.out.println("Deleting");
 		}
-		
+
+		surface.freeSurface();
 	}
 
 	protected void drawSurface() throws GUIException{

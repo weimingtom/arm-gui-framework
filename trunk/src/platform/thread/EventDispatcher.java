@@ -6,7 +6,9 @@ import sdljava.SDLException;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Key;
 import sdljavax.guichan.evt.KeyInput;
+import sdljavax.guichan.evt.MouseInput;
 import sdljavax.guichan.sdl.SDLInput;
+import sdljavax.guichan.widgets.Widget;
 
 public class EventDispatcher extends Thread{
 
@@ -15,6 +17,7 @@ public class EventDispatcher extends Thread{
 	private Area background;
 	private Area foreground;
 	private ActiveArea activeArea;
+	private Widget widgetWithMouse= null;
 	
 	public EventDispatcher(SDLInput input) throws SDLException{
 		super("EventDispatcher");
@@ -29,18 +32,20 @@ public class EventDispatcher extends Thread{
 	}
 	
 	public void run(){
+		//TODO add handling mousekeydown
 		try{
 			while(Screen.getScreen().isRunning()){
-			
 				synchronized(this){		
 					while(eventTriggered == false){ 	//waiting for an event to be triggered
 						wait(); 
 					}
 					eventTriggered = false;
 				}
+				
 				inputSource.pollInput();
 				Area active = (activeArea == ActiveArea.BACKGROUND) ? background : foreground;
-					
+				
+				
 				while (false == inputSource.isKeyQueueEmpty()) {	
 					KeyInput ki = inputSource.dequeueKeyInput();
 
@@ -63,6 +68,43 @@ public class EventDispatcher extends Thread{
 						}
 					}
 
+					active.getFocusHandler().applyChanges();
+				}
+				
+				
+				while (false == inputSource.isMouseQueueEmpty()) {
+					MouseInput mi = inputSource.dequeueMouseInput();
+
+						//TODO check here if the widget is inside borders
+					if (mi.x > 0 && mi.y > 0 ){
+						if(widgetWithMouse != null){
+							if(!widgetWithMouse.getDimension().isPointInRect(mi.x, mi.y)){
+								widgetWithMouse.mouseOutMessage();
+								widgetWithMouse = null;
+													
+							}
+							else{
+								widgetWithMouse.mouseInputMessage(mi);
+								continue;
+							}
+						}
+						
+						for(Widget widget: active.getWidgetMap().keySet()){
+																					
+							if( widget.getDimension().isPointInRect(mi.x, mi.y) ) {
+								widgetWithMouse = widget;
+								if (false == widgetWithMouse.hasMouse()) {
+									
+									widgetWithMouse.mouseInMessage();
+									continue;
+								
+								}
+								
+								widgetWithMouse.mouseInputMessage(mi);
+								
+							}	
+						}
+					}
 					active.getFocusHandler().applyChanges();
 				}
 				Thread.sleep(200);

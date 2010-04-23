@@ -90,7 +90,6 @@ public class Screen {
 
 	public void delete() throws SDLException, GUIException{
 		
-		target.freeSurface();
 		if(foreground != null){
 			foreground.delete();
 		}
@@ -98,6 +97,7 @@ public class Screen {
 			background.delete();
 		}
 		
+		target.freeSurface();
 	}
 	private void startEventHandling() throws SDLException{
 		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
