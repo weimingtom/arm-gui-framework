@@ -22,9 +22,11 @@ public class SimpleTextFieldTest {
 
 	/**
 	 * @param args
+	 * @throws SDLException 
+	 * @throws GUIException 
 	 */
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws SDLException, GUIException {
+		Screen screen = null;
 		
 		
 		try {
@@ -36,7 +38,7 @@ public class SimpleTextFieldTest {
 			
 			Input input = new SDLInput();
 			
-			Screen screen = Screen.getScreen();
+			screen=Screen.getScreen();
 			screen.setInputSource(input);
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
@@ -61,13 +63,11 @@ public class SimpleTextFieldTest {
 				
 				Thread.sleep(200);
 			}
-			panel.delete();
 			
 			
-			SDLTTF.quit();
-			SDLMain.quit();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (GUIException e) {
 			// TODO Auto-generated catch block
@@ -76,6 +76,9 @@ public class SimpleTextFieldTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
+			screen.delete();
+			SDLTTF.quit();
+			SDLMain.quit();
 			System.exit(0);					
 		}
 		

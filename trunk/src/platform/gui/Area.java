@@ -174,7 +174,16 @@ public class Area {
 	public void setFocusHandler(FocusHandler focusHandler) {
 		this.focusHandler = focusHandler;
 	}
-
+	
+	public void delete() throws GUIException, SDLException{
+		
+		surface.freeSurface();
+		for (Widget widget: widgetMap.keySet() ){
+			
+			widget.delete();
+		}
+		
+	}
 
 	protected void drawSurface() throws GUIException{
 		try {
