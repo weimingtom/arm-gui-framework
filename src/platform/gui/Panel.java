@@ -127,4 +127,18 @@ public class Panel extends Widget implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void delete() throws GUIException {
+		// TODO Auto-generated method stub
+		frame.delete();
+		for (Widget widget: widgetList){
+			
+			widget.delete();
+		}
+		super.delete();
+		
+	}
+	
+	
 }
