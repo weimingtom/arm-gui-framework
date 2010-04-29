@@ -23,6 +23,7 @@ public class TextField extends Widget implements  KeyListener{
 	protected int cursorPosition;
 	protected int prevOnScreenCursorPosition;
 	protected int onScreenCursorPosition;
+	protected int stepsFromBorder;
 	protected SDLColor cursorColor;
 	protected ElementChanged elementChanged;
 	
@@ -41,7 +42,8 @@ public class TextField extends Widget implements  KeyListener{
 
 		cursorPosition = text.length();
 		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(displayedText) + 10; //TODO fix that shift somehow
-		prevOnScreenCursorPosition=0;
+		prevOnScreenCursorPosition=onScreenCursorPosition;
+		stepsFromBorder=10;
 		elementChanged = ElementChanged.ALL;
 		
 		addKeyListener(this);
@@ -57,9 +59,10 @@ public class TextField extends Widget implements  KeyListener{
 			break;
 			
 			case TEXT:
-				
+				eraseCursor(graphics);
 				drawTextLine(graphics);
 				drawText(graphics);
+			
 				drawCursor(graphics);
 			break;
 			
@@ -81,27 +84,34 @@ public class TextField extends Widget implements  KeyListener{
 		if(prevOnScreenCursorPosition!=0){
 			graphics.setColor(new Color(0, 0, 0, 255));
 			graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
-			}
+		}
 		prevOnScreenCursorPosition=onScreenCursorPosition;
 	}
-	
-	/*public void eraseText(Graphics graphics) throws GUIException{
-		
-		textFont.drawString(graphics, "               ", getXTextPosition(), getYTextPosition() );
-		
-	}*/
-	
+			
 	public void drawText(Graphics graphics) throws GUIException{
 	
-	
-		if(displayedText.length() != 0){	
-		textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
+		System.out.println(cursorPosition);
+		if(displayedText.length() != 0){
+		
+			if(displayedText.length() < 11){
+				
+				textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
+			}
+			else if(displayedText.length() - cursorPosition > 10){
+				textFont.drawString(graphics, displayedText.substring(cursorPosition, cursorPosition+10), getXTextPosition(), getYTextPosition() );
+				
+			}
+			else{
+				
+				textFont.drawString(graphics, displayedText.substring(cursorPosition-10, cursorPosition), getXTextPosition(), getYTextPosition() );
+
+			}
 		}
 	}
 	
 	public void drawTextLine(Graphics graphics) throws GUIException{
 		//TODO change an argument 150 for visible text length
-		graphics.drawImage(textField, (int)(getWidth() * 0.2) , (int)(getHeight() * 0.3), getXTextPosition(), getYTextPosition(), 150, textFont.getHeight() + 1 ); 
+		graphics.drawImage(textField, (int)(getWidth() * 0.2) , (int)(getHeight() * 0.3), getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ); 
 		
 	}
 	
@@ -138,26 +148,50 @@ public class TextField extends Widget implements  KeyListener{
 		//TODO add here notification of a change being made
 		try {
 			if (key.getValue() == Key.LEFT && cursorPosition > 0) {
+				if(displayedText.length() - cursorPosition > 9){
+				elementChanged = ElementChanged.TEXT;
+				}
+				else{
+				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
 				
-				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));			
-				--cursorPosition;
+					if(stepsFromBorder<10){
+						stepsFromBorder++;
+					}
 				elementChanged = ElementChanged.CURSOR;
-				
+				}
+				--cursorPosition;
 			}
 			else if (key.getValue() == Key.RIGHT && cursorPosition < displayedText.length()) {
 				
-				onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition));
-				++cursorPosition;
-				elementChanged = ElementChanged.CURSOR;
+			
+				if(stepsFromBorder > 0){
+					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition));
+					stepsFromBorder--;
+					elementChanged = ElementChanged.CURSOR;
 				
+				}
+				else {
+					elementChanged = ElementChanged.TEXT;
+				}
+				++cursorPosition;
+				//displayedText.length() - cursorPosition > 9) || 
 			}
 			else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
+				
 				displayedText = displayedText.substring(0, cursorPosition) + displayedText.substring(cursorPosition + 1);
+								
+				if(displayedText.length() > 9){
+					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));	
+					stepsFromBorder--;
+				}
 				elementChanged = ElementChanged.TEXT;
 			}
 			else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 				
+				if(cursorPosition<11){
 				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
+				stepsFromBorder++;
+				}
 				displayedText = displayedText.substring(0, cursorPosition - 1) + displayedText.substring(cursorPosition);
 				--cursorPosition;
 				elementChanged = ElementChanged.TEXT;
@@ -168,19 +202,28 @@ public class TextField extends Widget implements  KeyListener{
 			} 
 			else if (key.getValue() == Key.HOME) {
 				cursorPosition = 0;
-				onScreenCursorPosition=getXTextPosition() + 15;
+				stepsFromBorder=10;
+				onScreenCursorPosition=getXTextPosition();
 				elementChanged = ElementChanged.CURSOR; //TODO distinguish here if text is longer than window
 			} 
 			else if (key.getValue() == Key.END) {
 				cursorPosition = displayedText.length();
+				stepsFromBorder=(displayedText.length()>10) ? 0 : 10-displayedText.length() ;
+				if(cursorPosition<11){
 				onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
-				//TOD) distinguish here if text is longer than window
+				}
+				else{
+					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText.substring(cursorPosition-10, cursorPosition));
+					
+				}
 				elementChanged = ElementChanged.CURSOR;
 			} 
 			else if (key.isCharacter()) {
 				displayedText = displayedText.substring(0, cursorPosition) + (char) key.getValue() + displayedText.substring(cursorPosition);
-				++cursorPosition;
+				if(++cursorPosition<11){
+				stepsFromBorder--;
 				onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth((char) key.getValue());
+				}
 				elementChanged = ElementChanged.TEXT;
 			}
 		}
