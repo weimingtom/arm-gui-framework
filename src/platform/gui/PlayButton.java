@@ -20,6 +20,8 @@ public class PlayButton extends Widget implements MouseListener{
 		super();
 		resourcePath = new String("resource" + File.separator + "PNG" + File.separator + "music_button");
 		defaultButton = new Image(resourcePath + "_default.png");
+		clickedButton = new Image(resourcePath + "_pressed.png");
+		selectedButton = new Image(resourcePath + "_selected.png");
 		buttonState = ButtonStates.DEFAULT;
 		
 		setWidth(defaultButton.getWidth());
@@ -54,8 +56,8 @@ public class PlayButton extends Widget implements MouseListener{
 
 	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
 			throws GUIException {
-		System.out.println("Button clicked");
 		
+		//buttonState=ButtonStates.DEFAULT;
 	}
 
 	public void mouseIn() throws GUIException {
@@ -63,7 +65,6 @@ public class PlayButton extends Widget implements MouseListener{
 		m_bHasMouse =  true;
 		requestFocus();
 		buttonState = ButtonStates.SELECTED;
-		selectedButton = new Image(resourcePath + "_selected.png");
 	}
 
 	public void mouseMotion(int arg0, int arg1) throws GUIException {
@@ -84,13 +85,11 @@ public class PlayButton extends Widget implements MouseListener{
 
 	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
 		buttonState=ButtonStates.PRESSED;
-		clickedButton = new Image(resourcePath + "_pressed.png");
-		
-		
+				
 	}
 
 	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
-		System.out.println("Mouse release");
+	
 		buttonState=ButtonStates.DEFAULT;
 		
 	}
