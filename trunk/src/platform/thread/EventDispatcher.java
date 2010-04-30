@@ -32,7 +32,7 @@ public class EventDispatcher extends Thread{
 	}
 	
 	public void run(){
-		//TODO add handling mousekeydown
+		
 		try{
 			while(Screen.getScreen().isRunning()){
 				synchronized(this){		
@@ -75,7 +75,7 @@ public class EventDispatcher extends Thread{
 				while (false == inputSource.isMouseQueueEmpty()) {
 					MouseInput mi = inputSource.dequeueMouseInput();
 
-						//TODO check here if the widget is inside borders
+						
 					if (mi.x > 0 && mi.y > 0 ){
 						if(widgetWithMouse != null){
 							if(!widgetWithMouse.getDimension().isPointInRect(mi.x, mi.y)){

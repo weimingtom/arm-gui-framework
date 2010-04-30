@@ -38,12 +38,11 @@ public class SimplePanelTest {
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,5,4);
 		
-		    Panel panel = new Panel(2,2);
+		    Panel panel = new Panel(4,1);
 		    backgroundArea.add(panel, 6);
 		    
 		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "PNG" + File.separator + "Music_widget_button_states_default.png")));
-		    //PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
-		    panel.add(icon, 3);
+		      panel.add(icon, 3);
 		    		    
 			screen.setBackground(backgroundArea);
 			screen.setForeground(foregroundArea);

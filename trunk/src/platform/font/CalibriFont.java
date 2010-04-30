@@ -37,6 +37,17 @@ public class CalibriFont implements Font{
 		}
 	}
 
+	public void drawStringBlended(Graphics graphics, String string, int x, int y)throws GUIException {
+		try {
+			SDLSurface textSurface = calibriFont.renderTextBlended(string, fontColor);
+			SDLGraphics sdlGraphics = (SDLGraphics) graphics;
+			sdlGraphics.drawSDLSurface(textSurface, textSurface.getRect(), sdlGraphics.getTarget().getRect(x,y));
+		
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public int getHeight() {
 		return calibriFont.fontHeight();
 	}
