@@ -43,7 +43,7 @@ public class SimpleBackgroundTest {
 			   // Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 			   // foregroundArea = new Area( image);
 
-			   foregroundArea = new Area(new SDLColor(200,100,50) ,4, 4);
+			   foregroundArea = new Area(new SDLColor(100,200,250) ,4, 4);
 				
 			  screen.setAreas(backgroundArea, foregroundArea);
 			   								

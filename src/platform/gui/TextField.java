@@ -145,7 +145,7 @@ public class TextField extends Widget implements  KeyListener{
 	}
 
 	public void keyPress(Key key) throws GUIException{
-		//TODO add here notification of a change being made
+		
 		try {
 			if (key.getValue() == Key.LEFT && cursorPosition > 0) {
 				if(displayedText.length() - cursorPosition > 9){
@@ -174,7 +174,7 @@ public class TextField extends Widget implements  KeyListener{
 					elementChanged = ElementChanged.TEXT;
 				}
 				++cursorPosition;
-				//displayedText.length() - cursorPosition > 9) || 
+				
 			}
 			else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
 				
@@ -204,7 +204,7 @@ public class TextField extends Widget implements  KeyListener{
 				cursorPosition = 0;
 				stepsFromBorder=10;
 				onScreenCursorPosition=getXTextPosition();
-				elementChanged = ElementChanged.CURSOR; //TODO distinguish here if text is longer than window
+				elementChanged = ElementChanged.CURSOR; 
 			} 
 			else if (key.getValue() == Key.END) {
 				cursorPosition = displayedText.length();

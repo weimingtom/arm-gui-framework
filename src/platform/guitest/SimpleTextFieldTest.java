@@ -3,6 +3,7 @@ package platform.guitest;
 import java.io.File;
 
 import platform.gui.Area;
+import platform.gui.Label;
 import platform.gui.Panel;
 import platform.gui.PlatformIcon;
 import platform.gui.Screen;
@@ -41,18 +42,20 @@ public class SimpleTextFieldTest {
 			screen=Screen.getScreen();
 			screen.setInputSource(input);
 			
-			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
+			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),4,4);
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
-		    Area foregroundArea = new Area( image,5,4);
+		    Area foregroundArea = new Area( image,4,4);
 		
-		    TextField googleSearch = new TextField("google");
+		    //TextField googleSearch = new TextField("google");
 		    //TextField googleSearch = new TextField();
 		    
-		    Panel panel= new Panel(2,2);
-		    panel.add(googleSearch, 0);
-		    backgroundArea.add(panel, 6);
-		    		    
+		    Panel panel= new Panel(4,1);
+		     	
+		    backgroundArea.add(panel, 4);
+		    
+		    Label label = new Label ("David Guetta", "One Love", 160, 35);
+		    panel.add(label, 1);	    
 			screen.setAreas(backgroundArea, foregroundArea);
 			foregroundArea.setAlpha(0);
 			

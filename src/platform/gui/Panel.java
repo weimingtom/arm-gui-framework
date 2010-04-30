@@ -24,7 +24,7 @@ public class Panel extends Widget implements MouseListener {
 	public Panel(int xFormat,int yFormat) throws GUIException{		
 		super();
 		
-		this.xFormat = new Integer( ( xFormat > 3 ) ? 3 : xFormat );
+		this.xFormat = new Integer( ( xFormat > 4 ) ? 4 : xFormat );
 		this.yFormat = new Integer( ( yFormat > 3 ) ? 3 : yFormat );
 		
 		String commonFramesName="_Widget_Frame_Landscape.png";
