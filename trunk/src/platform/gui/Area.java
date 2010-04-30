@@ -60,24 +60,11 @@ public class Area {
 	
 	
 	public Area(SDLColor color, int... args) throws GUIException{
-		int rmask,gmask,bmask,amask;
-		
-		if (SDLUtils.SDL_BYTEORDER == SDLUtils.SDL_BIG_ENDIAN) {
-			rmask = 0xff000000;
-			gmask = 0x00ff0000;
-			bmask = 0x0000ff00;
-			amask = 0x000000ff;
-		} else {
-			rmask = 0x000000ff;
-			gmask = 0x0000ff00;
-			bmask = 0x00ff0000;
-			amask = 0xff000000;
-		}
-		
+					
 		try {	
-			//TODO mask problem and transparency
 			surface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
-			surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 0));
+			//surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 255));
+			surface.fillRect(surface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
