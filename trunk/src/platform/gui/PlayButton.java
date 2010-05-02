@@ -2,6 +2,8 @@ package platform.gui;
 
 import java.io.File;
 
+import platform.util.WidgetUpdate;
+import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Graphics;
@@ -46,6 +48,7 @@ public class PlayButton extends Widget implements MouseListener{
 				graphics.drawImage(selectedButton, getX(), getY());
 			break;
 		}
+		
 	}
 
 	@Override
@@ -65,6 +68,12 @@ public class PlayButton extends Widget implements MouseListener{
 		m_bHasMouse =  true;
 		requestFocus();
 		buttonState = ButtonStates.SELECTED;
+		try {
+			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),selectedButton.getWidth(), selectedButton.getHeight())));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void mouseMotion(int arg0, int arg1) throws GUIException {
@@ -76,8 +85,12 @@ public class PlayButton extends Widget implements MouseListener{
 		m_bHasMouse =  false;
 		buttonState=ButtonStates.DEFAULT;
 		try {
+			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
 			lostFocus();
 		} catch (GUIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -85,12 +98,23 @@ public class PlayButton extends Widget implements MouseListener{
 
 	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
 		buttonState=ButtonStates.PRESSED;
-				
+		try {
+			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),clickedButton.getWidth(), clickedButton.getHeight())));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
 	
 		buttonState=ButtonStates.DEFAULT;
+		try {
+			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
