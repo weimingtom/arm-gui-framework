@@ -1,32 +1,37 @@
 package platform.gui;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
+import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.image.SDLImage;
 import sdljava.video.SDLColor;
+import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
-import sdljavax.guichan.evt.Input;
-import sdljavax.guichan.evt.Key;
-import sdljavax.guichan.evt.KeyInput;
+import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.sdl.SDLGraphics;
-import sdljavax.guichan.sdl.SDLUtils;
+import sdljavax.guichan.widgets.BasicContainer;
 import sdljavax.guichan.widgets.Widget;
 
-public class Area {
+public class Area extends BasicContainer{
 
 	protected SDLSurface surface;
 	protected SDLGraphics surfaceGraphics;
 	protected FocusHandler focusHandler = new FocusHandler();
 	
 	protected Map<Widget, Set<Integer> > widgetMap = new HashMap<Widget , Set<Integer> >();
+	protected BlockingQueue<WidgetUpdate> widgetUpdateInfo = new LinkedBlockingQueue<WidgetUpdate>();
 	
 	protected int grid[];
 	protected int xCellDimension, yCellDimension;
@@ -39,11 +44,15 @@ public class Area {
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
+			startAreaUpdateHandler();
+			widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 		}  catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to load image");
 			
 		}
+		
+		
 	}
 	
 	public Area(Image image, int... args) throws GUIException {	
@@ -56,6 +65,8 @@ public class Area {
 		surfaceGraphics = new SDLGraphics();
 		surfaceGraphics.setTarget(surface);		
 		setGrid(args);
+		startAreaUpdateHandler();
+		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 	}
 	
 	
@@ -68,6 +79,8 @@ public class Area {
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
+			startAreaUpdateHandler();
+			widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 				
 		} 
 		catch (SDLException e) {
@@ -113,35 +126,35 @@ public class Area {
 			widget.requestFocus();
 		}	
 		widget.setPosition( (offset % grid[0])* xCellDimension ,(offset / grid[1] ) * yCellDimension);
+		widget.setParent(this);
+		
+		widgetUpdateInfo.add(new WidgetUpdate(widget , new SDLRect(widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight() )));
 	}
 	
 	public void remove(Widget widget) throws GUIException{	
+		
 		for( Widget theWidget: widgetMap.keySet()){
 			if(theWidget.equals(widget)){
 				widgetMap.remove(widget);
+				//TOD0 will this really work?
+				widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight() )));
 				return;
 			}		
 		}
 		throw new GUIException("No such widget in this area");
 	}
 	
-	public void refreshArea() throws GUIException, SDLException{
-		//TODO refreshing function if really needed
-		surfaceGraphics.beginDraw();
+	public boolean putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException{
 		
-		for ( Widget widgetToDraw : widgetMap.keySet()){
-			//TODO if it needs to be updated
-			 widgetToDraw.draw(surfaceGraphics);
-		}
-		surfaceGraphics.endDraw();
-		drawSurface();	
+		return widgetUpdateInfo.offer(updateInfo, 50L, TimeUnit.MILLISECONDS);
 	}
-		
+	
+	
 	public void setAlpha(int alphaIndex) throws SDLException{
-		//TODO fast alpha blitting? 
+		//TODO make here notification of a change being made
 		surface.setAlpha(Screen._alphaFlags, alphaIndex);
-		//SDLSurface optimizedAlphaSurface = area.getSurface().displayFormatAlpha();
-		//area.setSurface(optimizedAlphaSurface);
+		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
+				
 	}
 	
 	public SDLSurface getSurface() {
@@ -188,20 +201,55 @@ public class Area {
 
 
 	public void setFocusHandler(FocusHandler focusHandler) {
+		
 		this.focusHandler = focusHandler;
 	}
 	
-	public void delete() throws GUIException, SDLException{
+	public void delete() throws GUIException{
 		
-		for (Widget widget: widgetMap.keySet() ){
-			widget.delete();
-			System.out.println("Deleting");
+		for( Widget theWidget: widgetMap.keySet()){
+			theWidget.delete();		
 		}
-
-		surface.freeSurface();
+		
+		try {
+			surface.freeSurface();
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	protected void announceDeath(Widget widget) throws GUIException {
+		
+		for( Widget theWidget: widgetMap.keySet()){
+			if(theWidget.equals(widget)){
+				widgetMap.remove(widget);
+				return;
+			}		
+		}
 	}
 
-	protected void drawSurface() throws GUIException{
+	@Override
+	public Dimension getDrawSize(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void moveToBottom(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveToTop(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void draw(Graphics arg0) throws GUIException {
 		try {
 			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
 				
@@ -212,8 +260,29 @@ public class Area {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
 		}
+		
+	}
+	
+	public void draw(SDLRect rect) throws GUIException{
+		
+		try {
+			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
+				
+			screenGraphics.beginDraw();
+			screenGraphics.drawSDLSurface(surface, rect, rect);
+			screenGraphics.endDraw();
+		} catch (SDLException e) {
+			e.printStackTrace();
+			throw new GUIException("Exception while drawing on target surface");
+		}
 	}
 
+	@Override
+	public void drawBorder(Graphics arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	private void calculateCellDimension(){		
 		xCellDimension = Screen._screenWidth / grid[0] ;
 		yCellDimension = Screen._screenHeight / grid[1] ;	
@@ -231,6 +300,70 @@ public class Area {
 			index++;
 		}
 		calculateCellDimension();
-	}	
+	}
+	private void startAreaUpdateHandler(){
+		AreaUpdateHandler areaUpdateHandler = new AreaUpdateHandler();
+	}
+	private class AreaUpdateHandler extends Thread{
 		
+		boolean needsUpdate = false;
+		
+		public AreaUpdateHandler(){
+			super();
+			start();
+		}
+		
+		public void run(){
+			//TODO solve the problem of whole screen being changed?
+			try {
+				while(Screen.getScreen().isRunning()){
+					WidgetUpdate widgetToUpdate;
+						while( widgetUpdateInfo.size() > 0 ){
+							surfaceGraphics.beginDraw();
+								if ((widgetToUpdate= widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null){
+									
+									widgetToUpdate.getWidget().draw(surfaceGraphics);
+									draw(widgetToUpdate.getWidgetRegion());
+									//draw(surfaceGraphics);
+									needsUpdate = true;
+								}
+							surfaceGraphics.endDraw();
+						}
+						if(needsUpdate == true){
+							needsUpdate = false;
+							Screen.getScreen().refresh();
+						}
+						Thread.sleep(200);
+				}
+				
+				
+			} catch (SDLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (GUIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+	}
 }
+
+/*
+ * public void refreshArea() throws GUIException, SDLException{
+		//TODO refreshing function if really needed
+		surfaceGraphics.beginDraw();
+		
+		for ( Widget widgetToDraw : widgetMap.keySet()){
+			//TODO if it needs to be updated
+			 widgetToDraw.draw(surfaceGraphics);
+		}
+		surfaceGraphics.endDraw();
+		drawSurface();	
+	}
+	*/

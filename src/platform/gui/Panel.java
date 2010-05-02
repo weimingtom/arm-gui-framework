@@ -49,12 +49,14 @@ public class Panel extends Widget implements MouseListener {
 		
 		widgetList.add(widget);
 		widget.setPosition(horizontalShift, verticalShift);
+		widget.setParent(getParent());
 		
 		if( this.getFocusHandler() != null){	
 			widget.setFocusHandler(getFocusHandler());
 			widget.setFocusable(true);
 			widget.requestFocus();
 		}
+		
 	}
 	
 	public void remove(Widget widget) throws GUIException{

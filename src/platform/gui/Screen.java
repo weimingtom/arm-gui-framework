@@ -24,19 +24,21 @@ public class Screen {
 	private Input inputSource;
 	private SDLSurface target;
 	private SDLGraphics graphics;
-	private EventDispatcher eventDispatcher;
 	private volatile boolean running;
 	
 	public static Screen getScreen() throws SDLException{	
 		if(_soleInstance == null){
-			_soleInstance = new Screen();
+			
+			synchronized(Screen.class){
+				if(_soleInstance == null){
+					_soleInstance = new Screen();
+				}
+			}
+			
 		}
 			return _soleInstance;
 	}
-	
-	public void refresh() throws GUIException, SDLException{	
-		background.refreshArea();
-		foreground.refreshArea();
+	public synchronized void refresh() throws SDLException{
 		target.flip();
 	}
 

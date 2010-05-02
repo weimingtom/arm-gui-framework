@@ -3,12 +3,13 @@ package platform.gui;
 import java.io.File;
 
 import platform.font.CalibriFont;
+import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.video.SDLColor;
+import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Key;
 import sdljavax.guichan.evt.KeyListener;
-import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.font.Font;
 import sdljavax.guichan.gfx.Color;
 import sdljavax.guichan.gfx.Graphics;
@@ -226,8 +227,21 @@ public class TextField extends Widget implements  KeyListener{
 				}
 				elementChanged = ElementChanged.TEXT;
 			}
+			
+			if(elementChanged == ElementChanged.TEXT){
+				
+				((Area)getParent()).putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
+			}
+			else{ //elementChanged == ElementChanged.CURSOR
+				int smallerIndex = (prevOnScreenCursorPosition < onScreenCursorPosition) ? prevOnScreenCursorPosition : onScreenCursorPosition;
+				int greaterIndex = (prevOnScreenCursorPosition > onScreenCursorPosition) ? prevOnScreenCursorPosition : onScreenCursorPosition;
+				((Area)getParent()).putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(  smallerIndex - 1 , greaterIndex + 1, Math.abs(prevOnScreenCursorPosition - onScreenCursorPosition), textFont.getHeight() + 1 ) ) );
+			}
 		}
 		catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

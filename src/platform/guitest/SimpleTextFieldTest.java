@@ -28,7 +28,7 @@ public class SimpleTextFieldTest {
 	 */
 	public static void main(String[] args) throws SDLException, GUIException {
 		Screen screen = null;
-		
+		int i=0;
 		
 		try {
 			SDLMain.init(SDLMain.SDL_INIT_VIDEO);
@@ -46,25 +46,22 @@ public class SimpleTextFieldTest {
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,4,4);
-		
-		    //TextField googleSearch = new TextField("google");
+		    foregroundArea.setAlpha(i);
+		    TextField googleSearch = new TextField("google");
 		    //TextField googleSearch = new TextField();
-		    
+		    backgroundArea.add(googleSearch,4);
 		    Panel panel= new Panel(4,1);
 		     	
-		    backgroundArea.add(panel, 4);
+		    //backgroundArea.add(panel, 4);
 		    
-		    Label label = new Label ("David Guetta", "One Love", 160, 35);
-		    panel.add(label, 1);	    
+		    //Label label = new Label ("David Guetta", "One Love", 160, 35);
+		    //panel.add(label, 1);	    
 			screen.setAreas(backgroundArea, foregroundArea);
-			foregroundArea.setAlpha(0);
-			
-		
+					
 			while(screen.isRunning()){
-				
-				screen.refresh();
-				
-				Thread.sleep(200);
+				//foregroundArea.setAlpha(i%255);
+				//i+=5;
+				Thread.sleep(300);
 			}
 			
 			
