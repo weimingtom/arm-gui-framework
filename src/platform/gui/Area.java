@@ -9,6 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.image.SDLImage;
@@ -24,7 +25,7 @@ import sdljavax.guichan.sdl.SDLGraphics;
 import sdljavax.guichan.widgets.BasicContainer;
 import sdljavax.guichan.widgets.Widget;
 
-public class Area extends BasicContainer{
+public class Area extends BasicContainer implements UpdateListener{
 
 	protected SDLSurface surface;
 	protected SDLGraphics surfaceGraphics;
