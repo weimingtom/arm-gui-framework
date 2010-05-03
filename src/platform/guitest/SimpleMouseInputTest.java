@@ -50,13 +50,10 @@ public class SimpleMouseInputTest {
 			
 		
 			while(screen.isRunning()){
-				
-				screen.refresh();
-				
+											
 				Thread.sleep(200);
 			}
-			screen.delete();
-			SDLMain.quit();
+			
 			
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
