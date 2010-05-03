@@ -156,6 +156,83 @@ public class Area extends BasicContainer{
 		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 				
 	}
+		
+	@Override
+	public void draw(Graphics arg0) throws GUIException {
+		try {
+			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
+				
+			screenGraphics.beginDraw();
+			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
+			screenGraphics.endDraw();
+		} catch (SDLException e) {
+			e.printStackTrace();
+			throw new GUIException("Exception while drawing on target surface");
+		}
+		
+	}
+	
+	public void draw(SDLRect rect) throws GUIException{
+		
+		try {
+			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
+				
+			screenGraphics.beginDraw();
+			screenGraphics.drawSDLSurface(surface, rect, rect);
+			screenGraphics.endDraw();
+		} catch (SDLException e) {
+			e.printStackTrace();
+			throw new GUIException("Exception while drawing on target surface");
+		}
+	}
+
+	public void delete() throws GUIException{
+		
+		for( Widget theWidget: widgetMap.keySet()){
+			theWidget.delete();		
+		}
+		
+		try {
+			surface.freeSurface();
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void announceDeath(Widget widget) throws GUIException {
+		
+		for( Widget theWidget: widgetMap.keySet()){
+			if(theWidget.equals(widget)){
+				widgetMap.remove(widget);
+				return;
+			}		
+		}
+	}
+
+	@Override
+	public Dimension getDrawSize(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void moveToBottom(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveToTop(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void drawBorder(Graphics arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	public SDLSurface getSurface() {
 		return surface;
@@ -205,84 +282,6 @@ public class Area extends BasicContainer{
 		this.focusHandler = focusHandler;
 	}
 	
-	public void delete() throws GUIException{
-		
-		for( Widget theWidget: widgetMap.keySet()){
-			theWidget.delete();		
-		}
-		
-		try {
-			surface.freeSurface();
-		} catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	protected void announceDeath(Widget widget) throws GUIException {
-		
-		for( Widget theWidget: widgetMap.keySet()){
-			if(theWidget.equals(widget)){
-				widgetMap.remove(widget);
-				return;
-			}		
-		}
-	}
-
-	@Override
-	public Dimension getDrawSize(Widget arg0) throws GUIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void moveToBottom(Widget arg0) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveToTop(Widget arg0) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void draw(Graphics arg0) throws GUIException {
-		try {
-			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
-				
-			screenGraphics.beginDraw();
-			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
-			screenGraphics.endDraw();
-		} catch (SDLException e) {
-			e.printStackTrace();
-			throw new GUIException("Exception while drawing on target surface");
-		}
-		
-	}
-	
-	public void draw(SDLRect rect) throws GUIException{
-		
-		try {
-			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
-				
-			screenGraphics.beginDraw();
-			screenGraphics.drawSDLSurface(surface, rect, rect);
-			screenGraphics.endDraw();
-		} catch (SDLException e) {
-			e.printStackTrace();
-			throw new GUIException("Exception while drawing on target surface");
-		}
-	}
-
-	@Override
-	public void drawBorder(Graphics arg0) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	private void calculateCellDimension(){		
 		xCellDimension = Screen._screenWidth / grid[0] ;
 		yCellDimension = Screen._screenHeight / grid[1] ;	
@@ -301,9 +300,11 @@ public class Area extends BasicContainer{
 		}
 		calculateCellDimension();
 	}
+	
 	private void startAreaUpdateHandler(){
 		AreaUpdateHandler areaUpdateHandler = new AreaUpdateHandler();
 	}
+	
 	private class AreaUpdateHandler extends Thread{
 		
 		boolean needsUpdate = false;
@@ -354,16 +355,3 @@ public class Area extends BasicContainer{
 	}
 }
 
-/*
- * public void refreshArea() throws GUIException, SDLException{
-		//TODO refreshing function if really needed
-		surfaceGraphics.beginDraw();
-		
-		for ( Widget widgetToDraw : widgetMap.keySet()){
-			//TODO if it needs to be updated
-			 widgetToDraw.draw(surfaceGraphics);
-		}
-		surfaceGraphics.endDraw();
-		drawSurface();	
-	}
-	*/
