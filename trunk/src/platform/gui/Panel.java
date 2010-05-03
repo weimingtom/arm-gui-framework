@@ -1,18 +1,22 @@
 package platform.gui;
 
 
+import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import platform.util.UpdateListener;
+import platform.util.WidgetUpdate;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
+import sdljavax.guichan.widgets.BasicContainer;
 import sdljavax.guichan.widgets.Widget;
 
-public class Panel extends Widget implements MouseListener {
+public class Panel extends BasicContainer implements MouseListener, UpdateListener {
 
 	protected Image frame;
 	protected List<Widget> widgetList = new ArrayList<Widget>();
@@ -49,7 +53,7 @@ public class Panel extends Widget implements MouseListener {
 		
 		widgetList.add(widget);
 		widget.setPosition(horizontalShift, verticalShift);
-		widget.setParent(getParent());
+		widget.setParent(this);
 		
 		if( this.getFocusHandler() != null){	
 			widget.setFocusHandler(getFocusHandler());
@@ -139,6 +143,35 @@ public class Panel extends Widget implements MouseListener {
 			widget.delete();
 		}
 		super.delete();
+		
+	}
+
+	public boolean putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
+		
+		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
+	}
+
+	@Override
+	protected void announceDeath(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Dimension getDrawSize(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void moveToBottom(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveToTop(Widget arg0) throws GUIException {
+		// TODO Auto-generated method stub
 		
 	}
 	
