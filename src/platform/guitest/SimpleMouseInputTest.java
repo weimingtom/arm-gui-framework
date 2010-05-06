@@ -40,13 +40,13 @@ public class SimpleMouseInputTest {
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,5,4);
-		
+		    foregroundArea.setAlpha(0);
 		    
 		    PlayButton playButton = new PlayButton();
 		    backgroundArea.add(playButton, 6);
 		    		    
 			screen.setAreas(backgroundArea, foregroundArea);
-			foregroundArea.setAlpha(0);
+			
 			
 		
 			while(screen.isRunning()){
