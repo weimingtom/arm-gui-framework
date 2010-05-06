@@ -27,7 +27,7 @@ import sdljavax.guichan.widgets.Widget;
 
 public class Area extends BasicContainer implements UpdateListener{
 
-	protected SDLSurface surface;
+	protected SDLSurface surface, originalSurface;
 	protected SDLGraphics surfaceGraphics;
 	protected FocusHandler focusHandler = new FocusHandler();
 	
@@ -41,7 +41,9 @@ public class Area extends BasicContainer implements UpdateListener{
 	
 	public Area(String filename, int... args ) throws GUIException {
 		try {
-			surface= SDLImage.load(filename);
+			originalSurface= SDLImage.load(filename);
+			surface = SDLImage.load(filename);
+			
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
@@ -57,8 +59,10 @@ public class Area extends BasicContainer implements UpdateListener{
 	}
 	
 	public Area(Image image, int... args) throws GUIException {	
-		surface = (SDLSurface) image.getData();
 		
+		originalSurface = (SDLSurface) image.getData();
+		surface = (SDLSurface) image.getData();
+				
 		if(surface == null){
 			throw new GUIException("Unable to create surface from image");
 		}
@@ -74,9 +78,13 @@ public class Area extends BasicContainer implements UpdateListener{
 	public Area(SDLColor color, int... args) throws GUIException{
 					
 		try {	
-			surface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
+			originalSurface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
 			//surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 255));
-			surface.fillRect(surface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
+			originalSurface.fillRect(originalSurface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
+			
+			surface =SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
+			surface.fillRect(originalSurface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
+			
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
@@ -187,6 +195,19 @@ public class Area extends BasicContainer implements UpdateListener{
 		}
 	}
 
+	public void drawOriginal(SDLRect rect) throws GUIException{
+		
+		try {
+			
+				
+			surfaceGraphics.beginDraw();
+			surfaceGraphics.drawSDLSurface(originalSurface, rect, rect);
+			surfaceGraphics.endDraw();
+		} catch (SDLException e) {
+			e.printStackTrace();
+			throw new GUIException("Exception while drawing on target surface");
+		}
+	}
 	public void delete() throws GUIException{
 		
 		for( Widget theWidget: widgetMap.keySet()){
@@ -324,6 +345,7 @@ public class Area extends BasicContainer implements UpdateListener{
 							surfaceGraphics.beginDraw();
 								if ((widgetToUpdate= widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null){
 									
+									drawOriginal(widgetToUpdate.getWidgetRegion());
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
 									draw(widgetToUpdate.getWidgetRegion());
 									//draw(surfaceGraphics);
@@ -335,7 +357,7 @@ public class Area extends BasicContainer implements UpdateListener{
 							needsUpdate = false;
 							Screen.getScreen().refresh();
 						}
-						Thread.sleep(200);
+						Thread.sleep(20);
 				}
 				
 				
