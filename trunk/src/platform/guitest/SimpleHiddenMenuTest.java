@@ -1,11 +1,14 @@
 package platform.guitest;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 import platform.gui.Area;
 import platform.gui.HiddenMenu;
 import platform.gui.PlatformIcon;
 import platform.gui.Screen;
+import platform.util.Direction;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.video.SDLColor;
@@ -44,9 +47,9 @@ public class SimpleHiddenMenuTest {
 		    Area foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(0);
 		    
-		   HiddenMenu hiddenMenu = new HiddenMenu(new SDLColor(100,100,100), HiddenMenu.Direction.SOUTH);
+		   HiddenMenu hiddenMenu = new HiddenMenu(new SDLColor(0,0,0), Direction.WEST);
 		   
-		   backgroundArea.add(hiddenMenu, 0);
+		   backgroundArea.add(hiddenMenu,0);
 		   
 		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail_small.png")));
 		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "browser_small.png")));	
@@ -54,11 +57,8 @@ public class SimpleHiddenMenuTest {
 		   hiddenMenu.addIcon(icon1);
 		   hiddenMenu.addIcon(icon2);
 		   
-		   
 		   screen.setAreas(backgroundArea, foregroundArea);
 			
-			
-		
 			while(screen.isRunning()){
 											
 				Thread.sleep(200);
