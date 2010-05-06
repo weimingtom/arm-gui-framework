@@ -3,15 +3,12 @@ package platform.guitest;
 import java.io.File;
 
 import platform.gui.Area;
-import platform.gui.Label;
-import platform.gui.Panel;
+import platform.gui.HiddenMenu;
 import platform.gui.PlatformIcon;
 import platform.gui.Screen;
-import platform.gui.TextField;
 import sdljava.SDLException;
 import sdljava.SDLMain;
-import sdljava.SDLTimer;
-import sdljava.ttf.SDLTTF;
+import sdljava.video.SDLColor;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.gfx.Image;
@@ -19,21 +16,20 @@ import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
 import sdljavax.guichan.sdl.SDLInput;
 
-public class SimpleTextFieldTest {
+public class SimpleHiddenMenuTest {
 
 	/**
 	 * @param args
-	 * @throws SDLException 
 	 * @throws GUIException 
+	 * @throws SDLException 
 	 */
 	public static void main(String[] args) throws SDLException, GUIException {
 		Screen screen = null;
-		int i=0;
+		
 		
 		try {
 			SDLMain.init(SDLMain.SDL_INIT_VIDEO);
-			SDLTTF.init();
-			
+						
 			ImageLoader imageLoader = new SDLImageLoader();
 			Image.setImageLoader(imageLoader);
 			
@@ -46,23 +42,26 @@ public class SimpleTextFieldTest {
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,4,4);
-		    foregroundArea.setAlpha(i);
-		   
-		    //TextField googleSearch = new TextField("google");
-		    //TextField googleSearch = new TextField();
-		    //backgroundArea.add(googleSearch,4);
-		    Panel panel= new Panel(4,1);
-		     	
-		    backgroundArea.add(panel, 4);
+		    foregroundArea.setAlpha(0);
 		    
-		    Label label = new Label ("David Guetta", "One Love", 160, 35);
-		    panel.add(label, 1);	    
-			screen.setAreas(backgroundArea, foregroundArea);
-					
+		   HiddenMenu hiddenMenu = new HiddenMenu(new SDLColor(100,100,100), HiddenMenu.Direction.SOUTH);
+		   
+		   backgroundArea.add(hiddenMenu, 0);
+		   
+		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail_small.png")));
+		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "browser_small.png")));	
+		   
+		   hiddenMenu.addIcon(icon1);
+		   hiddenMenu.addIcon(icon2);
+		   
+		   
+		   screen.setAreas(backgroundArea, foregroundArea);
+			
+			
+		
 			while(screen.isRunning()){
-				//foregroundArea.setAlpha(i%255);
-				//i+=5;
-				Thread.sleep(300);
+											
+				Thread.sleep(200);
 			}
 			
 			
@@ -77,13 +76,13 @@ public class SimpleTextFieldTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
+			
 			screen.delete();
-			SDLTTF.quit();
+			
 			SDLMain.quit();
 			System.exit(0);					
 		}
-		
-		
+
 
 	}
 

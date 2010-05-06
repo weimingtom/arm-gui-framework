@@ -31,7 +31,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 	protected Direction direction;
 	protected List<PlatformIcon> iconList = new ArrayList<PlatformIcon>();
 	
-	public HiddenMenu(SDLColor clr, Direction dir) throws SDLException{
+	public HiddenMenu(SDLColor clr, Direction dir) throws SDLException, InterruptedException{
 		
 		direction = dir;
 		slider = SDLImage.load("resource" + File.separator + "images" + File.separator + "slider.png");
@@ -48,7 +48,10 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 		//TODO change pixel format here?
 		slider = SDLGfx.rotozoomSurface(slider, 90* dir.ordinal(), 1, true);
 		
+		setWidth(background.getWidth());
+		setHeight(background.getHeight());
 		addMouseListener(this);
+					
 	}	
 	
 	public void addIcon(PlatformIcon icon){
@@ -56,12 +59,14 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 		iconList.add(icon);
 		
 		if(direction == Direction.NORTH || direction == Direction.SOUTH){
-			icon.setPosition(getX() + 20 + 80 * ( iconList.size() -1 ), getY() + 2 );
+			icon.setPosition(getX() + (icon.getWidth() + 10) * ( iconList.size() -1 ) + 10, getY() + 2 );
 		}
 		else{
-			icon.setPosition(getX() +2, getY() + 20 + 60 * ( iconList.size() -1 )  );
+			icon.setPosition(getX() +2, getY() +  (icon.getHeight() + 10) * ( iconList.size() -1 ) + 10 );
 			
 		}
+		
+		icon.setParent(this);
 	}
 		
 	@Override
@@ -94,12 +99,11 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 
 	@Override
 	public void draw(Graphics graphics) throws GUIException {
-			
+	
 		drawBorder(graphics);
 		if(sliderVisible) return;
 				
 		for ( PlatformIcon icon : iconList){
-			
 			icon.draw(graphics);
 		}
 		
@@ -112,9 +116,11 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 		if( graphics instanceof SDLGraphics){
 			try {
 				if(sliderVisible){
+					
 					((SDLGraphics)graphics).drawSDLSurface(slider, slider.getRect(), ((SDLGraphics) graphics).getTarget().getRect());
 				}
 				else{
+					System.out.println(background.getRect().toString());
 					((SDLGraphics)graphics).drawSDLSurface(background, background.getRect(), ((SDLGraphics) graphics).getTarget().getRect());
 				}
 			} catch (SDLException e) {
