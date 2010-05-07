@@ -128,7 +128,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 				}
 				
 				else{
-					System.out.println("drawing rectangle");
+					
 					((SDLGraphics)graphics).drawSDLSurface(background, background.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX(),getY()));
 					//((SDLGraphics)graphics).drawSDLSurface(slider, slider.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
 
@@ -148,14 +148,18 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 			
 			
 			if(m_bVisible){
-				new TransitionEffectHandler(this, background, direction,!m_bVisible );
+				
+				new TransitionEffectHandler(getParent(), background, direction,!m_bVisible );
 			
+				Thread.sleep(300);
+				m_bVisible = !m_bVisible;
 				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
-						
+			
+				putRegionToUpdate( new WidgetUpdate (this,new SDLRect(getX(),getY(),background.getWidth(), background.getHeight() ) ) );		
 			}
 			
 			else {
-				
+				//background.setClipRect(new SDLRect(0,0,background.getWidth(), background.getHeight() ));
 				new TransitionEffectHandler(this, background, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
 				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
@@ -172,7 +176,10 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 	catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	}
 
 
