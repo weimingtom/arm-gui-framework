@@ -3,6 +3,7 @@ package platform.thread;
 import platform.util.Direction;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
+import sdljava.SDLException;
 import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
 import sdljavax.guichan.GUIException;
@@ -69,7 +70,7 @@ public class TransitionEffectHandler extends Thread{
 					
 				case NORTH:
 					for(double i= 0.2 ; i<=1.0 ; i+=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY(),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight() *(1-i) ) ) ) );
+						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY() + (int)(transitionedSurface.getHeight() *(1-i)) ,transitionedSurface.getWidth(), transitionedSurface.getHeight() ) ) ) ;
 						Thread.sleep(50);
 					}
 					break;
@@ -89,7 +90,7 @@ public class TransitionEffectHandler extends Thread{
 					break;
 					
 				case WEST:	
-					for(double i= 0.2 ; i<1.0 ; i+=0.2){
+					for(double i= 0.2 ; i<=1.0 ; i+=0.2){
 						((UpdateListener)widget).putRegionToUpdate(new WidgetUpdate(widget,new SDLRect(widget.getX(),widget.getY(),(int)(transitionedSurface.getWidth() *(1-i) ), transitionedSurface.getHeight())));
 						Thread.sleep(50);
 					}
@@ -97,18 +98,14 @@ public class TransitionEffectHandler extends Thread{
 				}
 				Thread.sleep(50);
 				
-				widget.setVisible(false);
-				((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY(),transitionedSurface.getWidth(), transitionedSurface.getHeight() ) ) );
+				
 	
 			}
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (GUIException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 		
 	}
 }
