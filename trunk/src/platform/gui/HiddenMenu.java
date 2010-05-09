@@ -120,18 +120,10 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 			try {
 				
 				if(!m_bVisible ){
-					
-					System.out.println("drawing slider");
 					((SDLGraphics)graphics).drawSDLSurface(slider, slider.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
-
-					
 				}
-				
 				else{
-					
 					((SDLGraphics)graphics).drawSDLSurface(background, background.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX(),getY()));
-					//((SDLGraphics)graphics).drawSDLSurface(slider, slider.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
-
 				}
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
@@ -151,6 +143,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 				
 				new TransitionEffectHandler(getParent(), background, direction,!m_bVisible );
 			
+				//TODO is that safe at all platforms?
 				Thread.sleep(300);
 				m_bVisible = !m_bVisible;
 				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
@@ -159,27 +152,22 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 			}
 			
 			else {
-				//background.setClipRect(new SDLRect(0,0,background.getWidth(), background.getHeight() ));
 				new TransitionEffectHandler(this, background, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
 				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
-			
 			}
 			
 			
 			
-		}/*catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-		e.printStackTrace();
-		}*/
+		}
 		
-	catch (SDLException e) {
+		catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+		}
 	}
 
 
