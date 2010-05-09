@@ -99,12 +99,18 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		}
 	}
 	
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3) throws GUIException {
-		System.out.println("Panel clicked");
+	public void mouseClick(int x, int y, int b, int ts) throws GUIException {
+		for( Widget widget : widgetList){
+			
+			if(widget instanceof MouseListener){
+				if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight())
+				((MouseListener)widget).mouseClick(x, y, b, ts);
+			}
+		}
 	}
 
 	public void mouseIn() throws GUIException {
-		System.out.println("mouse In");
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -118,14 +124,25 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		
 	}
 
-	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
-		// TODO Auto-generated method stub
+	public void mousePress(int x, int y, int b) throws GUIException {
+		for( Widget widget : widgetList){
+			
+			if(widget instanceof MouseListener){
+				if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight())
+				((MouseListener)widget).mousePress(x, y, b);
+			}
+		}
 		
 	}
 
-	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
-		// TODO Auto-generated method stub
-		
+	public void mouseRelease(int x, int y, int b) throws GUIException {
+		for( Widget widget : widgetList){
+			
+			if(widget instanceof MouseListener){
+				if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight())
+				((MouseListener)widget).mouseRelease(x, y, b);
+			}
+		}
 	}
 
 	public void mouseWheelDown(int arg0, int arg1) throws GUIException {

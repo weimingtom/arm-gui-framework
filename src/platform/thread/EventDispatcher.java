@@ -96,12 +96,11 @@ public class EventDispatcher extends Thread{
 								widgetWithMouse = widget;
 								if (false == widgetWithMouse.hasMouse()) {
 									
-									System.out.println(widgetWithMouse.toString());
 									widgetWithMouse.mouseInMessage();
 									continue;
 								
 								}
-								System.out.println(widgetWithMouse.toString());
+								
 								widgetWithMouse.mouseInputMessage(mi);
 								
 							}	
