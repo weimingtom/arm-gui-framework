@@ -8,6 +8,7 @@ import java.util.List;
 
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
+import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
 import sdljavax.guichan.evt.MouseListener;
@@ -37,9 +38,11 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		frame = new Image(frameName);
 		setHeight(frame.getHeight());
 		setWidth(frame.getWidth());
+		
+		addMouseListener(this);
 	}
 	
-	public void add(Widget widget, int offset) throws GUIException{
+	public void add(Widget widget, int offset) throws GUIException, InterruptedException{
 		if(widget == null){
 			
 			throw new GUIException("Widget doesn't exist");
@@ -61,6 +64,7 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 			widget.requestFocus();
 		}
 		
+		this.putRegionToUpdate( new WidgetUpdate( widget, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
 	}
 	
 	public void remove(Widget widget) throws GUIException{
@@ -96,11 +100,11 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 	}
 	
 	public void mouseClick(int arg0, int arg1, int arg2, int arg3) throws GUIException {
-		// TODO Auto-generated method stub
+		System.out.println("Panel clicked");
 	}
 
 	public void mouseIn() throws GUIException {
-		// TODO Auto-generated method stub
+		System.out.println("mouse In");
 		
 	}
 

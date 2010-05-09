@@ -61,7 +61,7 @@ public class EventCapturer extends Thread{
 							eventDispatcher.notify();
 						}
 					}
-					//Thread.yield();
+					
 					Thread.sleep(200);
 			}
 		}	

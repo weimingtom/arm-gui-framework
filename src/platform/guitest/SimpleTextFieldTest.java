@@ -48,15 +48,15 @@ public class SimpleTextFieldTest {
 		    Area foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
 		   
-		    TextField googleSearch = new TextField("google");
+		    //TextField googleSearch = new TextField("google");
 		    //TextField googleSearch = new TextField();
-		    backgroundArea.add(googleSearch,4);
-		    //Panel panel= new Panel(4,1);
+		    //backgroundArea.add(googleSearch,4);
+		    Panel panel= new Panel(4,1);
 		     	
-		    //backgroundArea.add(panel, 4);
+		    backgroundArea.add(panel, 4);
 		    
-		    //Label label = new Label ("David Guetta", "One Love", 160, 35);
-		    //panel.add(label, 1);	    
+		    Label label = new Label ("David Guetta", "One Love", 160, 35);
+		    panel.add(label, 1);	    
 			screen.setAreas(backgroundArea, foregroundArea);
 					
 			while(screen.isRunning()){
