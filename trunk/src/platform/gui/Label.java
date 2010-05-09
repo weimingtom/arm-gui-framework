@@ -52,10 +52,7 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 	@Override
 	public void draw(Graphics graphics) throws GUIException {
 		
-		if(effectInProcess != true){
-			new MovingTextEffectHandler();
-		}
-		
+				
 		drawBorder(graphics);
 		textFont.drawString(graphics, headText, getX() + 10 , getY() + (int)(getHeight() * 0.05) );	
 		
@@ -101,16 +98,16 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
 	}
 	
-	class MovingTextEffectHandler extends Thread{
+	
+
+	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
+			throws GUIException {
 		
-			MovingTextEffectHandler(){
-						start();
-			}
-		
+		new Thread(){
 			
 			public void run(){
 				
-				effectInProcess = true;
+				
 				int textWidth = textFont.getWidth(descriptiveText);
 				try{
 					
@@ -123,27 +120,18 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 					shift=0;
 					putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( Label.this.getX(), Label.this.getY(), Label.this.getWidth(), Label.this.getHeight())));
 					Thread.sleep(50);
-					effectInProcess = false;
+				
 				}  catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 			}
-			
-	
-
-	}
-
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
-			throws GUIException {
-		System.out.println("effect Go!");
-		new MovingTextEffectHandler();
+		}.start();
 		
 	}
 
 	public void mouseIn() throws GUIException {
-		System.out.println("Mouse In");
 		m_bHasMouse =  true;
 		requestFocus();	
 		
@@ -155,7 +143,7 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 	}
 
 	public void mouseOut() {
-		System.out.println("Mouse Out");
+		
 		m_bHasMouse =  false;
 		try {
 			lostFocus();
