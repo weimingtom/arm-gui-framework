@@ -1,6 +1,7 @@
 package platform.thread;
 
 import platform.gui.Area;
+import platform.gui.PlatformDropDown;
 import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljavax.guichan.GUIException;
@@ -79,21 +80,26 @@ public class EventDispatcher extends Thread{
 						
 					if (mi.x > 0 && mi.y > 0 ){
 						if(widgetWithMouse != null){
+								
 							if(!widgetWithMouse.getDimension().isPointInRect(mi.x, mi.y)){
+								
 								widgetWithMouse.mouseOutMessage();
+								
 								widgetWithMouse = null;
 													
 							}
 							else{
+								
 								widgetWithMouse.mouseInputMessage(mi);
 								continue;
 							}
 						}
 						
 						for(Widget widget: active.getWidgetMap().keySet()){
-																					
+																			
 							if( widget.getDimension().isPointInRect(mi.x, mi.y) ) {
 								widgetWithMouse = widget;
+								
 								if (false == widgetWithMouse.hasMouse()) {
 									
 									widgetWithMouse.mouseInMessage();
@@ -106,7 +112,12 @@ public class EventDispatcher extends Thread{
 							}	
 						}
 					}
+					if(widgetWithMouse instanceof PlatformDropDown){
+						widgetWithMouse.getFocusHandler().applyChanges();
+					}
+					else{
 					active.getFocusHandler().applyChanges();
+					}
 				}
 				Thread.sleep(200);
 			}
@@ -118,6 +129,9 @@ public class EventDispatcher extends Thread{
 			e.printStackTrace();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e){
 			e.printStackTrace();
 		}
 	}

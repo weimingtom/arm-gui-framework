@@ -47,6 +47,12 @@ public class Area extends BasicContainer implements UpdateListener{
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
+			
+			
+			//TODO check this !!!
+			setWidth(surface.getWidth());
+			setHeight(surface.getHeight());
+			
 			startAreaUpdateHandler();
 			widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 		}  catch (SDLException e) {
@@ -70,8 +76,13 @@ public class Area extends BasicContainer implements UpdateListener{
 		surfaceGraphics = new SDLGraphics();
 		surfaceGraphics.setTarget(surface);		
 		setGrid(args);
+		
+		
+		
 		startAreaUpdateHandler();
 		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
+		
+		
 	}
 	
 	
@@ -88,6 +99,10 @@ public class Area extends BasicContainer implements UpdateListener{
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
+			
+			setWidth(surface.getWidth());
+			setHeight(surface.getHeight());
+			
 			startAreaUpdateHandler();
 			widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 				
@@ -132,7 +147,7 @@ public class Area extends BasicContainer implements UpdateListener{
 		else{
 			widget.setFocusHandler(focusHandler);
 			widget.setFocusable(true);
-			widget.requestFocus();
+			//widget.requestFocus();
 		}	
 		widget.setPosition( (offset % grid[0])* xCellDimension ,(offset / grid[1] ) * yCellDimension);
 		widget.setParent(this);
@@ -349,14 +364,19 @@ public class Area extends BasicContainer implements UpdateListener{
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
 									draw(widgetToUpdate.getWidgetRegion());
 									//draw(surfaceGraphics);
+									
 									needsUpdate = true;
 								}
+							
 							surfaceGraphics.endDraw();
 						}
 						if(needsUpdate == true){
 							needsUpdate = false;
+							
 							Screen.getScreen().refresh();
+							
 						}
+						
 						Thread.sleep(20);
 				}
 				
@@ -371,7 +391,9 @@ public class Area extends BasicContainer implements UpdateListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			catch (Exception e){
+				e.printStackTrace();
+			}
 			
 		}
 		
