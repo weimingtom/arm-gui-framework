@@ -39,11 +39,11 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 		setHeight(height);
 		
 		if(descriptiveText.length() != 0){
-			textFont = new CalibriFont((int) (getHeight() * 0.45), new SDLColor(0,0,0,0));
+			textFont = new CalibriFont((int) (getHeight() * 0.45), new SDLColor(0,0,0,0), true);
 		}
 		
 		else{
-			textFont = new CalibriFont((int) (getHeight() * 0.7), new SDLColor(0,0,0,0));
+			textFont = new CalibriFont((int) (getHeight() * 0.7), new SDLColor(0,0,0,0), true);
 		}
 		addMouseListener(this);
 	}

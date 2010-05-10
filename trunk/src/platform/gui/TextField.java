@@ -36,7 +36,7 @@ public class TextField extends Widget implements  KeyListener{
 		displayedText = text;
 		textField = new Image("resource" + File.separator + "images" + File.separator + "google_search.png");
 		cursorColor = new SDLColor(255,255,255,0);
-		textFont = new CalibriFont((int) (textField.getHeight() * 0.45), new SDLColor(255,255,255,0));
+		textFont = new CalibriFont((int) (textField.getHeight() * 0.45), new SDLColor(255,255,255,0), false);
 		setWidth(textField.getWidth());
 		setHeight(textField.getHeight());
 		

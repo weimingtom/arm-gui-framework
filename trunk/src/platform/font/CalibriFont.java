@@ -19,8 +19,14 @@ public class CalibriFont implements Font{
 	protected String text;
 	protected SDLColor fontColor;
 	
-	public CalibriFont(int size , SDLColor color) throws SDLException{
-		calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "calibri.ttf", size); 
+	public CalibriFont(int size , SDLColor color, boolean bold) throws SDLException{
+		
+		if(bold){
+		calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "Calibri Bold.ttf", size); 
+		}
+		else{
+			calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "calibri.ttf", size); 
+		}
 		text = new String("");
 		fontColor = color; 
 	}
