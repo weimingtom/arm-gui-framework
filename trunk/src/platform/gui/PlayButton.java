@@ -132,7 +132,6 @@ public class PlayButton extends Widget implements MouseListener{
 
 	@Override
 	public void delete() throws GUIException {
-		System.out.println("deleting playButton");
 		defaultButton.delete();
 		clickedButton.delete();
 		selectedButton.delete();

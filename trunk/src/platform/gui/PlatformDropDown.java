@@ -39,6 +39,15 @@ public class PlatformDropDown extends DropDown implements UpdateListener{
 	
 
 	@Override
+	public void delete() throws GUIException {
+		listBox.delete();
+		scrollArea.delete();
+		super.delete();
+	}
+
+
+
+	@Override
 	public void mousePress(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
 		super.mousePress(x, y, button);
@@ -59,6 +68,9 @@ public class PlatformDropDown extends DropDown implements UpdateListener{
 			int height= super.getHeight();
 			 
 			lostFocus();
+			putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), super.getWidth(), super.getHeight())));
+			
+			Thread.sleep(300);
 			putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), width, height )));
 		}
 		 catch (InterruptedException e) {

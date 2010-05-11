@@ -231,6 +231,8 @@ public class Area extends BasicContainer implements UpdateListener{
 		
 		try {
 			surface.freeSurface();
+			originalSurface.freeSurface();
+			super.delete();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
