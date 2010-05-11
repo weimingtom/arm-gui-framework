@@ -87,7 +87,4 @@ public class PlatformDropDown extends DropDown implements UpdateListener{
 		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
 	}
 	
-	//public FocusHandler getFocusHandler(){
-	//	return m_focusHandler;
-	//}
 }
