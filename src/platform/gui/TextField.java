@@ -247,7 +247,7 @@ public class TextField extends Widget implements  KeyListener{
 		}
 	}
 
-	public void keyRelease(Key arg0) throws GUIException {
+	public void keyRelease(Key key) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 	

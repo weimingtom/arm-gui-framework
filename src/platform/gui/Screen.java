@@ -103,7 +103,7 @@ public class Screen {
 	}
 	private void startEventHandling() throws SDLException{
 		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
-		EventCapturer eventCapturer = new EventCapturer((SDLInput)inputSource, eventDispatcher);
+		new EventCapturer((SDLInput)inputSource, eventDispatcher);
 	}
 	
 	private Screen() throws SDLException{	

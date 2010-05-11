@@ -72,28 +72,28 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 	}
 		
 	@Override
-	protected void announceDeath(Widget arg0) throws GUIException {
+	protected void announceDeath(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public Dimension getDrawSize(Widget arg0) throws GUIException {
+	public Dimension getDrawSize(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public void moveToBottom(Widget arg0) throws GUIException {
+	public void moveToBottom(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void moveToTop(Widget arg0) throws GUIException {
+	public void moveToTop(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -134,7 +134,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 		
 	}
 	
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
+	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
 		try {
 			
@@ -177,7 +177,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 	}
 
 
-	public void mouseMotion(int arg0, int arg1) throws GUIException {
+	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -195,25 +195,25 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 	}
 
 
-	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
+	public void mousePress(int x, int y, int button) throws GUIException {
 		
 				
 	}
 
 
-	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
+	public void mouseRelease(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void mouseWheelDown(int arg0, int arg1) throws GUIException {
+	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void mouseWheelUp(int arg0, int arg1) throws GUIException {
+	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}

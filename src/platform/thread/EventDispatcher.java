@@ -112,12 +112,9 @@ public class EventDispatcher extends Thread{
 							}	
 						}
 					}
-					if(widgetWithMouse instanceof PlatformDropDown){
-						widgetWithMouse.getFocusHandler().applyChanges();
-					}
-					else{
+				
 					active.getFocusHandler().applyChanges();
-					}
+				
 				}
 				Thread.sleep(200);
 			}
