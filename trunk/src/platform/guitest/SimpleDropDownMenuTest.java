@@ -6,6 +6,7 @@ import platform.gui.Area;
 import platform.gui.PlatformDropDown;
 import platform.gui.PlayButton;
 import platform.gui.Screen;
+import platform.util.PlatformListModel;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.ttf.SDLTTF;
@@ -15,9 +16,7 @@ import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
 import sdljavax.guichan.sdl.SDLInput;
-import sdljavax.guichan.test.sdlwidgets.DemoListModel;
-import sdljavax.guichan.widgets.DropDown;
-import sdljavax.guichan.widgets.ListBox;
+import sdljavax.guichan.widgets.ListModel;
 
 public class SimpleDropDownMenuTest {
 
@@ -54,9 +53,9 @@ public class SimpleDropDownMenuTest {
 		    foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
 		   	   							
-		    DemoListModel	demoListModel	= new DemoListModel();
+		   ListModel listModel= new PlatformListModel(new String[]{"zero","one","two","three", "four"});
 		
-		    dropDown = new PlatformDropDown(demoListModel);
+		    dropDown = new PlatformDropDown(listModel);
 		    
 		    backgroundArea.add(dropDown, 0);
 		
