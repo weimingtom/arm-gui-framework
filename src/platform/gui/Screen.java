@@ -91,16 +91,11 @@ public class Screen {
 	}
 
 	public void delete() throws SDLException, GUIException{
-		
-		if(foreground != null){
-			foreground.delete();
-		}
-		else if(background != null){
-			background.delete();
-		}
-		
 		target.freeSurface();
+		foreground.delete();
+		background.delete();
 	}
+	
 	private void startEventHandling() throws SDLException{
 		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
 		new EventCapturer((SDLInput)inputSource, eventDispatcher);

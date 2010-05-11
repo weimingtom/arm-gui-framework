@@ -29,6 +29,11 @@ public class SimpleDropDownMenuTest {
 	public static void main(String[] args) throws SDLException, GUIException {
 		
 		Screen screen = null;
+		Area backgroundArea = null;
+		Area foregroundArea = null;
+		PlatformDropDown dropDown = null;
+		PlayButton playButton = null;
+		
 		int i=0;
 		
 		try {
@@ -43,20 +48,19 @@ public class SimpleDropDownMenuTest {
 			screen=Screen.getScreen();
 			screen.setInputSource(input);
 			
-			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),4,4);
+			backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),4,4);
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
-		    Area foregroundArea = new Area( image,4,4);
+		    foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
 		   	   							
-		    PlatformDropDown		dropDown;
 		    DemoListModel	demoListModel	= new DemoListModel();
 		
 		    dropDown = new PlatformDropDown(demoListModel);
 		    
 		    backgroundArea.add(dropDown, 0);
 		
-		    PlayButton playButton = new PlayButton();
+		    playButton = new PlayButton();
 		    backgroundArea.add(playButton, 6);
 		    
 		    screen.setAreas(backgroundArea, foregroundArea);
@@ -67,6 +71,8 @@ public class SimpleDropDownMenuTest {
 			Thread.sleep(300);
 			
 		}
+		screen.delete();
+		
 		
 		
 	} catch (SDLException e) {
@@ -84,8 +90,8 @@ public class SimpleDropDownMenuTest {
 		e.printStackTrace();
 	}
 	finally{
-		System.out.println("delete");
-		screen.delete();
+	
+		
 		
 		SDLMain.quit();
 		System.exit(0);					
