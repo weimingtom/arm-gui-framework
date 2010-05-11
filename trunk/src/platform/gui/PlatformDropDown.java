@@ -1,18 +1,17 @@
 package platform.gui;
 
 import platform.font.CalibriFont;
-import platform.util.DropDown;
-import platform.util.ListBox;
-import platform.util.ScrollArea;
+
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.video.SDLColor;
 import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.evt.FocusHandler;
-import sdljavax.guichan.evt.MouseInput;
+import sdljavax.guichan.widgets.DropDown;
+import sdljavax.guichan.widgets.ListBox;
 import sdljavax.guichan.widgets.ListModel;
+import sdljavax.guichan.widgets.ScrollArea;
 
 public class PlatformDropDown extends DropDown implements UpdateListener{
 
@@ -23,41 +22,30 @@ public class PlatformDropDown extends DropDown implements UpdateListener{
 		super(list);
 		
 		listBox = new ListBox(list);
+		listBox.setSelected(2);
 		listBox.setBorderSize(1);
 		listBox.setFont(new CalibriFont(20, new SDLColor(0,0,0,0), true));
-		listBox.setSelected(2);
-		
-		
+			
 		scrollArea = new ScrollArea();
 		scrollArea.setBorderSize(1);
 		scrollArea.setContent(listBox);
-		
-	   
+   
 	    super.setFont(listBox.getFont());
 	    super.setListBox(listBox);
 		super.setScrollArea(scrollArea); ///It will adjust height automatically
-	
-		//TODO is it really needed?
 		super.logic(); 
 	}
 	
 	
+
 	@Override
-	public void mouseInputMessage(MouseInput arg0) throws GUIException {
+	public void mousePress(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
-		
-		super.mouseInputMessage(arg0);
-		
-		try{
-			//logic();
-			System.out.println(new SDLRect(getX(), getY(), super.getWidth(), super.getHeight()).toString());
+		super.mousePress(x, y, button);
+		try {
 			putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), super.getWidth(), super.getHeight())));
-			
-			/*} catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();*/
-		}
-		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
@@ -69,14 +57,14 @@ public class PlatformDropDown extends DropDown implements UpdateListener{
 		try{
 			int width=super.getWidth();
 			int height= super.getHeight();
-			System.out.println(new SDLRect(getX(), getY(), super.getWidth(), super.getHeight()).toString());
-			putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), width, height )));
+			 
 			lostFocus();
-			/*} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();*/
+			putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), width, height )));
 		}
-		catch(Exception e){
+		 catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (GUIException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -87,7 +75,7 @@ public class PlatformDropDown extends DropDown implements UpdateListener{
 		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
 	}
 	
-	public FocusHandler getFocusHandler(){
-		return m_focusHandler;
-	}
+	//public FocusHandler getFocusHandler(){
+	//	return m_focusHandler;
+	//}
 }

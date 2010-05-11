@@ -52,12 +52,12 @@ public class PlayButton extends Widget implements MouseListener{
 	}
 
 	@Override
-	public void drawBorder(Graphics arg0) throws GUIException {
+	public void drawBorder(Graphics graphics) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
+	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
 		
 		//buttonState=ButtonStates.DEFAULT;
@@ -76,7 +76,7 @@ public class PlayButton extends Widget implements MouseListener{
 		}
 	}
 
-	public void mouseMotion(int arg0, int arg1) throws GUIException {
+	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -96,7 +96,7 @@ public class PlayButton extends Widget implements MouseListener{
 		}
 	}
 
-	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
+	public void mousePress(int x, int y, int button) throws GUIException {
 		buttonState=ButtonStates.PRESSED;
 		try {
 			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),clickedButton.getWidth(), clickedButton.getHeight())));
@@ -106,7 +106,7 @@ public class PlayButton extends Widget implements MouseListener{
 		}
 	}
 
-	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
+	public void mouseRelease(int x, int y, int button) throws GUIException {
 	
 		buttonState=ButtonStates.DEFAULT;
 		try {
@@ -118,12 +118,12 @@ public class PlayButton extends Widget implements MouseListener{
 		
 	}
 
-	public void mouseWheelDown(int arg0, int arg1) throws GUIException {
+	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseWheelUp(int arg0, int arg1) throws GUIException {
+	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}

@@ -100,7 +100,7 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 	
 	
 
-	public void mouseClick(int arg0, int arg1, int arg2, int arg3)
+	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
 		
 		new Thread(){
@@ -137,7 +137,7 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 		
 	}
 
-	public void mouseMotion(int arg0, int arg1) throws GUIException {
+	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -154,22 +154,22 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 		
 	}
 
-	public void mousePress(int arg0, int arg1, int arg2) throws GUIException {
+	public void mousePress(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseRelease(int arg0, int arg1, int arg2) throws GUIException {
+	public void mouseRelease(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseWheelDown(int arg0, int arg1) throws GUIException {
+	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseWheelUp(int arg0, int arg1) throws GUIException {
+	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}

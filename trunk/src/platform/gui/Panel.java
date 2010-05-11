@@ -78,17 +78,17 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 	}
 	
 	@Override
-	public void draw(Graphics arg0) throws GUIException {
-			drawBorder(arg0);
+	public void draw(Graphics graphics) throws GUIException {
+			drawBorder(graphics);
 			
 			for ( Widget widget : widgetList){
-				widget.draw(arg0);
+				widget.draw(graphics);
 			}
 	}
 
 	@Override
-	public void drawBorder(Graphics arg0) throws GUIException {
-			arg0.drawImage(frame, getX(), getY() );
+	public void drawBorder(Graphics graphics) throws GUIException {
+			graphics.drawImage(frame, getX(), getY() );
 	}
 
 	public void setWidgetsFocusHandler(FocusHandler focusHandler) throws GUIException{
@@ -145,12 +145,12 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		}
 	}
 
-	public void mouseWheelDown(int arg0, int arg1) throws GUIException {
+	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseWheelUp(int arg0, int arg1) throws GUIException {
+	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -173,25 +173,25 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 	}
 
 	@Override
-	protected void announceDeath(Widget arg0) throws GUIException {
+	protected void announceDeath(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Dimension getDrawSize(Widget arg0) throws GUIException {
+	public Dimension getDrawSize(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void moveToBottom(Widget arg0) throws GUIException {
+	public void moveToBottom(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void moveToTop(Widget arg0) throws GUIException {
+	public void moveToTop(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}

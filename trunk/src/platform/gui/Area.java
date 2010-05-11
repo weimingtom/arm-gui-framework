@@ -182,7 +182,7 @@ public class Area extends BasicContainer implements UpdateListener{
 	}
 		
 	@Override
-	public void draw(Graphics arg0) throws GUIException {
+	public void draw(Graphics graphics) throws GUIException {
 		try {
 			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
 				
@@ -249,24 +249,24 @@ public class Area extends BasicContainer implements UpdateListener{
 	}
 
 	@Override
-	public Dimension getDrawSize(Widget arg0) throws GUIException {
+	public Dimension getDrawSize(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void moveToBottom(Widget arg0) throws GUIException {
+	public void moveToBottom(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void moveToTop(Widget arg0) throws GUIException {
+	public void moveToTop(Widget widget) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void drawBorder(Graphics arg0) throws GUIException {
+	public void drawBorder(Graphics graphics) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
