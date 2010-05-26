@@ -7,6 +7,7 @@ import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Input;
+import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.sdl.SDLGraphics;
 import sdljavax.guichan.sdl.SDLInput;
 
@@ -23,7 +24,7 @@ public class Screen {
 	private Area background;
 	private Input inputSource;
 	private SDLSurface target;
-	private SDLGraphics graphics;
+	private Graphics graphics;
 	private volatile boolean running;
 	
 	public static Screen getScreen() throws SDLException{	
@@ -49,11 +50,11 @@ public class Screen {
 		startEventHandling();
 	}
 				
-	public SDLGraphics getGraphics() {
+	public Graphics getGraphics() {
 		return graphics;
 	}
 
-	public void setGraphics(SDLGraphics graphics) {
+	public void setGraphics(Graphics graphics) {
 		this.graphics = graphics;
 	}
 
@@ -73,15 +74,6 @@ public class Screen {
 		return background;
 	}
 
-	public void setInputSource(Input inputSource) {
-		this.inputSource = inputSource;
-	}
-
-	public Input getInputSource() {
-		return inputSource;
-	}
-	
-	
 	public boolean isRunning() {
 		return running;
 	}
@@ -105,7 +97,10 @@ public class Screen {
 		//TODO change that for normal variables ?
 		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
 		graphics = new SDLGraphics();
-		graphics.setTarget(target);
+		
+		if(graphics instanceof SDLGraphics){
+			((SDLGraphics)graphics).setTarget(target);
+		}
 		inputSource = new SDLInput();
 		running = true;
 	}

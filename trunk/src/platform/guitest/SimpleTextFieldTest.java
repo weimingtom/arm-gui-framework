@@ -37,10 +37,9 @@ public class SimpleTextFieldTest {
 			ImageLoader imageLoader = new SDLImageLoader();
 			Image.setImageLoader(imageLoader);
 			
-			Input input = new SDLInput();
 			
 			screen=Screen.getScreen();
-			screen.setInputSource(input);
+			
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),4,4);
 		    		    			    

@@ -184,11 +184,13 @@ public class Area extends BasicContainer implements UpdateListener{
 	@Override
 	public void draw(Graphics graphics) throws GUIException {
 		try {
-			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
-				
+			Graphics screenGraphics = Screen.getScreen().getGraphics();
+			
+			if(screenGraphics instanceof SDLGraphics){
 			screenGraphics.beginDraw();
-			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
+			((SDLGraphics)screenGraphics).drawSDLSurface(surface, surface.getRect(), ((SDLGraphics)screenGraphics).getTarget().getRect());
 			screenGraphics.endDraw();
+			}
 		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
@@ -199,11 +201,14 @@ public class Area extends BasicContainer implements UpdateListener{
 	public void draw(SDLRect rect) throws GUIException{
 		
 		try {
-			SDLGraphics screenGraphics = Screen.getScreen().getGraphics();
-				
+			
+			Graphics screenGraphics = Screen.getScreen().getGraphics();
+			
+			if(screenGraphics instanceof SDLGraphics){
 			screenGraphics.beginDraw();
-			screenGraphics.drawSDLSurface(surface, rect, rect);
+			((SDLGraphics)screenGraphics).drawSDLSurface(surface, rect, rect);
 			screenGraphics.endDraw();
+			}
 		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");

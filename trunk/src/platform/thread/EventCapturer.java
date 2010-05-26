@@ -5,16 +5,17 @@ import sdljava.SDLException;
 import sdljava.event.SDLEvent;
 import sdljava.event.SDLKey;
 import sdljava.event.SDLKeyboardEvent;
+import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.sdl.SDLInput;
 
 public class EventCapturer extends Thread{
 
-	private SDLInput inputSource;
+	private Input inputSource;
 	private SDLEvent event;
 	private EventDispatcher eventDispatcher;
 	private boolean eventCaptured;
 	
-	public EventCapturer(SDLInput input, EventDispatcher dispatcher) throws SDLException{
+	public EventCapturer(Input input, EventDispatcher dispatcher) throws SDLException{
 		
 		super("EventCapturer");
 		inputSource = input;
@@ -51,7 +52,9 @@ public class EventCapturer extends Thread{
 							 * SDLInput object to later be handled by the Gui.
 							 */
 						eventCaptured = true;
-						 inputSource.pushInput(event);	
+						if(inputSource instanceof SDLInput){
+						 ((SDLInput)inputSource).pushInput(event);
+						}
 					}
 					if(eventCaptured){
 						eventCaptured = false;

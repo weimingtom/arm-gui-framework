@@ -42,10 +42,8 @@ public class SimpleDropDownMenuTest {
 			ImageLoader imageLoader = new SDLImageLoader();
 			Image.setImageLoader(imageLoader);
 			
-			Input input = new SDLInput();
-			
+					
 			screen=Screen.getScreen();
-			screen.setInputSource(input);
 			
 			backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),4,4);
 		    		    			    
