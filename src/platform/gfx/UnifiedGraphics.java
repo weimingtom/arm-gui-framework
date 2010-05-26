@@ -1,5 +1,6 @@
 package platform.gfx;
 
+import sdljava.SDLException;
 import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
 import sdljavax.guichan.gfx.Graphics;
@@ -7,7 +8,7 @@ import sdljavax.guichan.gfx.Graphics;
 public abstract class UnifiedGraphics extends Graphics{
 
 	//SDLGraphics methods
-	public void	drawSDLSurface(SDLSurface surface, SDLRect source, SDLRect destination){
+	public void	drawSDLSurface(SDLSurface surface, SDLRect source, SDLRect destination) throws SDLException{
 		throw new UnsupportedOperationException();
 	}
 	
