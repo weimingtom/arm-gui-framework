@@ -1,5 +1,6 @@
 package platform.gui;
 
+import platform.evt.ExtendedInput;
 import platform.gfx.UnifiedGraphics;
 import platform.thread.EventCapturer;
 import platform.thread.EventDispatcher;
@@ -7,9 +8,8 @@ import sdljava.SDLException;
 import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.evt.Input;
 import platform.sdl.SDLGraphics;
-import sdljavax.guichan.sdl.SDLInput;
+import platform.sdl.SDLInput;
 
 public class Screen {
 
@@ -22,7 +22,7 @@ public class Screen {
  	
 	private Area foreground;
 	private Area background;
-	private Input inputSource;
+	private ExtendedInput inputSource;
 	private SDLSurface target;
 	private UnifiedGraphics graphics;
 	private volatile boolean running;
@@ -89,15 +89,14 @@ public class Screen {
 	}
 	
 	private void startEventHandling() throws SDLException{
-		EventDispatcher eventDispatcher = new EventDispatcher((SDLInput)inputSource );
-		new EventCapturer((SDLInput)inputSource, eventDispatcher);
+		EventDispatcher eventDispatcher = new EventDispatcher(inputSource );
+		new EventCapturer(inputSource, eventDispatcher);
 	}
 	
 	private Screen() throws SDLException{	
 		//TODO change that for normal variables ?
 		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
 		graphics = new SDLGraphics();
-		
 		graphics.setTarget(target);
 		
 		inputSource = new SDLInput();

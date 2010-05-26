@@ -1,5 +1,6 @@
 package platform.thread;
 
+import platform.evt.ExtendedInput;
 import platform.gui.Area;
 import platform.gui.PlatformDropDown;
 import platform.gui.Screen;
@@ -14,13 +15,13 @@ import sdljavax.guichan.widgets.Widget;
 public class EventDispatcher extends Thread{
 
 	boolean eventTriggered;
-	private SDLInput inputSource;
+	private ExtendedInput inputSource;
 	private Area background;
 	private Area foreground;
 	private ActiveArea activeArea;
 	private Widget widgetWithMouse= null;
 	
-	public EventDispatcher(SDLInput input) throws SDLException{
+	public EventDispatcher(ExtendedInput input) throws SDLException{
 		super("EventDispatcher");
 		eventTriggered = false;
 		inputSource = input;
