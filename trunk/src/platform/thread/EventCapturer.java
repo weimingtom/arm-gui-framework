@@ -1,5 +1,6 @@
 package platform.thread;
 
+import platform.evt.ExtendedInput;
 import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljava.event.SDLEvent;
@@ -10,12 +11,12 @@ import sdljavax.guichan.sdl.SDLInput;
 
 public class EventCapturer extends Thread{
 
-	private Input inputSource;
+	private ExtendedInput inputSource;
 	private SDLEvent event;
 	private EventDispatcher eventDispatcher;
 	private boolean eventCaptured;
 	
-	public EventCapturer(Input input, EventDispatcher dispatcher) throws SDLException{
+	public EventCapturer(ExtendedInput input, EventDispatcher dispatcher) throws SDLException{
 		
 		super("EventCapturer");
 		inputSource = input;
@@ -52,10 +53,8 @@ public class EventCapturer extends Thread{
 							 * SDLInput object to later be handled by the Gui.
 							 */
 						eventCaptured = true;
-						if(inputSource instanceof SDLInput){
-						 ((SDLInput)inputSource).pushInput(event);
+						 inputSource.pushInput(event);
 						}
-					}
 					if(eventCaptured){
 						eventCaptured = false;
 						
