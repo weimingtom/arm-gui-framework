@@ -2,6 +2,7 @@ package platform.font;
 
 import java.io.File;
 
+import platform.gfx.UnifiedGraphics;
 import sdljava.SDLException;
 import sdljava.ttf.GlyphMetrics;
 import sdljava.ttf.SDLTTF;
@@ -11,7 +12,6 @@ import sdljava.video.SDLSurface;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.font.Font;
 import sdljavax.guichan.gfx.Graphics;
-import sdljavax.guichan.sdl.SDLGraphics;
 
 public class CalibriFont implements Font{
 
@@ -31,11 +31,10 @@ public class CalibriFont implements Font{
 		fontColor = color; 
 	}
 	
-	public void drawString(Graphics graphics, String string, int x, int y)throws GUIException {
+	public void drawString(UnifiedGraphics graphics, String string, int x, int y)throws GUIException {
 		try {
 			SDLSurface textSurface = calibriFont.renderTextSolid(string, fontColor);
-			SDLGraphics sdlGraphics = (SDLGraphics) graphics;
-			sdlGraphics.drawSDLSurface(textSurface, textSurface.getRect(), sdlGraphics.getTarget().getRect(x,y));
+			graphics.drawSDLSurface(textSurface, textSurface.getRect(), graphics.getTarget().getRect(x,y));
 		
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -43,11 +42,10 @@ public class CalibriFont implements Font{
 		}
 	}
 
-	public void drawStringBlended(Graphics graphics, String string, int x, int y)throws GUIException {
+	public void drawStringBlended(UnifiedGraphics graphics, String string, int x, int y)throws GUIException {
 		try {
 			SDLSurface textSurface = calibriFont.renderTextBlended(string, fontColor);
-			SDLGraphics sdlGraphics = (SDLGraphics) graphics;
-			sdlGraphics.drawSDLSurface(textSurface, textSurface.getRect(), sdlGraphics.getTarget().getRect(x,y));
+			graphics.drawSDLSurface(textSurface, textSurface.getRect(), graphics.getTarget().getRect(x,y));
 		
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -111,6 +109,12 @@ public class CalibriFont implements Font{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void drawString(Graphics arg0, String arg1, int arg2, int arg3)
+			throws GUIException {
+		// Nothing in here
+		
 	}
 	
 }
