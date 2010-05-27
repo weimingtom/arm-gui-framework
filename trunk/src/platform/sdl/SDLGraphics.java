@@ -14,7 +14,6 @@ import sdljavax.gfx.SDLGfx;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.ClipRectangle;
 import sdljavax.guichan.gfx.Color;
-import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.Rectangle;
 

@@ -1,13 +1,12 @@
 package platform.gui;
 
+import platform.gfx.UnifiedGraphics;
 import sdljava.SDLException;
 import sdljava.video.SDLSurface;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
-import sdljavax.guichan.widgets.Widget;
 
-public class PlatformIcon extends Widget {
+public class PlatformIcon extends PlatformWidget {
 
 	private Image iconImage;
 	
@@ -19,12 +18,12 @@ public class PlatformIcon extends Widget {
 		setWidth(image.getWidth());
 	}
 	@Override
-	public void draw(Graphics graphics) throws GUIException {
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 		graphics.drawImage(iconImage, getX(), getY());
 	}
 
 	@Override
-	public void drawBorder(Graphics graphics) throws GUIException {
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}

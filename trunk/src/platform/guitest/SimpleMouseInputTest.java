@@ -31,8 +31,6 @@ public class SimpleMouseInputTest {
 			ImageLoader imageLoader = new SDLImageLoader();
 			Image.setImageLoader(imageLoader);
 			
-			
-			
 			screen=Screen.getScreen();
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,4);
@@ -45,9 +43,7 @@ public class SimpleMouseInputTest {
 		    backgroundArea.add(playButton, 6);
 		    		    
 			screen.setAreas(backgroundArea, foregroundArea);
-			
-			
-		
+					
 			while(screen.isRunning()){
 											
 				Thread.sleep(200);

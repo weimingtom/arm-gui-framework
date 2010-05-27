@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import platform.gfx.UnifiedGraphics;
+import platform.sdl.SDLGraphics;
 import platform.thread.TransitionEffectHandler;
 import platform.util.Direction;
 import platform.util.UpdateListener;
@@ -18,19 +20,16 @@ import sdljava.video.SDLVideo;
 import sdljavax.gfx.SDLGfx;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
-import sdljavax.guichan.gfx.Graphics;
-import sdljavax.guichan.sdl.SDLGraphics;
-import sdljavax.guichan.widgets.BasicContainer;
-import sdljavax.guichan.widgets.Widget;
 
 
-public class HiddenMenu extends BasicContainer implements MouseListener,UpdateListener{
+
+public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateListener{
 
 	protected SDLSurface slider;
 	protected SDLSurface background;
 	protected int transition=0;
 	protected Direction direction;
-	protected List<PlatformIcon> iconList = new ArrayList<PlatformIcon>();
+	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	
 	public HiddenMenu(SDLColor clr, Direction dir) throws SDLException, InterruptedException{
 		
@@ -57,81 +56,48 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 					
 	}	
 	
-	public void addIcon(PlatformIcon icon){
-		iconList.add(icon);
+	@Override
+	public void add(PlatformWidget widget, int offset) throws GUIException{
+		widgetList.add(widget);
 				
 		if(direction == Direction.NORTH || direction == Direction.SOUTH){
 						
-			icon.setPosition(getX() + (icon.getWidth() + 10) * ( iconList.size() -1 ) + 10, getY() + 2 );
+			widget.setPosition(getX() + (widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10, getY() + 2 );
 		}
 		else{
-			icon.setPosition(getX() +2, getY() +  (icon.getHeight() + 10) * ( iconList.size() -1 ) + 10 );
+			widget.setPosition(getX() +2, getY() +  (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
 			
 		}
-		icon.setParent(this);
-	}
-		
-	@Override
-	protected void announceDeath(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
+		widget.setUpdateListener(this);
 	}
 
-
 	@Override
-	public Dimension getDrawSize(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public void moveToBottom(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void moveToTop(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void draw(Graphics graphics) throws GUIException {
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 	
 		drawBorder(graphics);
 		if(!m_bVisible) return;
 				
-		for ( PlatformIcon icon : iconList){
-			icon.draw(graphics);
+		for ( PlatformWidget widget : widgetList){
+			widget.draw(graphics);
 		}
 		
 	}
-
 	
 	@Override
-	public void drawBorder(Graphics graphics) throws GUIException {
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 	
-		
-		if( graphics instanceof SDLGraphics){
 			try {
 				
 				if(!m_bVisible ){
-					((SDLGraphics)graphics).drawSDLSurface(slider, slider.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
+					graphics.drawSDLSurface(slider, slider.getRect(), graphics.getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
 				}
 				else{
-					((SDLGraphics)graphics).drawSDLSurface(background, background.getRect(), ((SDLGraphics) graphics).getTarget().getRect(getX(),getY()));
+					graphics.drawSDLSurface(background, background.getRect(), graphics.getTarget().getRect(getX(),getY()));
 				}
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
-			
-		}
-		
 	}
 	
 	public void mouseClick(int x, int y, int button, int count)
@@ -141,7 +107,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 			
 			if(m_bVisible){
 				
-				new TransitionEffectHandler(getParent(), background, direction,!m_bVisible );
+				new TransitionEffectHandler(Screen.getScreen().getBackground(),updateListener, background, direction,!m_bVisible );
 			
 				//TODO is that safe at all platforms?
 				Thread.sleep(300);
@@ -152,7 +118,7 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 			}
 			
 			else {
-				new TransitionEffectHandler(this, background, direction, !m_bVisible);
+				new TransitionEffectHandler(this, updateListener, background, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
 				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
 			}
@@ -219,10 +185,11 @@ public class HiddenMenu extends BasicContainer implements MouseListener,UpdateLi
 	}
 
 
-	public boolean putRegionToUpdate(WidgetUpdate updateInfo)
+	public void putRegionToUpdate(WidgetUpdate updateInfo)
 			throws InterruptedException {
 		// TODO Auto-generated method stub
-		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
+		updateListener.putRegionToUpdate(updateInfo);
 	}
-	
+
+		
 }

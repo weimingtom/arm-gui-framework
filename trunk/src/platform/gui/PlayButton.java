@@ -2,15 +2,14 @@ package platform.gui;
 
 import java.io.File;
 
+import platform.gfx.UnifiedGraphics;
 import platform.util.WidgetUpdate;
 import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
-import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
-import sdljavax.guichan.widgets.Widget;
 
-public class PlayButton extends Widget implements MouseListener{
+public class PlayButton extends PlatformWidget implements MouseListener{
 
 	Image defaultButton;
 	Image clickedButton;
@@ -33,7 +32,7 @@ public class PlayButton extends Widget implements MouseListener{
 	}
 	
 	@Override
-	public void draw(Graphics graphics) throws GUIException {
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 		
 		switch(buttonState){
 			case DEFAULT:
@@ -52,7 +51,7 @@ public class PlayButton extends Widget implements MouseListener{
 	}
 
 	@Override
-	public void drawBorder(Graphics graphics) throws GUIException {
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -69,7 +68,7 @@ public class PlayButton extends Widget implements MouseListener{
 		requestFocus();
 		buttonState = ButtonStates.SELECTED;
 		try {
-			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),selectedButton.getWidth(), selectedButton.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),selectedButton.getWidth(), selectedButton.getHeight())));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +85,7 @@ public class PlayButton extends Widget implements MouseListener{
 		m_bHasMouse =  false;
 		buttonState=ButtonStates.DEFAULT;
 		try {
-			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
 			lostFocus();
 		} catch (GUIException e) {
 			// TODO Auto-generated catch block
@@ -100,7 +99,7 @@ public class PlayButton extends Widget implements MouseListener{
 	public void mousePress(int x, int y, int button) throws GUIException {
 		buttonState=ButtonStates.PRESSED;
 		try {
-			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),clickedButton.getWidth(), clickedButton.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),clickedButton.getWidth(), clickedButton.getHeight())));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,7 +110,7 @@ public class PlayButton extends Widget implements MouseListener{
 	
 		buttonState=ButtonStates.DEFAULT;
 		try {
-			((Area)getParent()).putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,8 +128,6 @@ public class PlayButton extends Widget implements MouseListener{
 		
 	}
 	
-	
-
 	@Override
 	public void delete() throws GUIException {
 		defaultButton.delete();
@@ -138,8 +135,6 @@ public class PlayButton extends Widget implements MouseListener{
 		selectedButton.delete();
 		super.delete();
 	}
-
-
-
+	
 	enum ButtonStates { DEFAULT, PRESSED, SELECTED };
 }

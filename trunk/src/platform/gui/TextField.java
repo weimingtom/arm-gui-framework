@@ -3,6 +3,7 @@ package platform.gui;
 import java.io.File;
 
 import platform.font.CalibriFont;
+import platform.gfx.UnifiedGraphics;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.video.SDLColor;
@@ -14,9 +15,8 @@ import sdljavax.guichan.font.Font;
 import sdljavax.guichan.gfx.Color;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
-import sdljavax.guichan.widgets.Widget;
 
-public class TextField extends Widget implements  KeyListener{
+public class TextField extends PlatformWidget implements  KeyListener{
 
 	protected Image textField;
 	protected String displayedText;
@@ -49,8 +49,8 @@ public class TextField extends Widget implements  KeyListener{
 		
 		addKeyListener(this);
 	}
-	
-	public void draw(Graphics graphics) throws GUIException {
+	@Override
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 		
 		switch(elementChanged){
 			case ALL:
@@ -116,7 +116,8 @@ public class TextField extends Widget implements  KeyListener{
 		
 	}
 	
-	public void drawBorder(Graphics graphics) throws GUIException {
+	@Override
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		graphics.drawImage(textField, getX(), getY());
 	}
 
@@ -230,12 +231,18 @@ public class TextField extends Widget implements  KeyListener{
 			
 			if(elementChanged == ElementChanged.TEXT){
 				
-				((Area)getParent()).putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
+				if(updateListener != null){
+					updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
+				}
+				
 			}
 			else{ //elementChanged == ElementChanged.CURSOR
 				int smallerIndex = (prevOnScreenCursorPosition < onScreenCursorPosition) ? prevOnScreenCursorPosition : onScreenCursorPosition;
 				int greaterIndex = (prevOnScreenCursorPosition > onScreenCursorPosition) ? prevOnScreenCursorPosition : onScreenCursorPosition;
-				((Area)getParent()).putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(  smallerIndex - 1 , greaterIndex + 1, Math.abs(prevOnScreenCursorPosition - onScreenCursorPosition), textFont.getHeight() + 1 ) ) );
+					
+				if(updateListener != null){
+					updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(  smallerIndex - 1 , greaterIndex + 1, Math.abs(prevOnScreenCursorPosition - onScreenCursorPosition), textFont.getHeight() + 1 ) ) );
+				}
 			}
 		}
 		catch (SDLException e) {

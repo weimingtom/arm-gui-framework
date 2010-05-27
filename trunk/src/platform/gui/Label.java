@@ -1,6 +1,8 @@
 package platform.gui;
 
 import platform.font.CalibriFont;
+import platform.gfx.UnifiedGraphics;
+import platform.sdl.SDLGraphics;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
@@ -11,11 +13,8 @@ import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.font.Font;
-import sdljavax.guichan.gfx.Graphics;
-import sdljavax.guichan.sdl.SDLGraphics;
-import sdljavax.guichan.widgets.Widget;
 
-public class Label extends Widget implements UpdateListener, MouseListener {
+public class Label extends PlatformWidget implements MouseListener {
 
 	protected SDLSurface labelSurface;
 	protected String headText;
@@ -50,7 +49,7 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 	
 	
 	@Override
-	public void draw(Graphics graphics) throws GUIException {
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 		
 				
 		drawBorder(graphics);
@@ -69,9 +68,9 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 	}
 
 	@Override
-	public void drawBorder(Graphics graphics) throws GUIException {
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		try {
-			((SDLGraphics)graphics).drawSDLSurface(labelSurface, labelSurface.getRect(),  ((SDLGraphics) graphics).getTarget().getRect(getX(), getY()));
+			graphics.drawSDLSurface(labelSurface, labelSurface.getRect(),   graphics.getTarget().getRect(getX(), getY()));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,13 +92,6 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 		}
 	}
 
-	public boolean putRegionToUpdate(WidgetUpdate updateInfo)
-			throws InterruptedException {
-		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
-	}
-	
-	
-
 	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
 		
@@ -113,12 +105,12 @@ public class Label extends Widget implements UpdateListener, MouseListener {
 					
 					for(int i = 0 ; i < textWidth + 15 ; i+=5 ){
 							shift = i;
-							putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( getX(), getY(), getWidth(), getHeight())));
+							updateListener.putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( getX(), getY(), getWidth(), getHeight())));
 							Thread.sleep(100);
 						}
 					Thread.sleep(100);
 					shift=0;
-					putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( Label.this.getX(), Label.this.getY(), Label.this.getWidth(), Label.this.getHeight())));
+					updateListener.putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( Label.this.getX(), Label.this.getY(), Label.this.getWidth(), Label.this.getHeight())));
 					Thread.sleep(50);
 				
 				}  catch (InterruptedException e) {
