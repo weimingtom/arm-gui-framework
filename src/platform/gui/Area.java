@@ -183,8 +183,13 @@ public class Area extends PlatformWidget implements UpdateListener{
 		try {
 			UnifiedGraphics screenGraphics = Screen.getScreen().getGraphics();
 			
+			for(PlatformWidget widget: widgetMap.keySet()){
+				
+				//TODO check this
+				widget.draw(surfaceGraphics);
+			}
 			screenGraphics.beginDraw();
-			screenGraphics.drawSDLSurface(surface, surface.getRect(), ((SDLGraphics)screenGraphics).getTarget().getRect());
+			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
 			screenGraphics.endDraw();
 			
 		} catch (SDLException e) {
@@ -328,6 +333,7 @@ public class Area extends PlatformWidget implements UpdateListener{
 					WidgetUpdate widgetToUpdate;
 						while( widgetUpdateInfo.size() > 0 ){
 							surfaceGraphics.beginDraw();
+							
 								if ((widgetToUpdate= widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null){
 									drawOriginal(widgetToUpdate.getWidgetRegion());
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
