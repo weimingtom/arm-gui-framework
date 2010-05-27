@@ -6,21 +6,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import platform.gfx.UnifiedGraphics;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
 import sdljavax.guichan.evt.MouseListener;
-import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
-import sdljavax.guichan.widgets.BasicContainer;
 import sdljavax.guichan.widgets.Widget;
 
-public class Panel extends BasicContainer implements MouseListener, UpdateListener {
+public class Panel extends PlatformWidget implements MouseListener, UpdateListener {
 
 	protected Image frame;
-	protected List<Widget> widgetList = new ArrayList<Widget>();
+	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	protected Integer xFormat, yFormat;
 	
 	private final int horizontalPixelShift = 10;
@@ -42,7 +41,8 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		addMouseListener(this);
 	}
 	
-	public void add(Widget widget, int offset) throws GUIException, InterruptedException{
+	@Override
+	public void add(PlatformWidget widget, int offset) throws GUIException{
 		if(widget == null){
 			
 			throw new GUIException("Widget doesn't exist");
@@ -56,7 +56,7 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		
 		widgetList.add(widget);
 		widget.setPosition(horizontalShift, verticalShift);
-		widget.setParent(this);
+		widget.setUpdateListener(this);
 		
 		if( this.getFocusHandler() != null){	
 			widget.setFocusHandler(getFocusHandler());
@@ -64,10 +64,16 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 			widget.requestFocus();
 		}
 		
-		this.putRegionToUpdate( new WidgetUpdate( widget, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
+		try {
+			putRegionToUpdate( new WidgetUpdate( widget, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void remove(Widget widget) throws GUIException{
+	@Override
+	public void remove(PlatformWidget widget) throws GUIException{
 		for( Widget theWidget: widgetList){
 			if(widget.equals(theWidget)){
 				widgetList.remove(widget);
@@ -78,7 +84,7 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 	}
 	
 	@Override
-	public void draw(Graphics graphics) throws GUIException {
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 			drawBorder(graphics);
 			
 			for ( Widget widget : widgetList){
@@ -87,7 +93,7 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 	}
 
 	@Override
-	public void drawBorder(Graphics graphics) throws GUIException {
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 			graphics.drawImage(frame, getX(), getY() );
 	}
 
@@ -167,34 +173,10 @@ public class Panel extends BasicContainer implements MouseListener, UpdateListen
 		
 	}
 
-	public boolean putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
+	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		
-		return ((UpdateListener)getParent()).putRegionToUpdate(updateInfo);
+		updateListener.putRegionToUpdate(updateInfo);
 	}
 
-	@Override
-	protected void announceDeath(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Dimension getDrawSize(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void moveToBottom(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveToTop(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 }

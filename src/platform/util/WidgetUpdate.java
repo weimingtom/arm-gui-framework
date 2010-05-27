@@ -1,20 +1,20 @@
 package platform.util;
 
+import platform.gui.PlatformWidget;
 import sdljava.video.SDLRect;
-import sdljavax.guichan.widgets.Widget;
 
 public class WidgetUpdate {
 	
-	protected Widget widget;
+	protected PlatformWidget widget;
 	protected SDLRect widgetRegion;
 	
-	public WidgetUpdate(Widget widgetToUpdate, SDLRect updateRegion){
+	public WidgetUpdate(PlatformWidget widgetToUpdate, SDLRect updateRegion){
 		
 		widget = widgetToUpdate;
 		widgetRegion = updateRegion;
 	}
 
-	public Widget getWidget() {
+	public PlatformWidget getWidget() {
 		return widget;
 	}
 

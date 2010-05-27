@@ -1,22 +1,23 @@
 package platform.thread;
 
+import platform.gui.PlatformWidget;
 import platform.util.Direction;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
-import sdljava.SDLException;
 import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
-import sdljavax.guichan.GUIException;
-import sdljavax.guichan.widgets.Widget;
 
 public class TransitionEffectHandler extends Thread{
 
-	Widget widget;
+	PlatformWidget widget;
+	UpdateListener updateListener;
 	SDLSurface transitionedSurface;
 	Direction direction;
 	boolean show;
-	public TransitionEffectHandler(Widget widg ,SDLSurface surface, Direction dir, boolean shw){
+	
+	public TransitionEffectHandler(PlatformWidget widg , UpdateListener listener, SDLSurface surface, Direction dir, boolean shw){
 		widget = widg;
+		updateListener = listener;
 		transitionedSurface = surface;
 		direction = dir;
 		show=shw;
@@ -32,28 +33,28 @@ public class TransitionEffectHandler extends Thread{
 					
 				case NORTH:
 					for(double i= 0.2 ; i<=1.0 ; i+=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY(),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight() * i) ) ) );
+						updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY(),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight() * i) ) ) );
 						Thread.sleep(50);
 					}
 					break;
 					
 				case EAST:
 					for(double i= 0.8 ; i>=0.0 ; i-=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX() + (int)(transitionedSurface.getWidth() * i) ,widget.getY() ,(int)(transitionedSurface.getWidth() * i) , transitionedSurface.getHeight() ) ) );
+						updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX() + (int)(transitionedSurface.getWidth() * i) ,widget.getY() ,(int)(transitionedSurface.getWidth() * i) , transitionedSurface.getHeight() ) ) );
 						Thread.sleep(50);
 					}
 					break;
 						
 				case SOUTH:
 					for(double i= 0.8 ; i>=0.0 ; i-=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY()+ (int)(transitionedSurface.getHeight() * i),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight()*i) ) ) );
+						updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY()+ (int)(transitionedSurface.getHeight() * i),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight()*i) ) ) );
 						Thread.sleep(50);
 					}
 					break;
 					
 				case WEST:	
 					for(double i= 0.2 ; i<1.0 ; i+=0.2){
-						((UpdateListener)widget).putRegionToUpdate(new WidgetUpdate(widget,new SDLRect(widget.getX(),widget.getY(),(int)(transitionedSurface.getWidth() * i), transitionedSurface.getHeight())));
+						updateListener.putRegionToUpdate(new WidgetUpdate(widget,new SDLRect(widget.getX(),widget.getY(),(int)(transitionedSurface.getWidth() * i), transitionedSurface.getHeight())));
 						Thread.sleep(50);
 					}
 					break;
@@ -62,7 +63,7 @@ public class TransitionEffectHandler extends Thread{
 					break;
 				}
 					
-				((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY(),transitionedSurface.getWidth(), transitionedSurface.getHeight() ) ) );
+				updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY(),transitionedSurface.getWidth(), transitionedSurface.getHeight() ) ) );
 			}
 			
 			else{
@@ -70,28 +71,28 @@ public class TransitionEffectHandler extends Thread{
 					
 				case NORTH:
 					for(double i= 0.2 ; i<=1.0 ; i+=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY() + (int)(transitionedSurface.getHeight() *(1-i)) ,transitionedSurface.getWidth(), transitionedSurface.getHeight() ) ) ) ;
+						updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY() + (int)(transitionedSurface.getHeight() *(1-i)) ,transitionedSurface.getWidth(), transitionedSurface.getHeight() ) ) ) ;
 						Thread.sleep(50);
 					}
 					break;
 					
 				case EAST:
 					for(double i= 0.8 ; i>=0.0 ; i-=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX() + (int)(transitionedSurface.getWidth() *(1-i) ) ,widget.getY() ,(int)(transitionedSurface.getWidth() *(1-i) ) , transitionedSurface.getHeight() ) ) );
+						updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX() + (int)(transitionedSurface.getWidth() *(1-i) ) ,widget.getY() ,(int)(transitionedSurface.getWidth() *(1-i) ) , transitionedSurface.getHeight() ) ) );
 						Thread.sleep(50);
 					}
 					break;
 						
 				case SOUTH:
 					for(double i= 0.8 ; i>=0.0 ; i-=0.2){
-						((UpdateListener)widget).putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY()+ (int)(transitionedSurface.getHeight() *(1-i) ),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight()*(1-i) ) ) ) );
+						updateListener.putRegionToUpdate( new WidgetUpdate (widget,new SDLRect(widget.getX(),widget.getY()+ (int)(transitionedSurface.getHeight() *(1-i) ),transitionedSurface.getWidth(), (int)(transitionedSurface.getHeight()*(1-i) ) ) ) );
 						Thread.sleep(50);
 					}
 					break;
 					
 				case WEST:	
 					for(double i= 0.2 ; i<=1.0 ; i+=0.2){
-						((UpdateListener)widget).putRegionToUpdate(new WidgetUpdate(widget,new SDLRect(widget.getX(),widget.getY(),(int)(transitionedSurface.getWidth() *(1-i) ), transitionedSurface.getHeight())));
+						updateListener.putRegionToUpdate(new WidgetUpdate(widget,new SDLRect(widget.getX(),widget.getY(),(int)(transitionedSurface.getWidth() *(1-i) ), transitionedSurface.getHeight())));
 						Thread.sleep(50);
 					}
 					break;

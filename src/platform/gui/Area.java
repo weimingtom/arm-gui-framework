@@ -1,6 +1,5 @@
 package platform.gui;
 
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import platform.gfx.UnifiedGraphics;
+import platform.sdl.SDLGraphics;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
@@ -22,17 +22,15 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
-import sdljavax.guichan.sdl.SDLGraphics;
-import sdljavax.guichan.widgets.BasicContainer;
-import sdljavax.guichan.widgets.Widget;
 
-public class Area extends BasicContainer implements UpdateListener{
+
+public class Area extends PlatformWidget implements UpdateListener{
 
 	protected SDLSurface surface, originalSurface;
-	protected SDLGraphics surfaceGraphics;
+	protected UnifiedGraphics surfaceGraphics;
 	protected FocusHandler focusHandler = new FocusHandler();
 	
-	protected Map<Widget, Set<Integer> > widgetMap = new HashMap<Widget , Set<Integer> >();
+	protected Map<PlatformWidget, Set<Integer> > widgetMap = new HashMap<PlatformWidget , Set<Integer> >();
 	protected BlockingQueue<WidgetUpdate> widgetUpdateInfo = new LinkedBlockingQueue<WidgetUpdate>();
 	
 	protected int grid[];
@@ -48,8 +46,7 @@ public class Area extends BasicContainer implements UpdateListener{
 			surfaceGraphics = new SDLGraphics();
 			surfaceGraphics.setTarget(surface);
 			setGrid(args);
-			
-			
+				
 			//TODO check this !!!
 			setWidth(surface.getWidth());
 			setHeight(surface.getHeight());
@@ -78,11 +75,8 @@ public class Area extends BasicContainer implements UpdateListener{
 		surfaceGraphics.setTarget(surface);		
 		setGrid(args);
 		
-		
-		
 		startAreaUpdateHandler();
 		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
-		
 		
 	}
 	
@@ -114,7 +108,8 @@ public class Area extends BasicContainer implements UpdateListener{
 		}	
 	}
 	
-	public void add(Widget widget, int offset) throws GUIException{
+	@Override
+	public void add(PlatformWidget widget, int offset) throws GUIException{
 		int returnValue,xCellNeeded,yCellNeeded;
 		
 		if(widget == null){	
@@ -141,24 +136,25 @@ public class Area extends BasicContainer implements UpdateListener{
 		
 		widgetMap.put(widget, cellsNr);
 	
-		if( widget instanceof Panel ){
+		/*if( PlatformWidget instanceof Panel ){
 			widget.setFocusHandler(focusHandler);
 			((Panel)widget).setWidgetsFocusHandler(focusHandler);		
 		}
-		else{
+		else{*/
 			widget.setFocusHandler(focusHandler);
 			widget.setFocusable(true);
 			//widget.requestFocus();
-		}	
+		//}	
 		widget.setPosition( (offset % grid[0])* xCellDimension ,(offset / grid[1] ) * yCellDimension);
-		widget.setParent(this);
+		widget.setUpdateListener(this);
 		
 		widgetUpdateInfo.add(new WidgetUpdate(widget , new SDLRect(widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight() )));
 	}
 	
-	public void remove(Widget widget) throws GUIException{	
+	@Override
+	public void remove(PlatformWidget widget) throws GUIException{	
 		
-		for( Widget theWidget: widgetMap.keySet()){
+		for( PlatformWidget theWidget: widgetMap.keySet()){
 			if(theWidget.equals(widget)){
 				widgetMap.remove(widget);
 				//TOD0 will this really work?
@@ -169,9 +165,9 @@ public class Area extends BasicContainer implements UpdateListener{
 		throw new GUIException("No such widget in this area");
 	}
 	
-	public boolean putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException{
+	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException{
 		
-		return widgetUpdateInfo.offer(updateInfo, 50L, TimeUnit.MILLISECONDS);
+		widgetUpdateInfo.offer(updateInfo, 50L, TimeUnit.MILLISECONDS);
 	}
 	
 	
@@ -183,15 +179,14 @@ public class Area extends BasicContainer implements UpdateListener{
 	}
 		
 	@Override
-	public void draw(Graphics graphics) throws GUIException {
+	public void draw(UnifiedGraphics graphics) throws GUIException {
 		try {
-			Graphics screenGraphics = Screen.getScreen().getGraphics();
+			UnifiedGraphics screenGraphics = Screen.getScreen().getGraphics();
 			
-			if(screenGraphics instanceof SDLGraphics){
 			screenGraphics.beginDraw();
-			((SDLGraphics)screenGraphics).drawSDLSurface(surface, surface.getRect(), ((SDLGraphics)screenGraphics).getTarget().getRect());
+			screenGraphics.drawSDLSurface(surface, surface.getRect(), ((SDLGraphics)screenGraphics).getTarget().getRect());
 			screenGraphics.endDraw();
-			}
+			
 		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
@@ -203,13 +198,12 @@ public class Area extends BasicContainer implements UpdateListener{
 		
 		try {
 			
-			Graphics screenGraphics = Screen.getScreen().getGraphics();
+			UnifiedGraphics screenGraphics = Screen.getScreen().getGraphics();
 			
-			if(screenGraphics instanceof SDLGraphics){
 			screenGraphics.beginDraw();
-			((SDLGraphics)screenGraphics).drawSDLSurface(surface, rect, rect);
+			screenGraphics.drawSDLSurface(surface, rect, rect);
 			screenGraphics.endDraw();
-			}
+			
 		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
@@ -219,11 +213,11 @@ public class Area extends BasicContainer implements UpdateListener{
 	public void drawOriginal(SDLRect rect) throws GUIException{
 		
 		try {
-			
-				
+	
 			surfaceGraphics.beginDraw();
 			surfaceGraphics.drawSDLSurface(originalSurface, rect, rect);
 			surfaceGraphics.endDraw();
+			
 		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
@@ -231,7 +225,7 @@ public class Area extends BasicContainer implements UpdateListener{
 	}
 	public void delete() throws GUIException{
 		
-		for( Widget theWidget: widgetMap.keySet()){
+		for( PlatformWidget theWidget: widgetMap.keySet()){
 			theWidget.delete();		
 		}
 		
@@ -245,39 +239,7 @@ public class Area extends BasicContainer implements UpdateListener{
 		}
 	}
 
-	@Override
-	protected void announceDeath(Widget widget) throws GUIException {
-		
-		for( Widget theWidget: widgetMap.keySet()){
-			if(theWidget.equals(widget)){
-				widgetMap.remove(widget);
-				return;
-			}		
-		}
-	}
-
-	@Override
-	public Dimension getDrawSize(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void moveToBottom(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveToTop(Widget widget) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void drawBorder(Graphics graphics) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	public SDLSurface getSurface() {
 		return surface;
@@ -288,12 +250,12 @@ public class Area extends BasicContainer implements UpdateListener{
 	}
 	
 	
-	public Map<Widget, Set<Integer>> getWidgetMap() {
+	public Map<PlatformWidget, Set<Integer>> getWidgetMap() {
 		return widgetMap;
 	}
 
 
-	public SDLGraphics getSurfaceGraphics() {
+	public UnifiedGraphics getSurfaceGraphics() {
 		return surfaceGraphics;
 	}
 
@@ -367,7 +329,6 @@ public class Area extends BasicContainer implements UpdateListener{
 						while( widgetUpdateInfo.size() > 0 ){
 							surfaceGraphics.beginDraw();
 								if ((widgetToUpdate= widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null){
-									
 									drawOriginal(widgetToUpdate.getWidgetRegion());
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
 									draw(widgetToUpdate.getWidgetRegion());
@@ -406,5 +367,12 @@ public class Area extends BasicContainer implements UpdateListener{
 		}
 		
 	}
+
+	@Override
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
