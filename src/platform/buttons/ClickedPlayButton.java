@@ -1,38 +1,38 @@
 package platform.buttons;
 
+import platform.gui.Button;
 import platform.gui.ButtonState;
 import platform.util.UpdateListener;
+import platform.util.WidgetUpdate;
+import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.gfx.Image;
 
 public class ClickedPlayButton extends ButtonState{
 
-		
-	
-	public ClickedPlayButton(String imageStr, UpdateListener listener)throws GUIException {
-		super(imageStr, listener);
+	public ClickedPlayButton(String imageStr, UpdateListener listener, Button parent)throws GUIException {
+		super(imageStr, listener, parent);
 	
 	}
-
 	
 	public void mouseIn() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void mouseOut() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void mousePress() {
-		// TODO Auto-generated method stub
+	// TODO Auto-generated method stub
 		
 	}
 
 	public void mouseRelease() {
-		// TODO Auto-generated method stub
 		
+		parentButton.setCurrentState(parentButton.getDefaultButton());
+		try {
+			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton,new SDLRect(parentButton.getX(),parentButton.getY(),buttonImage.getWidth(), buttonImage.getHeight())));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	
