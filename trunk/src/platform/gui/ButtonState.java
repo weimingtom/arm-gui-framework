@@ -1,12 +1,44 @@
 package platform.gui;
 
-public interface ButtonState {
+import platform.util.UpdateListener;
+import sdljavax.guichan.GUIException;
+import sdljavax.guichan.gfx.Image;
 
-	public void mouseIn();
+public abstract class ButtonState {
+
+	protected Image buttonImage;
+	protected UpdateListener updateListener;
 	
-	public void mouseOut();
+	public ButtonState(String imageStr, UpdateListener listener) throws GUIException{
+		buttonImage = new Image(imageStr);
+		updateListener = listener;
+	}
 	
-	public void mousePress();
+	abstract public void mouseIn();
 	
-	public void mouseRelease();
+	abstract public void mouseOut();
+	
+	abstract public void mousePress();
+	
+	abstract public void mouseRelease();
+	
+	public void delete() throws GUIException{
+		
+		buttonImage.delete();
+	}
+	
+	public Image getImage(){
+		
+		return buttonImage;
+	}
+	
+	public int getWidth(){
+		return buttonImage.getWidth();
+	}
+	
+	public int getHeight(){
+		return buttonImage.getHeight();
+	}
+	
+	
 }

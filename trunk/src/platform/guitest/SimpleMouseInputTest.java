@@ -3,16 +3,14 @@ package platform.guitest;
 import java.io.File;
 
 import platform.gui.Area;
-import platform.gui.PlayButton;
+import platform.gui.Button;
 import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
-import sdljavax.guichan.sdl.SDLInput;
 
 public class SimpleMouseInputTest {
 
@@ -39,7 +37,7 @@ public class SimpleMouseInputTest {
 		    Area foregroundArea = new Area( image,5,4);
 		    foregroundArea.setAlpha(0);
 		    
-		    PlayButton playButton = new PlayButton();
+		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator);
 		    backgroundArea.add(playButton, 6);
 		    		    
 			screen.setAreas(backgroundArea, foregroundArea);

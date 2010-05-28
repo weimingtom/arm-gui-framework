@@ -3,8 +3,8 @@ package platform.guitest;
 import java.io.File;
 
 import platform.gui.Area;
+import platform.gui.Button;
 import platform.gui.PlatformDropDown;
-import platform.gui.PlayButton;
 import platform.gui.Screen;
 import platform.util.PlatformListModel;
 import sdljava.SDLException;
@@ -29,7 +29,7 @@ public class SimpleDropDownMenuTest {
 		Area backgroundArea = null;
 		Area foregroundArea = null;
 		PlatformDropDown dropDown = null;
-		PlayButton playButton = null;
+		Button playButton = null;
 		
 		int i=0;
 		
@@ -55,7 +55,7 @@ public class SimpleDropDownMenuTest {
 		    
 		    backgroundArea.add(dropDown, 0);
 		
-		    playButton = new PlayButton();
+		    playButton = new Button("resource" + File.separator + "PNG" + File.separator);
 		    backgroundArea.add(playButton, 6);
 		    
 		    screen.setAreas(backgroundArea, foregroundArea);
