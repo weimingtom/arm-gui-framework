@@ -9,6 +9,7 @@ import sdljavax.guichan.widgets.Widget;
 public abstract class PlatformWidget extends Widget{
 
 	protected UpdateListener updateListener = null;
+	protected PlatformWidget parentWidget = null;
 	
 	@Override
 	public void draw(Graphics graphics) throws GUIException {
@@ -41,5 +42,11 @@ public abstract class PlatformWidget extends Widget{
 		return updateListener;
 	}
 	
-	
+	public PlatformWidget getParentWidget() {
+		return parentWidget;
+	}
+
+	public void setParentWidget(PlatformWidget parentWidget) {
+		this.parentWidget = parentWidget;
+	}
 }

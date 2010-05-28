@@ -11,11 +11,9 @@ import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.ttf.SDLTTF;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
-import sdljavax.guichan.sdl.SDLInput;
 import sdljavax.guichan.widgets.ListModel;
 
 public class SimpleDropDownMenuTest {
