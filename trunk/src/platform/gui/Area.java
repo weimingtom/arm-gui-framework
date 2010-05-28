@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import platform.gfx.UnifiedGraphics;
 import platform.sdl.SDLGraphics;
+import platform.util.Maintainable;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
@@ -20,7 +21,6 @@ import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
-import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 
 
@@ -136,11 +136,12 @@ public class Area extends PlatformWidget implements UpdateListener{
 		
 		widgetMap.put(widget, cellsNr);
 	
-		/*if( PlatformWidget instanceof Panel ){
-			widget.setFocusHandler(focusHandler);
-			((Panel)widget).setWidgetsFocusHandler(focusHandler);		
+		if( widget instanceof Maintainable ){
+			//widget.setFocusHandler(focusHandler);
+			//((Panel)widget).setWidgetsFocusHandler(focusHandler);		
+			widget.setParentWidget(this);
 		}
-		else{*/
+		//else{
 			widget.setFocusHandler(focusHandler);
 			widget.setFocusable(true);
 			//widget.requestFocus();

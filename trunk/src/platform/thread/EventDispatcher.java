@@ -2,14 +2,12 @@ package platform.thread;
 
 import platform.evt.ExtendedInput;
 import platform.gui.Area;
-import platform.gui.PlatformDropDown;
 import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Key;
 import sdljavax.guichan.evt.KeyInput;
 import sdljavax.guichan.evt.MouseInput;
-import sdljavax.guichan.sdl.SDLInput;
 import sdljavax.guichan.widgets.Widget;
 
 public class EventDispatcher extends Thread{
