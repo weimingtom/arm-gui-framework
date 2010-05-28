@@ -1,29 +1,31 @@
 package platform.gui;
 
-import java.io.File;
-
+import platform.buttons.ClickedPlayButton;
+import platform.buttons.DefaultPlayButton;
+import platform.buttons.SelectedPlayButton;
 import platform.gfx.UnifiedGraphics;
+import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
-import sdljavax.guichan.gfx.Image;
 
-public class Button extends PlatformWidget implements MouseListener{
+public class Button extends PlatformWidget implements MouseListener, UpdateListener{
 
-	Image defaultButton;
-	Image clickedButton;
-	Image selectedButton;
-	String resourcePath;
-	ButtonStates buttonState;
+	ButtonState defaultButton;
+	ButtonState clickedButton;
+	ButtonState selectedButton;
 	
-	public Button() throws GUIException{
+	ButtonState currentState;
+		
+	public Button(String resourceDir) throws GUIException{
 		super();
-		resourcePath = new String("resource" + File.separator + "PNG" + File.separator + "music_button");
-		defaultButton = new Image(resourcePath + "_default.png");
-		clickedButton = new Image(resourcePath + "_pressed.png");
-		selectedButton = new Image(resourcePath + "_selected.png");
-		buttonState = ButtonStates.DEFAULT;
+		
+		defaultButton = new DefaultPlayButton(resourceDir + "music_button_default.png", this );
+		clickedButton = new ClickedPlayButton(resourceDir + "music_button_pressed.png", this);
+		selectedButton = new SelectedPlayButton(resourceDir + "music_button_selected.png", this);
+		
+		currentState = defaultButton;
 		
 		setWidth(defaultButton.getWidth());
 		setHeight(defaultButton.getHeight());
@@ -33,21 +35,8 @@ public class Button extends PlatformWidget implements MouseListener{
 	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-		
-		switch(buttonState){
-			case DEFAULT:
-				graphics.drawImage(defaultButton, getX(), getY());
-			break;
-			
-			case PRESSED:
-				graphics.drawImage(clickedButton, getX(), getY());
-			break;
-			
-			case SELECTED:
-				graphics.drawImage(selectedButton, getX(), getY());
-			break;
-		}
-		
+
+		graphics.drawImage(currentState.getImage(), getX(), getY());
 	}
 
 	@Override
@@ -64,6 +53,7 @@ public class Button extends PlatformWidget implements MouseListener{
 
 	public void mouseIn() throws GUIException {
 	
+		
 		m_bHasMouse =  true;
 		requestFocus();
 		buttonState = ButtonStates.SELECTED;
@@ -135,6 +125,11 @@ public class Button extends PlatformWidget implements MouseListener{
 		selectedButton.delete();
 		super.delete();
 	}
+
+	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
+		updateListener.putRegionToUpdate(updateInfo);
+
+		
+	}
 	
-	enum ButtonStates { DEFAULT, PRESSED, SELECTED };
 }
