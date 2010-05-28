@@ -9,7 +9,7 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Image;
 
-public class PlayButton extends PlatformWidget implements MouseListener{
+public class Button extends PlatformWidget implements MouseListener{
 
 	Image defaultButton;
 	Image clickedButton;
@@ -17,7 +17,7 @@ public class PlayButton extends PlatformWidget implements MouseListener{
 	String resourcePath;
 	ButtonStates buttonState;
 	
-	public PlayButton() throws GUIException{
+	public Button() throws GUIException{
 		super();
 		resourcePath = new String("resource" + File.separator + "PNG" + File.separator + "music_button");
 		defaultButton = new Image(resourcePath + "_default.png");
