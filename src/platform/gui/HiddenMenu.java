@@ -1,14 +1,13 @@
 package platform.gui;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import platform.gfx.UnifiedGraphics;
-import platform.sdl.SDLGraphics;
 import platform.thread.TransitionEffectHandler;
 import platform.util.Direction;
+import platform.util.Maintainable;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
@@ -23,7 +22,7 @@ import sdljavax.guichan.evt.MouseListener;
 
 
 
-public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateListener{
+public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateListener, Maintainable{
 
 	protected SDLSurface slider;
 	protected SDLSurface background;
@@ -106,13 +105,12 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			
 			
 			if(m_bVisible){
-				
-				new TransitionEffectHandler(Screen.getScreen().getBackground(),updateListener, background, direction,!m_bVisible );
-			
-				//TODO is that safe at all platforms?
-				Thread.sleep(300);
 				m_bVisible = !m_bVisible;
-				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
+				new TransitionEffectHandler(this,updateListener, background, direction, m_bVisible );
+			
+				//TODO is that safe at all platforms? we 're waiting till TransitionHandler finishes his job
+				Thread.sleep(300);
+				//slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
 			
 				putRegionToUpdate( new WidgetUpdate (this,new SDLRect(getX(),getY(),background.getWidth(), background.getHeight() ) ) );		
 			}
@@ -120,17 +118,14 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			else {
 				new TransitionEffectHandler(this, updateListener, background, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
-				slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
+				//slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
 			}
 			
 			
 			
 		}
 		
-		catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+		catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		}
