@@ -6,7 +6,6 @@ import platform.buttons.SelectedPlayButton;
 import platform.gfx.UnifiedGraphics;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
-import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 
@@ -21,9 +20,9 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	public Button(String resourceDir) throws GUIException{
 		super();
 		
-		defaultButton = new DefaultPlayButton(resourceDir + "music_button_default.png", this );
-		clickedButton = new ClickedPlayButton(resourceDir + "music_button_pressed.png", this);
-		selectedButton = new SelectedPlayButton(resourceDir + "music_button_selected.png", this);
+		defaultButton = new DefaultPlayButton(resourceDir + "music_button_default.png", this , this);
+		clickedButton = new ClickedPlayButton(resourceDir + "music_button_pressed.png", this, this);
+		selectedButton = new SelectedPlayButton(resourceDir + "music_button_selected.png", this, this);
 		
 		currentState = defaultButton;
 		
@@ -53,16 +52,8 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 
 	public void mouseIn() throws GUIException {
 	
+		currentState.mouseIn();
 		
-		m_bHasMouse =  true;
-		requestFocus();
-		buttonState = ButtonStates.SELECTED;
-		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),selectedButton.getWidth(), selectedButton.getHeight())));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void mouseMotion(int x, int y) throws GUIException {
@@ -72,40 +63,15 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 
 
 	public void mouseOut() {
-		m_bHasMouse =  false;
-		buttonState=ButtonStates.DEFAULT;
-		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
-			lostFocus();
-		} catch (GUIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		currentState.mouseOut();
 	}
 
 	public void mousePress(int x, int y, int button) throws GUIException {
-		buttonState=ButtonStates.PRESSED;
-		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),clickedButton.getWidth(), clickedButton.getHeight())));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		currentState.mousePress();
 	}
 
 	public void mouseRelease(int x, int y, int button) throws GUIException {
-	
-		buttonState=ButtonStates.DEFAULT;
-		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(getX(),getY(),defaultButton.getWidth(), defaultButton.getHeight())));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		currentState.mouseRelease();
 	}
 
 	public void mouseWheelDown(int x, int y) throws GUIException {
@@ -131,5 +97,22 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 
 		
 	}
+
+	public ButtonState getDefaultButton() {
+		return defaultButton;
+	}
+
+	public ButtonState getClickedButton() {
+		return clickedButton;
+	}
+
+	public ButtonState getSelectedButton() {
+		return selectedButton;
+	}
+
+	public void setCurrentState(ButtonState currentState) {
+		this.currentState = currentState;
+	}
+	
 	
 }

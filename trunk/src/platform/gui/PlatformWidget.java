@@ -49,4 +49,8 @@ public abstract class PlatformWidget extends Widget{
 	public void setParentWidget(PlatformWidget parentWidget) {
 		this.parentWidget = parentWidget;
 	}
+	
+	public void setMouseEnabled(boolean value){
+		m_bHasMouse = value;
+	}
 }
