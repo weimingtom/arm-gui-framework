@@ -68,6 +68,10 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			
 		}
 		widget.setUpdateListener(this);
+		
+		if(widget.getWidth() > getWidth() || widget.getHeight() > getHeight()){
+			adjustSize(widget);
+		}
 	}
 
 	@Override
@@ -186,5 +190,27 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 		updateListener.putRegionToUpdate(updateInfo);
 	}
 
+	protected void adjustSize(PlatformWidget greaterWidget) {
 		
+		try {
+			background.freeSurface();
+				
+			if(direction == Direction.NORTH || direction == Direction.SOUTH){
+				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, greaterWidget.getHeight() , 16, 0, 0, 0, 0);
+				setHeight(greaterWidget.getHeight());
+			}
+			else{
+				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, greaterWidget.getWidth() , Screen._screenHeight , 16, 0, 0, 0, 0);
+				setWidth(greaterWidget.getWidth());
+			}
+			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight())));
+		
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
