@@ -19,6 +19,7 @@ import sdljava.video.SDLVideo;
 import sdljavax.gfx.SDLGfx;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
+import sdljavax.guichan.widgets.Widget;
 
 
 
@@ -37,9 +38,11 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 		
 		if( direction == Direction.SOUTH || direction == Direction.NORTH){
 			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, (int)(Screen._screenHeight * 0.25) , 16, 0, 0, 0, 0);
+			
 		}
 		else {
 			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, (int)(Screen._screenWidth * 0.25) , Screen._screenHeight , 16, 0, 0, 0, 0);
+			
 		}
 		
 		background.fillRect(background.mapRGB(clr.getRed(), clr.getGreen(), clr.getBlue()));
@@ -68,7 +71,6 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			
 		}
 		widget.setUpdateListener(this);
-		
 		if(widget.getWidth() > getWidth() || widget.getHeight() > getHeight()){
 			adjustSize(widget);
 		}
@@ -103,36 +105,49 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			} 
 	}
 	
+	public void delete() throws GUIException{
+		
+		for( PlatformWidget theWidget: widgetList){
+			theWidget.delete();		
+		}
+		
+		try {
+			slider.freeSurface();
+			background.freeSurface();
+			super.delete();
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
 	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
 		try {
-			
-			
+
 			if(m_bVisible){
+				for( Widget widget : widgetList){
+					
+					if(widget instanceof MouseListener){
+						if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight()){
+							((MouseListener)widget).mouseClick(x, y, button, count);
+							return;
+						}
+					}
+				}
 				m_bVisible = !m_bVisible;
 				new TransitionEffectHandler(this,updateListener, direction, m_bVisible );
 			
 				//TODO is that safe at all platforms? we 're waiting till TransitionHandler finishes his job
 				Thread.sleep(300);
-				
-				//m_bVisible = !m_bVisible;
-				
-				//slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
-			
 				putRegionToUpdate( new WidgetUpdate (this,new SDLRect(getX(),getY(),background.getWidth(), background.getHeight() ) ) );		
 			}
 			
 			else {
 				new TransitionEffectHandler(this, updateListener, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
-				//slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
 			}
-			
-			
-			
-		}
-		
-		catch (InterruptedException e) {
+		}catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		}
