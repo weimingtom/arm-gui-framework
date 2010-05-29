@@ -49,8 +49,8 @@ public class SimpleHiddenMenuTest {
 		   
 		   backgroundArea.add(hiddenMenu,0);
 		   
-		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail_small.png")));
-		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "browser_small.png")));	
+		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail.png")));
+		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "music.png")));	
 		   
 		   hiddenMenu.add(icon1,0);
 		   hiddenMenu.add(icon2,1);
