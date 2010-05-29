@@ -171,10 +171,15 @@ public class Area extends PlatformWidget implements UpdateListener{
 		widgetUpdateInfo.offer(updateInfo, 50L, TimeUnit.MILLISECONDS);
 	}
 	
-	
-	public void setAlpha(int alphaIndex) throws SDLException{
-		//TODO make here notification of a change being made
-		surface.setAlpha(Screen._alphaFlags, alphaIndex);
+	@Override
+	public void setAlpha(int alphaIndex) {
+		
+		try {
+			surface.setAlpha(Screen._alphaFlags, alphaIndex);
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
 				
 	}

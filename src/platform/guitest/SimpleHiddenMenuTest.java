@@ -62,7 +62,7 @@ public class SimpleHiddenMenuTest {
 				Thread.sleep(200);
 			}
 			
-			
+			screen.delete();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			
@@ -75,7 +75,7 @@ public class SimpleHiddenMenuTest {
 			e.printStackTrace();
 		} finally{
 			
-			screen.delete();
+			//screen.delete();
 			
 			SDLMain.quit();
 			System.exit(0);					

@@ -34,6 +34,10 @@ public abstract class PlatformWidget extends Widget{
 		throw new UnsupportedOperationException();
 	}
 	
+	public void setAlpha(int alphaIndex){
+		throw new UnsupportedOperationException();
+	}
+	
 	public void setUpdateListener(UpdateListener listener){
 		updateListener = listener;
 	}
