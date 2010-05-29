@@ -199,7 +199,17 @@ public class Area extends PlatformWidget implements UpdateListener{
 		}
 		
 	}
-	
+	public void drawWidgets(SDLRect rect, PlatformWidget widgetNotToDraw) throws GUIException{
+		
+		for(PlatformWidget widget: widgetMap.keySet()){
+			if(!widget.equals(widgetNotToDraw)){
+				if( widget.getX() >= rect.x && widget.getX() <= rect.x + rect.width && widget.getY() >= rect.y && widget.getY() <= rect.y + rect.height){
+					widget.draw(surfaceGraphics);
+				}
+			}
+		}
+	}
+
 	public void draw(SDLRect rect) throws GUIException{
 		
 		try {
@@ -337,6 +347,7 @@ public class Area extends PlatformWidget implements UpdateListener{
 							
 								if ((widgetToUpdate= widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null){
 									drawOriginal(widgetToUpdate.getWidgetRegion());
+									drawWidgets(widgetToUpdate.getWidgetRegion(), widgetToUpdate.getWidget());
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
 									draw(widgetToUpdate.getWidgetRegion());
 									//draw(surfaceGraphics);
