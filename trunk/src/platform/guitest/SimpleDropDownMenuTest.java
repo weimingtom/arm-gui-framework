@@ -56,7 +56,7 @@ public class SimpleDropDownMenuTest {
 		    backgroundArea.add(dropDown, 0);
 		
 		    playButton = new Button("resource" + File.separator + "PNG" + File.separator);
-		    backgroundArea.add(playButton, 6);
+		    backgroundArea.add(playButton, 4);
 		    
 		    screen.setAreas(backgroundArea, foregroundArea);
 		    

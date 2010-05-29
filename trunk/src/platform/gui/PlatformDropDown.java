@@ -9,6 +9,7 @@ import sdljava.video.SDLColor;
 import sdljava.video.SDLRect;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseInput;
+import sdljavax.guichan.gfx.Color;
 import sdljavax.guichan.widgets.ListBox;
 import sdljavax.guichan.widgets.ListModel;
 import sdljavax.guichan.widgets.ScrollArea;
@@ -21,19 +22,27 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 	public PlatformDropDown(ListModel list) throws GUIException, SDLException{
 		super(list);
 		
+		//setBaseColor(new Color(128,128,144, 255));
+		//setForegroundColor(new Color(0,0,0,255));
+		//setBackgroundColor(new Color(255,255,255,255));
+		
 		listBox = new ListBox(list);
 		listBox.setSelected(2);
 		listBox.setBorderSize(1);
 		listBox.setFont(new CalibriFont(20, new SDLColor(0,0,0,0), true));
-			
+		listBox.setBackgroundColor(new Color(255,255,255,128));
+		
 		scrollArea = new ScrollArea();
 		scrollArea.setBorderSize(1);
 		scrollArea.setContent(listBox);
-   
+		scrollArea.setBackgroundColor(new Color(255,255,255,128));
+		
 	    super.setFont(listBox.getFont());
 	    super.setListBox(listBox);
 		super.setScrollArea(scrollArea); ///It will adjust height automatically
 		super.logic(); 
+				
+		
 	}
 	
 	
