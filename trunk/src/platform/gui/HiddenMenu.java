@@ -110,17 +110,20 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			
 			if(m_bVisible){
 				m_bVisible = !m_bVisible;
-				new TransitionEffectHandler(this,updateListener, background, direction, m_bVisible );
+				new TransitionEffectHandler(this,updateListener, direction, m_bVisible );
 			
 				//TODO is that safe at all platforms? we 're waiting till TransitionHandler finishes his job
 				Thread.sleep(300);
+				
+				//m_bVisible = !m_bVisible;
+				
 				//slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
 			
 				putRegionToUpdate( new WidgetUpdate (this,new SDLRect(getX(),getY(),background.getWidth(), background.getHeight() ) ) );		
 			}
 			
 			else {
-				new TransitionEffectHandler(this, updateListener, background, direction, !m_bVisible);
+				new TransitionEffectHandler(this, updateListener, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
 				//slider = SDLGfx.rotozoomSurface(slider, 180, 1, true);
 			}
