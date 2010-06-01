@@ -11,21 +11,29 @@ import sdljavax.guichan.gfx.Image;
 
 public class PlatformIcon extends PlatformWidget implements MouseListener{
 
-	private Image iconImage;
+	private SDLSurface iconImage;
 	private boolean clicked = false;
 	
-	public PlatformIcon(Image image){
+	public PlatformIcon(Image image) throws GUIException{
 		super();
-		iconImage = image;
+		iconImage =(SDLSurface)image.getData();
 		
 		setHeight(image.getHeight());
 		setWidth(image.getWidth());
 		
 		addMouseListener(this);
+		
+		
 	}
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-		graphics.drawImage(iconImage, getX(), getY());
+		try {
+			graphics.drawSDLSurface(iconImage, iconImage.getRect(), graphics.getTarget().getRect(getX(), getY()));
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//graphics.drawImage(iconImage, getX(), getY());
 	}
 
 	@Override
@@ -36,7 +44,7 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	@Override
 	public void setAlpha(int alphaIndex) {
 		try {
-			((SDLSurface)iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
+			iconImage.setAlpha(Screen._alphaFlags, alphaIndex);
 			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -52,7 +60,13 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	@Override
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
-		iconImage.delete();
+		//iconImage.delete();
+		try {
+			iconImage.freeSurface();
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		super.delete();
 	}
 	public void mouseClick(int arg0, int y, int button, int count)

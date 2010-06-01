@@ -1,4 +1,4 @@
-package platform.guitest;
+package test;
 
 import java.io.File;
 
@@ -9,7 +9,6 @@ import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.SDLTimer;
-import sdljava.ttf.SDLTTF;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;

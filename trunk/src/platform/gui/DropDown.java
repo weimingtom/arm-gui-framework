@@ -490,6 +490,7 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 		}
 		// Fold up the listbox if the upper part is clicked after fold down
 		else if (button == MouseInput.LEFT && hasMouse() && m_bDroppedDown && y < m_nOldH) {
+			this.m_bHasMouse = false;
 			foldUp();
 		} else if (!hasMouse()) {
 			foldUp();

@@ -42,7 +42,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		
 
 		cursorPosition = text.length();
-		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(displayedText) + 10; //TODO fix that shift somehow
+		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(displayedText) ; 
 		prevOnScreenCursorPosition=onScreenCursorPosition;
 		stepsFromBorder=10;
 		elementChanged = ElementChanged.ALL;
@@ -91,7 +91,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 			
 	public void drawText(Graphics graphics) throws GUIException{
 	
-		System.out.println(cursorPosition);
+		//System.out.println(cursorPosition);
 		if(displayedText.length() != 0){
 		
 			if(displayedText.length() < 11){
@@ -159,7 +159,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 					if(stepsFromBorder<10){
 						stepsFromBorder++;
 					}
-				elementChanged = ElementChanged.CURSOR;
+					elementChanged = ElementChanged.TEXT;
+				//elementChanged = ElementChanged.CURSOR;
 				}
 				--cursorPosition;
 			}
@@ -169,8 +170,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				if(stepsFromBorder > 0){
 					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition));
 					stepsFromBorder--;
-					elementChanged = ElementChanged.CURSOR;
-				
+					//elementChanged = ElementChanged.CURSOR;
+					elementChanged = ElementChanged.TEXT;
 				}
 				else {
 					elementChanged = ElementChanged.TEXT;
@@ -182,15 +183,15 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				
 				displayedText = displayedText.substring(0, cursorPosition) + displayedText.substring(cursorPosition + 1);
 								
-				if(displayedText.length() > 9){
+				/*if(displayedText.length() > 9 && cursorPosition != 0){
 					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));	
 					stepsFromBorder--;
-				}
+				}*/
 				elementChanged = ElementChanged.TEXT;
 			}
 			else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 				
-				if(cursorPosition<11){
+				if(cursorPosition<11 && cursorPosition != 0){
 				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
 				stepsFromBorder++;
 				}
@@ -206,7 +207,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				cursorPosition = 0;
 				stepsFromBorder=10;
 				onScreenCursorPosition=getXTextPosition();
-				elementChanged = ElementChanged.CURSOR; 
+				elementChanged = ElementChanged.TEXT;
+				//elementChanged = ElementChanged.CURSOR; 
 			} 
 			else if (key.getValue() == Key.END) {
 				cursorPosition = displayedText.length();
@@ -218,7 +220,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText.substring(cursorPosition-10, cursorPosition));
 					
 				}
-				elementChanged = ElementChanged.CURSOR;
+				elementChanged = ElementChanged.TEXT;
+				//elementChanged = ElementChanged.CURSOR;
 			} 
 			else if (key.isCharacter()) {
 				displayedText = displayedText.substring(0, cursorPosition) + (char) key.getValue() + displayedText.substring(cursorPosition);
@@ -229,7 +232,10 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				elementChanged = ElementChanged.TEXT;
 			}
 			
-			if(elementChanged == ElementChanged.TEXT){
+			if(updateListener != null){
+				updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
+			}
+			/*if(elementChanged == ElementChanged.TEXT){
 				
 				if(updateListener != null){
 					updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
@@ -241,9 +247,11 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				int greaterIndex = (prevOnScreenCursorPosition > onScreenCursorPosition) ? prevOnScreenCursorPosition : onScreenCursorPosition;
 					
 				if(updateListener != null){
-					updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(  smallerIndex - 1 , greaterIndex + 1, Math.abs(prevOnScreenCursorPosition - onScreenCursorPosition), textFont.getHeight() + 1 ) ) );
+					//updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(  smallerIndex - 1 , getYTextPosition(), Math.abs(prevOnScreenCursorPosition - onScreenCursorPosition), textFont.getHeight() + 1 ) ) );
+					updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(  smallerIndex - 1 , getYTextPosition(), Math.abs(prevOnScreenCursorPosition - onScreenCursorPosition), textFont.getHeight() + 1 ) ) );
+
 				}
-			}
+			}*/
 		}
 		catch (SDLException e) {
 			// TODO Auto-generated catch block

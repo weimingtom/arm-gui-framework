@@ -6,8 +6,6 @@ import sdljava.SDLException;
 import sdljava.event.SDLEvent;
 import sdljava.event.SDLKey;
 import sdljava.event.SDLKeyboardEvent;
-import sdljavax.guichan.evt.Input;
-import sdljavax.guichan.sdl.SDLInput;
 
 public class EventCapturer extends Thread{
 
