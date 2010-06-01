@@ -2,8 +2,6 @@ package platform.gui;
 
 import platform.font.CalibriFont;
 import platform.gfx.UnifiedGraphics;
-import platform.sdl.SDLGraphics;
-import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.video.SDLColor;

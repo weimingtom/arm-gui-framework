@@ -3,7 +3,6 @@ package platform.font;
 import java.io.File;
 
 import platform.gfx.UnifiedGraphics;
-import platform.gui.Screen;
 import platform.sdl.SDLGraphics;
 import sdljava.SDLException;
 import sdljava.ttf.GlyphMetrics;

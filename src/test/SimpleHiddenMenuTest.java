@@ -1,8 +1,6 @@
-package platform.guitest;
+package test;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 
 import platform.gui.Area;
 import platform.gui.HiddenMenu;
@@ -13,11 +11,9 @@ import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.video.SDLColor;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
-import sdljavax.guichan.sdl.SDLInput;
 
 public class SimpleHiddenMenuTest {
 

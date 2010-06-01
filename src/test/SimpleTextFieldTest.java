@@ -1,23 +1,19 @@
-package platform.guitest;
+package test;
 
 import java.io.File;
 
 import platform.gui.Area;
 import platform.gui.Label;
 import platform.gui.Panel;
-import platform.gui.PlatformIcon;
 import platform.gui.Screen;
 import platform.gui.TextField;
 import sdljava.SDLException;
 import sdljava.SDLMain;
-import sdljava.SDLTimer;
 import sdljava.ttf.SDLTTF;
 import sdljavax.guichan.GUIException;
-import sdljavax.guichan.evt.Input;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
 import sdljavax.guichan.sdl.SDLImageLoader;
-import sdljavax.guichan.sdl.SDLInput;
 
 public class SimpleTextFieldTest {
 
@@ -47,12 +43,13 @@ public class SimpleTextFieldTest {
 		    Area foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
 		   
-		    //TextField googleSearch = new TextField("google");
+		    TextField googleSearch = new TextField("google");
 		    //TextField googleSearch = new TextField();
-		    //backgroundArea.add(googleSearch,4);
+		    backgroundArea.add(googleSearch,0);
+		    
 		    Panel panel= new Panel(4,1);
 		     	
-		    backgroundArea.add(panel, 4);
+		    backgroundArea.add(panel, 8);
 		    
 		    Label label = new Label ("David Guetta", "One Love", 160, 35);
 		    panel.add(label, 1);	    
