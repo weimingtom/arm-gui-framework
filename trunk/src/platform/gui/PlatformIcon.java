@@ -12,7 +12,7 @@ import sdljavax.guichan.gfx.Image;
 public class PlatformIcon extends PlatformWidget implements MouseListener{
 	
 	private Image iconImage;
-	private Image modified;
+	private Image modified = null;
 	private boolean drawModified=false;
 	//private SDLSurface iconImage;
 	private boolean clicked = false;
@@ -69,6 +69,7 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
 		iconImage.delete();
+		modified.delete();
 		/*try {
 			iconImage.freeSurface();
 		} catch (SDLException e) {
@@ -83,16 +84,22 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		return ((SDLSurface)iconImage.getData());
 	}
 	
-	public void setIconImage(Object icon, int width, int height) {
-		
+	public void setIconImage(Object icon, int width, int height) throws GUIException {
+		iconImage.delete();
 		iconImage = new Image(icon, width, height);
 		setWidth(width);
 		setHeight(height);
 	}
 	
-	public void setIconModifiedImage(Object modifiedIcon, int width, int height) {
+	public void setIconModifiedImage(Object modifiedIcon, int width, int height) throws GUIException {
 		drawModified = true;
-		modified = new Image(modifiedIcon, width, height);
+		if(modified == null){
+			modified = new Image(modifiedIcon, width, height);
+		}
+		else{
+			modified.delete();
+			modified = new Image(modifiedIcon, width, height);
+		}
 	}
 	
 	public void mouseClick(int arg0, int y, int button, int count)
