@@ -8,6 +8,7 @@ import platform.gui.Screen;
 import platform.thread.CurveMotionHandler;
 import sdljava.SDLException;
 import sdljava.SDLMain;
+import sdljava.video.SDLColor;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
@@ -17,9 +18,11 @@ public class SimpleCurveMotionHandlerTest {
 
 	/**
 	 * @param args
+	 * @throws GUIException 
+	 * @throws SDLException 
 	 */
-	public static void main(String[] args) {
-Screen screen = null;
+	public static void main(String[] args) throws SDLException, GUIException {
+		Screen screen = null;
 		
 		
 		try {
@@ -31,7 +34,7 @@ Screen screen = null;
 			
 			screen=Screen.getScreen();
 			
-			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),5,5);
+			Area backgroundArea = new Area( new SDLColor(0,0,0) ,5,5);
 		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,4,4);
@@ -65,7 +68,7 @@ Screen screen = null;
 			e.printStackTrace();
 		} finally{
 			
-			//screen.delete();
+			screen.delete();
 			
 			SDLMain.quit();
 			System.exit(0);					

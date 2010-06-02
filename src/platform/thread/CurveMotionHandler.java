@@ -18,15 +18,16 @@ import sdljavax.guichan.GUIException;
 
 public class CurveMotionHandler extends Thread {
 
-	private final int transitionNr=5;
-	private double[] resizeFactor = { 0.6, 0.7, 0.85, 1.0, 0.85, 0.7, 0.6 }; // 0.5 , 0.8, 1.0,
+	private final int transitionNr=4;
+	private double[] resizeFactor = { 0.5, 0.7, 0.85, 0.95, 1.0, 0.95, 0.85, 0.7, 0.5 }; // 0.5 , 0.8, 1.0,
 															// 1.0, 0.8, 0.5
 	private SDLRect[] curveCells = new SDLRect[resizeFactor.length];
 	private List<PlatformIcon> iconList = new ArrayList<PlatformIcon>();
 	private Integer[] iconIndex;
 	private Area motionArea;
 	private UpdateListener updateListener;
-
+	private SDLSurface temp;
+	
 	public CurveMotionHandler(Area area) throws GUIException {
 		super();
 
@@ -77,38 +78,49 @@ public class CurveMotionHandler extends Thread {
 
 	public void run(){
 		
-		int i=0;
-		double a = (double)(curveCells[2].y - curveCells[5].y) / (curveCells[2].x - curveCells[5].x);
-		int b = (int) (curveCells[2].y - a * curveCells[2].x);
+		int b, i=0;
+		double a,sizeGrowth;
 		
 		try {
 			
-			while( (i++) < 200){
+			while( (i++) < 20){
 				
 				Integer[] newIconIndex = new Integer[iconIndex.length]; 
 		
-				for(int k=0; k<transitionNr ; k++){
+				for(int k=1; k<transitionNr ; k++){
 					
 					for(PlatformIcon icon: iconList){
 						int xPos,yPos;
+						int curveIndex = iconIndex[iconList.indexOf(icon)];
+						
 						updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(icon.getX(),icon.getY(),icon.getWidth() + 2, icon.getHeight()+2)));
 						
 						if(iconIndex[iconList.indexOf(icon)]+1 < curveCells.length){
-						xPos = curveCells[iconIndex[iconList.indexOf(icon)]].x + k*(curveCells[iconIndex[iconList.indexOf(icon)]+1].x - curveCells[iconIndex[iconList.indexOf(icon)]].x)/transitionNr;
-						yPos = (int) (xPos* a + b);
+							a = (double)(curveCells[curveIndex+1].y - curveCells[curveIndex].y) / (curveCells[curveIndex+1].x - curveCells[curveIndex].x);
+							b = (int) (curveCells[curveIndex+1].y - a * curveCells[curveIndex+1].x);
+							xPos = curveCells[curveIndex].x + k*(curveCells[curveIndex+1].x - curveCells[curveIndex].x)/transitionNr;
+							yPos = (int) (xPos* a + b);
+						
+							sizeGrowth = resizeFactor[curveIndex+1] - resizeFactor[curveIndex]; 
+							temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[curveIndex]+ sizeGrowth/ transitionNr*k, true);
+							icon.setIconModifiedImage(temp, temp.getWidth(), temp.getHeight() );
 						}
+						
 						else{
-						xPos = curveCells[iconIndex[iconList.indexOf(icon)]].x + k*(curveCells[iconIndex[iconList.indexOf(icon)]].x - curveCells[iconIndex[iconList.indexOf(icon)]-1].x)/transitionNr;
-						yPos = (int) (xPos* a + b);
+							
+							a = (double)(curveCells[curveIndex].y - curveCells[curveIndex-1].y) / (curveCells[curveIndex].x - curveCells[curveIndex-1].x);
+							b = (int) (curveCells[curveIndex].y - a * curveCells[curveIndex].x);
+							xPos = curveCells[curveIndex].x + k*(curveCells[curveIndex].x - curveCells[curveIndex-1].x)/transitionNr;
+							yPos = (int) (xPos* a + b);
 						}
 						icon.setPosition(xPos, yPos);
-						//SDLSurface temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[iconIndex[j]], true);
-						//icon.setIconModifiedImage(temp, temp.getWidth(), temp.getHeight() );
-					
+											
 						updateListener.putRegionToUpdate(new WidgetUpdate(icon, new SDLRect(xPos, yPos, icon.getWidth() ,icon.getHeight() )));
 						
 					}
-					Thread.sleep(30);
+					
+					//Thread.sleep(100); sufficient for ARM to make it smoothly
+					Thread.sleep(100);
 				}
 				for(int j=0 ; j< iconIndex.length; j++){
 						PlatformIcon icon = iconList.get(j);
@@ -117,20 +129,24 @@ public class CurveMotionHandler extends Thread {
 						updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(icon.getX(),icon.getY(),icon.getWidth(), icon.getHeight())));
 
 						icon.setPosition(curveCells[newIconIndex[j]].x , curveCells[newIconIndex[j]].y );
-						SDLSurface temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[newIconIndex[j]], true);
+						temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[newIconIndex[j]], true);
 						icon.setIconModifiedImage(temp, temp.getWidth(), temp.getHeight() );
 						updateListener.putRegionToUpdate(new WidgetUpdate(icon, curveCells[newIconIndex[j]]));																				
+						
 				}
 				
 				iconIndex = newIconIndex.clone();
 				Thread.sleep(1000);
 			}
-			System.out.println("Finished");
+			clean();
 		}
 		catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GUIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -139,31 +155,42 @@ public class CurveMotionHandler extends Thread {
 
 	private void fillCurveCellsArray(int width, int height) {
 
-		curveCells[0] = new SDLRect((int) (0.1 * width),
-				(int) (0.1 * height), (int) (0.65 * width),
+		curveCells[0] = new SDLRect((int) (0.2 * width),
+				(int) (0.2 * height), (int) (0.65 * width),
 				(int) (0.65 * height));
 		
-		curveCells[1] = new SDLRect((int) (0.75 * width),
-				(int) (0.75 * height), (int) (0.75 * width),
+		
+		curveCells[1] = new SDLRect((int) (0.6 * width),
+		(int) (0.6 * height), (int) (0.75 * width),
+		(int) (0.75 * height));
+
+		
+		curveCells[2] = new SDLRect((int) (1.1 * width),
+				(int) (1.1 * height), (int) (0.75 * width),
 				(int) (0.75 * height));
 		
-		curveCells[2] = new SDLRect((int) (1.4 * width),
-				(int) (1.4 * height), (int) (0.9 * width),
+		curveCells[3] = new SDLRect((int) (1.7 * width),
+				(int) (1.7 * height), (int) (0.9 * width),
 				(int) (0.9 * height));
 		
-		curveCells[3] = new SDLRect((int)(2.0 * width), (int)(2.0 * height), width,
+		curveCells[4] = new SDLRect((int)(2.4 * width), (int)(2.4 * height), width,
 				(int) (1.0 * height));
 		
-		curveCells[4] = new SDLRect((int) (2.7 * width),
-				(int) (2.7 * height), (int) (0.9 * width),
+		curveCells[5] = new SDLRect((int) (3.1 * width),
+				(int) (3.1 * height), (int) (0.9 * width),
 				(int) (0.9 * height));
 		
 		
-		curveCells[5] = new SDLRect((int) (3.5 * width),
-				(int) (3.5 * height), (int) (0.75 * width),
+		curveCells[6] = new SDLRect((int) (3.7 * width),
+				(int) (3.7 * height), (int) (0.75 * width),
 				(int) (0.75 * height));
-		curveCells[6] = new SDLRect((int) (4.25 * width),
-				(int) (4.25 * height), (int) (0.65 * width),
+		
+		curveCells[7] = new SDLRect((int) (4.2 * width),
+				(int) (4.2 * height), (int) (0.65 * width),
+				(int) (0.65 * height));
+		
+		curveCells[8] = new SDLRect((int) (4.6 * width),
+				(int) (4.6 * height), (int) (0.65 * width),
 				(int) (0.65 * height));
 
 	}
@@ -175,8 +202,11 @@ public class CurveMotionHandler extends Thread {
 			SDLSurface temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0,
 					factor, true);
 			icon.setIconImage(temp, temp.getWidth(), temp.getHeight());
-
+			
 		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GUIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -184,51 +214,12 @@ public class CurveMotionHandler extends Thread {
 		return 1;
 	}
 
+	private void clean() throws SDLException, GUIException{
+		temp.freeSurface();
+		for(PlatformIcon icon: iconList){
+			icon.delete();
+		}
+		iconList.clear();
+	}
 }
 
-/*
-Integer[] newIconIndex = new Integer[iconIndex.length]; 
-for(int index=0; index<5; index++){
-	int j;
-	for( j=0 ; j< iconIndex.length; j++){
-		if(iconIndex[j] == index){ 
-			
-			PlatformIcon icon = iconList.get(j);
-			if(iconIndex[j] != 0 && iconIndex[j] !=5 ){
-				SDLRect currentRect = curveCells[iconIndex[j]-1];
-				SDLRect nextRect = curveCells[iconIndex[j]];
-				
-				double a = (double)(nextRect.y - currentRect.y) / (nextRect.x - currentRect.x);
-				int b = (int) (nextRect.y - a * nextRect.x);
-				
-				for(int k=0; k<20 ; k++){
-					int xPos = curveCells[iconIndex[j] -1].x + k* 3;
-					int yPos = (int) (xPos* a + b);
-					
-					icon.setPosition(xPos, yPos);
-					//SDLSurface temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[iconIndex[j]], true);
-					//icon.setIconModifiedImage(temp, temp.getWidth(), temp.getHeight() );
-				
-					updateListener.putRegionToUpdate(new WidgetUpdate(icon, new SDLRect(xPos, yPos, curveCells[iconIndex[j]-1].width, curveCells[iconIndex[j]-1].height)));
-					updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xPos, yPos, curveCells[iconIndex[j]-1].width, curveCells[iconIndex[j]-1].height)));
-					Thread.sleep(5);
-				}
-			}
-			
-			icon.setPosition(curveCells[iconIndex[j]].x , curveCells[iconIndex[j]].y );
-			SDLSurface temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[iconIndex[j]], true);
-			icon.setIconModifiedImage(temp, temp.getWidth(), temp.getHeight() );
-		
-			updateListener.putRegionToUpdate(new WidgetUpdate(icon, curveCells[iconIndex[j]]));
-			newIconIndex[j] = (iconIndex[j] + 1) % 5;
-			break;
-		}
-		
-	}
-	if(j == iconIndex.length){
-		updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, curveCells[index]));
-	}
-}
-iconIndex = newIconIndex.clone();
-Thread.sleep(2000);
-*/
