@@ -49,7 +49,7 @@ public class SimpleDropDownMenuTest {
 		    foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
 		   	   							
-		   ListModel listModel= new PlatformListModel(new String[]{"zero","one","two","three", "four"});
+		   ListModel listModel= new PlatformListModel(new String[]{"zero","one","two","three", "four", "five", "six"});
 		
 		    dropDown = new PlatformDropDown(listModel);
 		    

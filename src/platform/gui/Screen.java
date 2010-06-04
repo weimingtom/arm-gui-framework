@@ -2,14 +2,15 @@ package platform.gui;
 
 import platform.evt.ExtendedInput;
 import platform.gfx.UnifiedGraphics;
+import platform.sdl.SDLGraphics;
+import platform.sdl.SDLInput;
 import platform.thread.EventCapturer;
 import platform.thread.EventDispatcher;
+import platform.util.Active;
 import sdljava.SDLException;
 import sdljava.video.SDLSurface;
 import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
-import platform.sdl.SDLGraphics;
-import platform.sdl.SDLInput;
 
 public class Screen {
 
@@ -22,6 +23,7 @@ public class Screen {
  	
 	private Area foreground;
 	private Area background;
+	private Active active;
 	private ExtendedInput inputSource;
 	private SDLSurface target;
 	private UnifiedGraphics graphics;
@@ -82,6 +84,14 @@ public class Screen {
 		this.running = running;
 	}
 
+	
+	public void setActive(Active active) {
+		this.active = active;
+	}
+	
+	public Active getActive() {
+		return active;
+	}
 	public void delete() throws SDLException, GUIException{
 		target.freeSurface();
 		foreground.delete();
@@ -101,6 +111,7 @@ public class Screen {
 		
 		inputSource = new SDLInput();
 		running = true;
+		active = Active.BACKGROUND;
 	}
 	
 	

@@ -3,6 +3,7 @@ package platform.thread;
 import platform.evt.ExtendedInput;
 import platform.gui.Area;
 import platform.gui.Screen;
+import platform.util.Active;
 import sdljava.SDLException;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.Key;
@@ -16,7 +17,7 @@ public class EventDispatcher extends Thread{
 	private ExtendedInput inputSource;
 	private Area background;
 	private Area foreground;
-	private ActiveArea activeArea;
+	private Active activeArea;
 	private Widget widgetWithMouse= null;
 	
 	public EventDispatcher(ExtendedInput input) throws SDLException{
@@ -27,7 +28,7 @@ public class EventDispatcher extends Thread{
 		background = Screen.getScreen().getBackground();
 		foreground = Screen.getScreen().getForeground();
 		
-		activeArea = ActiveArea.BACKGROUND;
+		activeArea = Screen.getScreen().getActive(); 
 		start();
 	}
 	
@@ -43,7 +44,7 @@ public class EventDispatcher extends Thread{
 				}
 				
 				inputSource.pollInput();
-				Area active = (activeArea == ActiveArea.BACKGROUND) ? background : foreground;
+				Area active = (activeArea == Active.BACKGROUND) ? background : foreground;
 				
 				
 				while (false == inputSource.isKeyQueueEmpty()) {	
@@ -131,16 +132,5 @@ public class EventDispatcher extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public ActiveArea getActiveArea() {
-		return activeArea;
-	}
-
-	public void setActiveArea(ActiveArea activeArea) {
-		this.activeArea = activeArea;
-	}
-
-	enum ActiveArea { FOREGROUND, BACKGROUND };
 	
 }

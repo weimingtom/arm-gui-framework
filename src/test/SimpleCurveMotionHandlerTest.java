@@ -34,11 +34,12 @@ public class SimpleCurveMotionHandlerTest {
 			
 			screen=Screen.getScreen();
 			
-			Area backgroundArea = new Area( new SDLColor(0,0,0) ,5,5);
-		    		    			    
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
-		    Area foregroundArea = new Area( image,4,4);
-		    foregroundArea.setAlpha(0);
+		    Area backgroundArea = new Area( image,5,5);
+		    
+			Area foregroundArea = new Area( new SDLColor(0,0,0) ,5,5);
+		    		    			    
+			foregroundArea.setAlpha(0);
 		    
 		   
 		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail.png")));
