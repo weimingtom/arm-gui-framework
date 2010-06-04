@@ -40,7 +40,7 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 	    super.setFont(listBox.getFont());
 	    super.setListBox(listBox);
 		super.setScrollArea(scrollArea); ///It will adjust height automatically
-		super.logic(); 
+		//super.logic(); 
 				
 		
 	}

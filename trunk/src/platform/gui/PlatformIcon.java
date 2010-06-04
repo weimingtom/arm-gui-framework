@@ -93,6 +93,12 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		setHeight(height);
 	}
 	
+	public void deleteIconModifiedImage() throws GUIException, InterruptedException{
+		modified.delete();
+		drawModified = false;
+		//updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
+	}
+	
 	public void setIconModifiedImage(Object modifiedIcon, int width, int height) throws GUIException {
 		drawModified = true;
 		if(modified == null){
