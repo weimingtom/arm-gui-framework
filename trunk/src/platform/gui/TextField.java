@@ -18,6 +18,8 @@ import sdljavax.guichan.gfx.Image;
 
 public class TextField extends PlatformWidget implements  KeyListener{
 
+	protected final int MAX_STEPS_FROM_BORDER = 10;
+	
 	protected Image textField;
 	protected String displayedText;
 	protected Font textFont;
@@ -44,10 +46,12 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		cursorPosition = text.length();
 		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(displayedText) ; 
 		prevOnScreenCursorPosition=onScreenCursorPosition;
-		stepsFromBorder=10;
+		stepsFromBorder= MAX_STEPS_FROM_BORDER - text.length();
 		elementChanged = ElementChanged.ALL;
 		
+				
 		addKeyListener(this);
+		
 	}
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
@@ -57,6 +61,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				drawBorder(graphics);
 				drawText(graphics);
 				drawCursor(graphics);
+				new FlickeringCursorHandler();
 			break;
 			
 			case TEXT:
@@ -67,9 +72,12 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				drawCursor(graphics);
 			break;
 			
-			case CURSOR:
-				eraseCursor(graphics);
+			case CURSOR_ON:
 				drawCursor(graphics);
+			break;
+			
+			case CURSOR_OFF:
+				eraseCursor(graphics);
 			break;
 			
 			case NONE:	
@@ -84,28 +92,26 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		
 		if(prevOnScreenCursorPosition!=0){
 			graphics.setColor(new Color(0, 0, 0, 255));
-			graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
+			graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
+			//graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
 		}
 		prevOnScreenCursorPosition=onScreenCursorPosition;
 	}
 			
 	public void drawText(Graphics graphics) throws GUIException{
-	
 		//System.out.println(cursorPosition);
 		if(displayedText.length() != 0){
 		
-			if(displayedText.length() < 11){
+			if(displayedText.length() < MAX_STEPS_FROM_BORDER  + 1){
 				
 				textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
 			}
-			else if(displayedText.length() - cursorPosition > 10){
-				textFont.drawString(graphics, displayedText.substring(cursorPosition, cursorPosition+10), getXTextPosition(), getYTextPosition() );
+			else if(displayedText.length() - cursorPosition > MAX_STEPS_FROM_BORDER){
+				textFont.drawString(graphics, displayedText.substring(cursorPosition, cursorPosition+MAX_STEPS_FROM_BORDER), getXTextPosition(), getYTextPosition() );
 				
 			}
 			else{
-				
-				textFont.drawString(graphics, displayedText.substring(cursorPosition-10, cursorPosition), getXTextPosition(), getYTextPosition() );
-
+				textFont.drawString(graphics, displayedText.substring(displayedText.length()-MAX_STEPS_FROM_BORDER, displayedText.length()), getXTextPosition(), getYTextPosition() );
 			}
 		}
 	}
@@ -150,8 +156,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		
 		try {
 			if (key.getValue() == Key.LEFT && cursorPosition > 0) {
-				if(displayedText.length() - cursorPosition > 9){
-				elementChanged = ElementChanged.TEXT;
+				if(displayedText.length() - cursorPosition > MAX_STEPS_FROM_BORDER){
+					elementChanged = ElementChanged.TEXT;
 				}
 				else{
 				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
@@ -162,11 +168,9 @@ public class TextField extends PlatformWidget implements  KeyListener{
 					elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR;
 				}
-				--cursorPosition;
+				cursorPosition--;
 			}
 			else if (key.getValue() == Key.RIGHT && cursorPosition < displayedText.length()) {
-				
-			
 				if(stepsFromBorder > 0){
 					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition));
 					stepsFromBorder--;
@@ -176,8 +180,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				else {
 					elementChanged = ElementChanged.TEXT;
 				}
-				++cursorPosition;
-				
+				cursorPosition++;
 			}
 			else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
 				
@@ -191,12 +194,12 @@ public class TextField extends PlatformWidget implements  KeyListener{
 			}
 			else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 				
-				if(cursorPosition<11 && cursorPosition != 0){
-				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
-				stepsFromBorder++;
+				if(cursorPosition< MAX_STEPS_FROM_BORDER + 1 ){
+					onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
+					stepsFromBorder++;
 				}
 				displayedText = displayedText.substring(0, cursorPosition - 1) + displayedText.substring(cursorPosition);
-				--cursorPosition;
+				cursorPosition--;
 				elementChanged = ElementChanged.TEXT;
 			} 
 			else if (key.getValue() == Key.ENTER) {
@@ -205,14 +208,14 @@ public class TextField extends PlatformWidget implements  KeyListener{
 			} 
 			else if (key.getValue() == Key.HOME) {
 				cursorPosition = 0;
-				stepsFromBorder=10;
+				stepsFromBorder= MAX_STEPS_FROM_BORDER ;
 				onScreenCursorPosition=getXTextPosition();
 				elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR; 
 			} 
 			else if (key.getValue() == Key.END) {
 				cursorPosition = displayedText.length();
-				stepsFromBorder=(displayedText.length()>10) ? 0 : 10-displayedText.length() ;
+				stepsFromBorder=(displayedText.length()>MAX_STEPS_FROM_BORDER) ? 0 : MAX_STEPS_FROM_BORDER-displayedText.length() ;
 				if(cursorPosition<11){
 				onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
 				}
@@ -223,18 +226,23 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR;
 			} 
-			else if (key.isCharacter()) {
+			//else if (key.isCharacter() || key.isNumber() || key.isNumericPad() || key.isMetaPressed()) {
+			else if(key.getValue() < 127 && key.getValue() > 31){	
 				displayedText = displayedText.substring(0, cursorPosition) + (char) key.getValue() + displayedText.substring(cursorPosition);
-				if(++cursorPosition<11){
-				stepsFromBorder--;
-				onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth((char) key.getValue());
+				if(cursorPosition<MAX_STEPS_FROM_BORDER){
+					stepsFromBorder--;
+					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth((char) key.getValue());
 				}
+				cursorPosition++;
 				elementChanged = ElementChanged.TEXT;
 			}
 			
-			if(updateListener != null){
+			if(updateListener != null && elementChanged != ElementChanged.NONE){
+				
 				updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
 			}
+			
+			
 			/*if(elementChanged == ElementChanged.TEXT){
 				
 				if(updateListener != null){
@@ -271,6 +279,34 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		textFont.delete();
 		super.delete();
 	}
-	enum ElementChanged { TEXT, CURSOR , NONE, ALL };
+	enum ElementChanged { TEXT, CURSOR_ON, CURSOR_OFF , NONE, ALL };
+	
+	class FlickeringCursorHandler extends Thread{
+		
+		boolean visible=false;
+		
+		FlickeringCursorHandler(){
+			start();
+		}
+		
+		public void run(){
+			
+			while(true){
+				
+				try {
+					elementChanged = (visible == true ) ? ElementChanged.CURSOR_ON : ElementChanged.CURSOR_OFF;
+					updateListener.putRegionToUpdate(new WidgetUpdate(TextField.this,new SDLRect(onScreenCursorPosition, getYTextPosition(), 1, textFont.getHeight() + 1 )));
+					visible=!visible;
+					Thread.sleep(1000);
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		}
+	}
 	
 }
