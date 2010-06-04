@@ -9,6 +9,7 @@ import platform.gui.Screen;
 import sdljava.SDLException;
 import sdljava.SDLMain;
 import sdljava.SDLTimer;
+import sdljava.ttf.SDLTTF;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
@@ -39,27 +40,31 @@ public class SimplePanelTest {
 		    foregroundArea.setAlpha(0);
 		    
 		    Panel panel = new Panel(4,1);
-		    backgroundArea.add(panel, 6);
-		    
+		    backgroundArea.add(panel, 5);
+		    panel.setAlpha(210);
 		    
 		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "PNG" + File.separator + "music_button_default.png")));
 		    panel.add(icon, 3);
 		    		    
 			screen.setAreas(backgroundArea, foregroundArea);
 						
-			int i = 0;
-			while(i<255){
+			int i=0;
+			while(Screen.getScreen().isRunning()){
 				
-				i+=50;
-				//foregroundArea.setAlpha(i);
-				screen.refresh();
-				
-				
-				SDLTimer.delay(1000);
+				Thread.sleep(2000);
+				if(i == 5){
+					
+					panel.remove(icon);
+					i++;
+				}
+				else{
+					
+					i++;
+				}
+
 			}
+			screen.delete();						
 			
-			screen.refresh();						
-			SDLTimer.delay(100);
 			
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -71,7 +76,11 @@ public class SimplePanelTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		finally{
+						
+			SDLMain.quit();
+			System.exit(0);	
+		}
 		
 
 	}

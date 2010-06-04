@@ -8,7 +8,9 @@ import java.util.List;
 import platform.gfx.UnifiedGraphics;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
+import sdljava.SDLException;
 import sdljava.video.SDLRect;
+import sdljava.video.SDLSurface;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
 import sdljavax.guichan.evt.MouseListener;
@@ -64,7 +66,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 		
 		try {
-			putRegionToUpdate( new WidgetUpdate( widget, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
+			putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,7 +77,16 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	public void remove(PlatformWidget widget) throws GUIException{
 		for( Widget theWidget: widgetList){
 			if(widget.equals(theWidget)){
-				widgetList.remove(widget);
+				
+				try {
+					putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				theWidget.delete();
+				widgetList.remove(theWidget);
 				return;
 			}
 		}
@@ -89,11 +100,28 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			for ( Widget widget : widgetList){
 				widget.draw(graphics);
 			}
+			
 	}
 
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 			graphics.drawImage(frame, getX(), getY() );
+	}
+
+	
+	@Override
+	public void setAlpha(int alphaIndex) {
+		try {
+			((SDLSurface)frame.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
+			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void setWidgetsFocusHandler(FocusHandler focusHandler) throws GUIException{
@@ -167,6 +195,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		for (Widget widget: widgetList){
 			
 			widget.delete();
+			widgetList.remove(widget);
 		}
 		super.delete();
 		

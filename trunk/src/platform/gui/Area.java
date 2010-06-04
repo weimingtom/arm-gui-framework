@@ -157,9 +157,11 @@ public class Area extends PlatformWidget implements UpdateListener{
 		
 		for( PlatformWidget theWidget: widgetMap.keySet()){
 			if(theWidget.equals(widget)){
-				widgetMap.remove(widget);
+				
 				//TOD0 will this really work?
 				widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight() )));
+				widget.delete();
+				widgetMap.remove(widget);
 				return;
 			}		
 		}
@@ -248,6 +250,7 @@ public class Area extends PlatformWidget implements UpdateListener{
 		
 		for( PlatformWidget theWidget: widgetMap.keySet()){
 			theWidget.delete();		
+			widgetMap.remove(theWidget);
 		}
 		
 		try {

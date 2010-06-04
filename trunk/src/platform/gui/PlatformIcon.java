@@ -69,7 +69,9 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
 		iconImage.delete();
-		modified.delete();
+		if(modified != null){
+			modified.delete();
+		}
 		/*try {
 			iconImage.freeSurface();
 		} catch (SDLException e) {
