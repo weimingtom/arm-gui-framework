@@ -60,8 +60,7 @@ public class SimpleTextFieldTest {
 				//i+=5;
 				Thread.sleep(300);
 			}
-			
-			
+						
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			

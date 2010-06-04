@@ -109,6 +109,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 		
 		for( PlatformWidget theWidget: widgetList){
 			theWidget.delete();		
+			widgetList.remove(theWidget);
 		}
 		
 		try {
