@@ -157,7 +157,7 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 				setHeight(h);
 			} else {
 				setHeight(listBoxHeight + h2 + 2);
-				m_scrollArea.setHeight(listBoxHeight);
+				m_scrollArea.setHeight(listBoxHeight / 2);
 			}
 		}
 

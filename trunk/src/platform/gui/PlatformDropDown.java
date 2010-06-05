@@ -61,6 +61,7 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 		// TODO Auto-generated method stub
 			
 		try {
+			logic();
 			
 			if (button == MouseInput.LEFT && hasMouse() && !m_bDroppedDown) {
 				m_bPushed = true;
