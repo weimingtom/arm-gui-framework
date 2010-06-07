@@ -12,6 +12,7 @@ import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
+import sdljava.video.SDLVideo;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.FocusHandler;
 import sdljavax.guichan.evt.MouseListener;
@@ -26,10 +27,10 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	protected Integer xFormat, yFormat;
 	protected UnifiedGraphics panelGraphics;
 	
-	private final int horizontalPixelShift = 10;
+	private final int horizontalPixelShift = 3;
 	private final int verticalPixelShift = 10;
 	
-	public Panel(int xFormat,int yFormat) throws GUIException{		
+	public Panel(int xFormat,int yFormat) throws GUIException, SDLException{		
 		super();
 		
 		this.xFormat = new Integer( ( xFormat > 4 ) ? 4 : xFormat );
@@ -42,7 +43,10 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		setHeight(frame.getHeight());
 		setWidth(frame.getWidth());
 		
+		
 		panelGraphics = new SDLGraphics();
+		//long colorKey = SDLVideo.mapRGB(frame.getFormat(), 0, 0, 0);
+		//frame.setColorKey(SDLVideo.SDL_SRCCOLORKEY, colorKey);
 		panelGraphics.setTarget(frame);
 		addMouseListener(this);
 	}
@@ -57,11 +61,14 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			
 			throw new GUIException("Offset out of range for the panel.");
 		}
-		int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
-		int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
+		int verticalShift = (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + verticalPixelShift;  
+		int horizontalShift = (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + horizontalPixelShift;
+		
+		//int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
+		//int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
 		
 		widgetList.add(widget);
-		widget.setPosition(horizontalShift, verticalShift);
+		widget.setPosition(verticalShift, horizontalShift);
 		widget.setUpdateListener(this);
 		
 		if( this.getFocusHandler() != null){	
@@ -71,6 +78,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 		
 		try {
+			System.out.println("adding widget - updating");
 			putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -100,19 +108,21 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-			//drawBorder(graphics);
-			
-			for ( Widget widget : widgetList){
-				widget.draw(panelGraphics);
-			}
-			drawBorder(graphics);
-			
+		
+		
+		panelGraphics.beginDraw();
+		for ( PlatformWidget widget : widgetList){
+			widget.draw(panelGraphics);
+		}
+		panelGraphics.endDraw();
+		
+		drawBorder(graphics);
 	}
 
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 				try {
-					graphics.drawSDLSurface((SDLSurface)frame.getData(), panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
+					graphics.drawSDLSurface(frame, panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
 				} catch (SDLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -124,7 +134,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	@Override
 	public void setAlpha(int alphaIndex) {
 		try {
-			((SDLSurface)frame.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
+			frame.setAlpha(Screen._alphaFlags, alphaIndex);
 			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -148,7 +158,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		for( Widget widget : widgetList){
 			
 			if(widget instanceof MouseListener){
-				if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight())
+				if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() && y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() +getY() )
 				((MouseListener)widget).mouseClick(x, y, b, ts);
 			}
 		}
@@ -173,7 +183,9 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		for( Widget widget : widgetList){
 			
 			if(widget instanceof MouseListener){
-				if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight())
+				System.out.println(widget.toString());
+				if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() && y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY())
+				System.out.println("Mouse press");
 				((MouseListener)widget).mousePress(x, y, b);
 			}
 		}
@@ -184,7 +196,8 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		for( Widget widget : widgetList){
 			
 			if(widget instanceof MouseListener){
-				if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight())
+				System.out.println(widget.toString());
+				if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth()+ getX() && y>= widget.getY() + getY()  && y<= widget.getY() + widget.getHeight()+ getY())
 				((MouseListener)widget).mouseRelease(x, y, b);
 			}
 		}
@@ -203,7 +216,12 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	@Override
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
-		frame.delete();
+		try {
+			frame.freeSurface();
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (Widget widget: widgetList){
 			
 			widget.delete();
@@ -214,8 +232,9 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	}
 
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
-		
-		updateListener.putRegionToUpdate(updateInfo);
+		System.out.println(updateInfo.getWidgetRegion().toString());
+		updateListener.putRegionToUpdate(new WidgetUpdate(this, updateInfo.getWidgetRegion()));
+		//updateListener.putRegionToUpdate(updateInfo);
 	}
 
 		

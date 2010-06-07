@@ -34,7 +34,6 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-
 		graphics.drawImage(currentState.getImage(), getX(), getY());
 	}
 
