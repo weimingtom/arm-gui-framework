@@ -78,8 +78,8 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 		
 		try {
-			System.out.println("adding widget - updating");
-			putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
+			
+			putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX() + getX(), widget.getY() + getY(), widget.getWidth(), widget.getHeight()) ) );
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			if(widget.equals(theWidget)){
 				
 				try {
-					putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()) ) );
+					putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX() + getX(), widget.getY() + getY(), widget.getWidth(), widget.getHeight()) ) );
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -183,9 +183,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		for( Widget widget : widgetList){
 			
 			if(widget instanceof MouseListener){
-				System.out.println(widget.toString());
 				if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() && y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY())
-				System.out.println("Mouse press");
 				((MouseListener)widget).mousePress(x, y, b);
 			}
 		}
@@ -196,7 +194,6 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		for( Widget widget : widgetList){
 			
 			if(widget instanceof MouseListener){
-				System.out.println(widget.toString());
 				if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth()+ getX() && y>= widget.getY() + getY()  && y<= widget.getY() + widget.getHeight()+ getY())
 				((MouseListener)widget).mouseRelease(x, y, b);
 			}
@@ -232,8 +229,9 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	}
 
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
-		System.out.println(updateInfo.getWidgetRegion().toString());
-		updateListener.putRegionToUpdate(new WidgetUpdate(this, updateInfo.getWidgetRegion()));
+		SDLRect region = updateInfo.getWidgetRegion();
+		System.out.println( new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height).toString());
+		updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height)));
 		//updateListener.putRegionToUpdate(updateInfo);
 	}
 

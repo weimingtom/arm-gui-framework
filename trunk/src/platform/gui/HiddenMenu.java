@@ -216,9 +216,9 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 
 	public void putRegionToUpdate(WidgetUpdate updateInfo)
 			throws InterruptedException {
-		// TODO Auto-generated method stub
-		System.out.println(updateInfo.getWidgetRegion().toString());
-		updateListener.putRegionToUpdate(new WidgetUpdate(this,updateInfo.getWidgetRegion()));
+		
+		SDLRect region = updateInfo.getWidgetRegion();
+		updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height)));
 	}
 
 	protected void adjustSize(PlatformWidget greaterWidget) {
