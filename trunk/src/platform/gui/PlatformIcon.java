@@ -3,6 +3,7 @@ package platform.gui;
 import platform.gfx.UnifiedGraphics;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
+import sdljava.image.SDLImage;
 import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
 import sdljavax.guichan.GUIException;
@@ -28,6 +29,18 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		
 				
 	}
+	
+	/*public PlatformIcon(String imagePath) throws GUIException{
+		super();
+	//	iconImage =(SDLSurface)image.getData();
+		//iconImage = SDLImage.load(imagePath);
+		setHeight(image.getHeight());
+		setWidth(image.getWidth());
+		
+		addMouseListener(this);
+		
+				
+	}*/
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		
@@ -55,6 +68,7 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	@Override
 	public void setAlpha(int alphaIndex) {
 		try {
+			System.out.println("Alpha" + alphaIndex);
 			((SDLSurface)iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
 			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
 		} catch (SDLException e) {
@@ -115,8 +129,8 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	
 	public void mouseClick(int arg0, int y, int button, int count)
 			throws GUIException {
-		
-			setAlpha((clicked == false) ? 100 : 255 );
+		System.out.println("Mouse click");
+			setAlpha((clicked == false) ? 0 : 255 );
 			clicked = !clicked;
 		
 	}

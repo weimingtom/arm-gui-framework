@@ -37,13 +37,17 @@ public class SimplePanelTest {
 		    Area foregroundArea = new Area( image,5,4);
 		    foregroundArea.setAlpha(0);
 		    
+		    
 		    Panel panel = new Panel(4,1);
 		    backgroundArea.add(panel, 5);
 		    panel.setAlpha(210);
 		    
-		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "PNG" + File.separator + "music_button_default.png")));
+		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
 		    panel.add(icon, 3);
-		    		    
+		    
+		    PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube.png")));
+		    backgroundArea.add(icon2,0);
+		    
 			screen.setAreas(backgroundArea, foregroundArea);
 						
 			int i=0;

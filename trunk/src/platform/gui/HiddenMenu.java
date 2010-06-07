@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import platform.gfx.UnifiedGraphics;
+import platform.sdl.SDLGraphics;
 import platform.thread.TransitionEffectHandler;
 import platform.util.Direction;
 import platform.util.Maintainable;
@@ -27,6 +28,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 
 	protected SDLSurface slider;
 	protected SDLSurface background;
+	protected UnifiedGraphics hiddenMenuGraphics;
 	protected int transition=0;
 	protected Direction direction;
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
@@ -54,6 +56,9 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 		
 		setWidth(background.getWidth());
 		setHeight(background.getHeight());
+		
+		hiddenMenuGraphics = new SDLGraphics();
+		hiddenMenuGraphics.setTarget(background);
 		addMouseListener(this);
 					
 	}	
@@ -64,10 +69,10 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 				
 		if(direction == Direction.NORTH || direction == Direction.SOUTH){
 						
-			widget.setPosition(getX() + (widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10, getY() + 2 );
+			widget.setPosition((widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10, 2 );
 		}
 		else{
-			widget.setPosition(getX() +2, getY() +  (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
+			widget.setPosition(2, (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
 			
 		}
 		widget.setUpdateListener(this);
@@ -79,12 +84,18 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 	
-		drawBorder(graphics);
-		if(!m_bVisible) return;
-				
-		for ( PlatformWidget widget : widgetList){
-			widget.draw(graphics);
+		
+		if(!m_bVisible){
+			drawBorder(graphics);
+			return;
 		}
+		hiddenMenuGraphics.beginDraw();		
+		for ( PlatformWidget widget : widgetList){
+			widget.draw(hiddenMenuGraphics);
+		}
+		hiddenMenuGraphics.endDraw();
+		drawBorder(graphics);
+		
 		
 	}
 	
@@ -97,7 +108,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 					graphics.drawSDLSurface(slider, slider.getRect(), graphics.getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
 				}
 				else{
-					graphics.drawSDLSurface(background, background.getRect(), graphics.getTarget().getRect(getX(),getY()));
+					graphics.drawSDLSurface(background, hiddenMenuGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(),getY()));
 				}
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
@@ -130,7 +141,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 				for( Widget widget : widgetList){
 					
 					if(widget instanceof MouseListener){
-						if( x >= widget.getX() && x<= widget.getX() + widget.getWidth() && y>= widget.getY() && y<= widget.getY() + widget.getHeight()){
+						if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() && y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY()){
 							((MouseListener)widget).mouseClick(x, y, button, count);
 							return;
 						}
@@ -206,7 +217,8 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 	public void putRegionToUpdate(WidgetUpdate updateInfo)
 			throws InterruptedException {
 		// TODO Auto-generated method stub
-		updateListener.putRegionToUpdate(updateInfo);
+		System.out.println(updateInfo.getWidgetRegion().toString());
+		updateListener.putRegionToUpdate(new WidgetUpdate(this,updateInfo.getWidgetRegion()));
 	}
 
 	protected void adjustSize(PlatformWidget greaterWidget) {
