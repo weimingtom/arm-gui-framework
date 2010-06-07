@@ -52,7 +52,7 @@ public class SimplePanelTest {
 				Thread.sleep(2000);
 				if(i == 5){
 					
-					panel.remove(icon);
+					//panel.remove(icon);
 					i++;
 				}
 				else{

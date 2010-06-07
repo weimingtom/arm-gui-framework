@@ -30,16 +30,19 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	}
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
+		
 		/*try {
 			graphics.drawSDLSurface(iconImage, iconImage.getRect(), graphics.getTarget().getRect(getX(), getY()));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+		
 		if(!drawModified){
-		graphics.drawImage(iconImage, getX(), getY());
+			graphics.drawImage(iconImage, getX(), getY());
 		}
 		else{
+			
 			graphics.drawImage(modified, getX(), getY());	
 		}
 	}
@@ -112,6 +115,7 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	
 	public void mouseClick(int arg0, int y, int button, int count)
 			throws GUIException {
+		
 			setAlpha((clicked == false) ? 100 : 255 );
 			clicked = !clicked;
 		
