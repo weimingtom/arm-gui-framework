@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import platform.gfx.UnifiedGraphics;
+import platform.sdl.SDLGraphics;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
@@ -19,9 +20,11 @@ import sdljavax.guichan.widgets.Widget;
 
 public class Panel extends PlatformWidget implements MouseListener, UpdateListener {
 
-	protected Image frame;
+	//protected Image frame;
+	protected SDLSurface frame;
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	protected Integer xFormat, yFormat;
+	protected UnifiedGraphics panelGraphics;
 	
 	private final int horizontalPixelShift = 10;
 	private final int verticalPixelShift = 10;
@@ -35,10 +38,12 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		String commonFramesName="_Widget_Frame_Landscape.png";
 		String frameName = "resource" + File.separator+ "PNG" + File.separator + this.xFormat.toString() + "x" + this.yFormat.toString() + commonFramesName;
 		
-		frame = new Image(frameName);
+		frame = (SDLSurface)(new Image(frameName)).getData();
 		setHeight(frame.getHeight());
 		setWidth(frame.getWidth());
 		
+		panelGraphics = new SDLGraphics();
+		panelGraphics.setTarget(frame);
 		addMouseListener(this);
 	}
 	
@@ -95,17 +100,24 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-			drawBorder(graphics);
+			//drawBorder(graphics);
 			
 			for ( Widget widget : widgetList){
-				widget.draw(graphics);
+				widget.draw(panelGraphics);
 			}
+			drawBorder(graphics);
 			
 	}
 
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
-			graphics.drawImage(frame, getX(), getY() );
+				try {
+					graphics.drawSDLSurface((SDLSurface)frame.getData(), panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
+				} catch (SDLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			//graphics.drawImage(frame, getX(), getY() );
 	}
 
 	

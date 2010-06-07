@@ -84,9 +84,10 @@ public class Area extends PlatformWidget implements UpdateListener{
 	public Area(SDLColor color, int... args) throws GUIException{
 					
 		try {	
+			
 			originalSurface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
 			//surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 255));
-			originalSurface.fillRect(originalSurface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
+			originalSurface.fillRect(originalSurface.mapRGBA(color.getRed(),color.getGreen(),color.getBlue(), 255));
 			
 			surface =SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE,Screen._screenWidth, Screen._screenHeight, 16 , 0, 0, 0, 0);
 			surface.fillRect(originalSurface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
@@ -262,8 +263,6 @@ public class Area extends PlatformWidget implements UpdateListener{
 			e.printStackTrace();
 		}
 	}
-
-	
 	
 	public SDLSurface getSurface() {
 		return surface;
@@ -272,12 +271,10 @@ public class Area extends PlatformWidget implements UpdateListener{
 	public void setSurface(SDLSurface surface) {
 		this.surface = surface;
 	}
-	
-	
+		
 	public Map<PlatformWidget, Set<Integer>> getWidgetMap() {
 		return widgetMap;
 	}
-
 
 	public UnifiedGraphics getSurfaceGraphics() {
 		return surfaceGraphics;
