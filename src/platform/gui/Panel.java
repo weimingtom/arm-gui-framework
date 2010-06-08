@@ -230,7 +230,6 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		SDLRect region = updateInfo.getWidgetRegion();
-		System.out.println( new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height).toString());
 		updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height)));
 		//updateListener.putRegionToUpdate(updateInfo);
 	}

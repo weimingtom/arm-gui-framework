@@ -40,7 +40,7 @@ public class FlipEffectHandler extends Thread{
 			while( i++ < 20){
 				
 				
-				SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius , maxVerticalRadius, 0, 0, 1 ,0);
+				SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius , maxVerticalRadius, 10, 10, 10 ,255);
 				updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
 				
 				for(int j=TRANSITION_NR; j > (-1) ; j--){
@@ -54,7 +54,7 @@ public class FlipEffectHandler extends Thread{
 					//updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
 
 					
-					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSITION_NR * j, maxVerticalRadius, 0, 0, 1 ,255);
+					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSITION_NR * j, maxVerticalRadius, 10, 10, 10 ,255);
 					updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));	
 					
 				}

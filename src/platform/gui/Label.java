@@ -36,11 +36,11 @@ public class Label extends PlatformWidget implements MouseListener {
 		setHeight(height);
 		
 		if(descriptiveText.length() != 0){
-			textFont = new CalibriFont((int) (getHeight() * 0.45), new SDLColor(0,0,0,0), true);
+			textFont = new CalibriFont((int) (getHeight() * 0.45), new SDLColor(10,10,10), true);
 		}
 		
 		else{
-			textFont = new CalibriFont((int) (getHeight() * 0.7), new SDLColor(0,0,0,0), true);
+			textFont = new CalibriFont((int) (getHeight() * 0.7), new SDLColor(10,10,10), true);
 		}
 		addMouseListener(this);
 	}
@@ -48,8 +48,7 @@ public class Label extends PlatformWidget implements MouseListener {
 	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-		
-				
+						
 		drawBorder(graphics);
 		textFont.drawString(graphics, headText, getX() + 10 , getY() + (int)(getHeight() * 0.05) );	
 		
@@ -68,6 +67,7 @@ public class Label extends PlatformWidget implements MouseListener {
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		try {
+						
 			graphics.drawSDLSurface(labelSurface, labelSurface.getRect(),   graphics.getTarget().getRect(getX(), getY()));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -92,7 +92,7 @@ public class Label extends PlatformWidget implements MouseListener {
 
 	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
-		
+		System.out.println("Mouse click");
 		new Thread(){
 			
 			public void run(){
