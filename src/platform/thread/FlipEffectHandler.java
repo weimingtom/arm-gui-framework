@@ -10,7 +10,7 @@ import sdljavax.gfx.SDLGfx;
 
 public class FlipEffectHandler extends Thread{
 
-	final int TRANSIITON_NR=10;
+	final int TRANSITION_NR=10;
 	Area motionArea;
 	UpdateListener updateListener;
 	SDLSurface destSurface, originalSurface;
@@ -35,33 +35,38 @@ public class FlipEffectHandler extends Thread{
 		
 		
 		try{
-			SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius , maxVerticalRadius, 0, 0, 0 ,0);
-			updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
+		
 			
 			while( i++ < 20){
 				
-				for(int j=TRANSIITON_NR; j > (-1) ; j--){
+				
+				SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius , maxVerticalRadius, 0, 0, 1 ,0);
+				updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
+				
+				for(int j=TRANSITION_NR; j > (-1) ; j--){
+					
 					
 					//parametr alpha 0 to pełna przeżroczystość
-					
-					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSIITON_NR * j, maxVerticalRadius, r, g, b ,255);
+					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSITION_NR * j, maxVerticalRadius, r, g, b ,255);
 					updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
-					Thread.sleep(100);
+					
+					Thread.sleep( (int)((double)(j + 1) / TRANSITION_NR * 150));
 					//updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
 
 					
-					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSIITON_NR * j, maxVerticalRadius, 0, 0, 1 ,255);
+					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSITION_NR * j, maxVerticalRadius, 0, 0, 1 ,255);
 					updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));	
 					
 				}
 				r^=255;
 				g^=255;
-				for(int k=0; k < TRANSIITON_NR + 1; k++){
-					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSIITON_NR * k, maxVerticalRadius, r, g, b, 255);
+				for(int k=0; k < TRANSITION_NR + 1; k++){
+					SDLGfx.filledEllipseRGBA(destSurface, xCenter, yCenter, maxHorizontalRadius / TRANSITION_NR * k, maxVerticalRadius, r, g, b, 255);
 					updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
-					Thread.sleep(100);
+					Thread.sleep( (int)((double) (k + 1) / TRANSITION_NR * 150));
 				}
-				Thread.sleep(2000);
+				
+				Thread.sleep(1500);
 			}
 			
 			destSurface = new SDLSurface(originalSurface.getSwigSurface());

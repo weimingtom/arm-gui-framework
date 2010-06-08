@@ -62,7 +62,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			throw new GUIException("Offset out of range for the panel.");
 		}
 		int verticalShift = (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + verticalPixelShift;  
-		int horizontalShift = (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + horizontalPixelShift;
+		int horizontalShift = (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + (getHeight()- widget.getHeight())/2;
 		
 		//int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
 		//int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;

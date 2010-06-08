@@ -42,7 +42,7 @@ public class SimpleCurveMotionHandlerTest {
 			foregroundArea.setAlpha(0);
 		    
 		   
-		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail2.png")));
+		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail.png")));
 		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "music.png")));	
 		   PlatformIcon icon3 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube.png")));
 		   PlatformIcon icon4 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "camera.png")));
