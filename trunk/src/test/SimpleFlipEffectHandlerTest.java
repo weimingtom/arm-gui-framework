@@ -40,7 +40,7 @@ public class SimpleFlipEffectHandlerTest {
 		    
 		  
 		   screen.setAreas(backgroundArea, foregroundArea);
-			Thread.sleep(2000);
+			Thread.sleep(200);
 		   new FlipEffectHandler(backgroundArea);
 			while(screen.isRunning()){
 											

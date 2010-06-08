@@ -71,7 +71,7 @@ public class SimpleHiddenMenuTest {
 			e.printStackTrace();
 		} finally{
 			
-			//screen.delete();
+			screen.delete();
 			
 			SDLMain.quit();
 			System.exit(0);					

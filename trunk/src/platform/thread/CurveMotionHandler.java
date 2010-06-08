@@ -20,7 +20,7 @@ import sdljavax.guichan.GUIException;
 public class CurveMotionHandler extends Thread {
 
 	private final int transitionNr=4;
-	private double[] resizeFactor = { 0.48, 0.61, 0.74, 0.87, 1.0, 0.87, 0.74, 0.61, 0.48 }; // 0.5 , 0.8, 1.0,
+	private double[] resizeFactor = { 0.48, 0.48, 0.61, 0.74, 0.87, 1.0, 0.87, 0.74, 0.61, 0.48 }; // 0.5 , 0.8, 1.0,
 															// 1.0, 0.8, 0.5
 	private SDLRect[] curveCells = new SDLRect[resizeFactor.length];
 	private List<PlatformIcon> iconList = new ArrayList<PlatformIcon>();
@@ -103,12 +103,13 @@ public class CurveMotionHandler extends Thread {
 	}
 
 	public void run(){
+		System.out.println("Start");
 		int b, i=0;
 		double a,sizeGrowth;
 				
 		try {
 			
-			while( (i++) < 5){
+			while( (i++) < 25){
 				
 				Integer[] newIconIndex = new Integer[iconIndex.length]; 
 		
@@ -180,42 +181,45 @@ public class CurveMotionHandler extends Thread {
 
 	private void fillCurveCellsArray(int width, int height) {
 
-		curveCells[0] = new SDLRect((int) (0.2 * width),
-				(int) (0.2 * height), (int) (0.65 * width),
+		curveCells[0] = new SDLRect((int) (0.4 * width),
+				0, (int) (0.65 * width),
 				(int) (0.65 * height));
 		
-		
-		curveCells[1] = new SDLRect((int) (0.5 * width),
-		(int) (0.5 * height), (int) (0.75 * width),
-		(int) (0.75 * height));
+		curveCells[1] = new SDLRect(0, 0,
+				(int) (0.65 * width),
+				(int) (0.65 * height));
+			
+		curveCells[2] = new SDLRect((int) (0.4 * width),
+		(int) (0.4 * height), (int) (0.65 * width),
+		(int) (0.65 * height));
 
 		
-		curveCells[2] = new SDLRect((int) (0.9 * width),
-				(int) (0.9 * height), (int) (0.75 * width),
+		curveCells[3] = new SDLRect((int) (0.85 * width),
+				(int) (0.85 * height), (int) (0.75 * width),
 				(int) (0.75 * height));
 		
-		curveCells[3] = new SDLRect((int) (1.4 * width),
+		curveCells[4] = new SDLRect((int) (1.4 * width),
 				(int) (1.4 * height), (int) (0.9 * width),
 				(int) (0.9 * height));
 		
-		curveCells[4] = new SDLRect((int)(2 * width), (int)(2 * height), width,
+		curveCells[5] = new SDLRect((int)(2.1 * width), (int)(2.1 * height), width,
 				(int) (1.0 * height));
 		
-		curveCells[5] = new SDLRect((int) (2.6 * width),
-				(int) (2.6 * height), (int) (0.9 * width),
+		curveCells[6] = new SDLRect((int) (2.9 * width),
+				(int) (2.9 * height), (int) (0.9 * width),
 				(int) (0.9 * height));
 		
 		
-		curveCells[6] = new SDLRect((int) (3.1 * width),
-				(int) (3.1 * height), (int) (0.75 * width),
+		curveCells[7] = new SDLRect((int) (3.6 * width),
+				(int) (3.6 * height), (int) (0.75 * width),
 				(int) (0.75 * height));
 		
-		curveCells[7] = new SDLRect((int) (3.5 * width),
-				(int) (3.5 * height), (int) (0.65 * width),
+		curveCells[8] = new SDLRect((int) (4.2 * width),
+				(int) (4.2 * height), (int) (0.65 * width),
 				(int) (0.65 * height));
 		
-		curveCells[8] = new SDLRect((int) (3.8 * width),
-				(int) (3.8 * height), (int) (0.65 * width),
+		curveCells[9] = new SDLRect((int) (4.7 * width),
+				(int) (4.3 * height), (int) (0.65 * width),
 				(int) (0.65 * height));
 
 	}
@@ -243,13 +247,13 @@ public class CurveMotionHandler extends Thread {
 		int x=241;
 		
 		temp.freeSurface();
-		
-		for(PlatformIcon icon: iconList){
+		Screen.getScreen().setRunning(false);
+		/*for(PlatformIcon icon: iconList){
 			icon.deleteIconModifiedImage();
 			updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(icon.getX(), icon.getY(), icon.getWidth() ,icon.getHeight() )));
 			//iconList.remove(icon);
 			//icon.delete();
-		}
+		}*/
 		
 		Area displayArea = ( Screen.getScreen().getBackground().equals(motionArea) ) ? Screen.getScreen().getForeground() : Screen.getScreen().getBackground() ;
 		
@@ -276,6 +280,7 @@ public class CurveMotionHandler extends Thread {
 			x -=12;
 			
 		}
+		
 		
 		//iconList.clear();
 	}

@@ -42,7 +42,7 @@ public class SimpleTextFieldTest {
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
-		   
+		    screen.setAreas(backgroundArea, foregroundArea);
 		    TextField googleSearch = new TextField("google");
 		    //TextField googleSearch = new TextField();
 		    backgroundArea.add(googleSearch,0);
@@ -53,14 +53,14 @@ public class SimpleTextFieldTest {
 		    
 		    Label label = new Label ("David Guetta", "One Love", 160, 35);
 		    panel.add(label, 1);	    
-			screen.setAreas(backgroundArea, foregroundArea);
+			
 					
 			while(screen.isRunning()){
 				//foregroundArea.setAlpha(i%255);
 				//i+=5;
 				Thread.sleep(300);
 			}
-						
+			screen.delete();			
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			
@@ -72,7 +72,7 @@ public class SimpleTextFieldTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
-			screen.delete();
+			
 			SDLTTF.quit();
 			SDLMain.quit();
 			System.exit(0);					
