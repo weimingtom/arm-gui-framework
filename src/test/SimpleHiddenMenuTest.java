@@ -41,7 +41,7 @@ public class SimpleHiddenMenuTest {
 		    Area foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(0);
 		    
-		   HiddenMenu hiddenMenu = new HiddenMenu(new SDLColor(100,100,100), Direction.WEST);
+		   HiddenMenu hiddenMenu = new HiddenMenu(new SDLColor(100,100,100), Direction.NORTH);
 		   
 		   backgroundArea.add(hiddenMenu,0);
 		   

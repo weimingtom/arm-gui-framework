@@ -56,9 +56,10 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 		
 		setWidth(background.getWidth());
 		setHeight(background.getHeight());
-		
+	
 		hiddenMenuGraphics = new SDLGraphics();
 		hiddenMenuGraphics.setTarget(background);
+		
 		addMouseListener(this);
 					
 	}	
@@ -83,8 +84,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-	
-		
+				
 		if(!m_bVisible){
 			drawBorder(graphics);
 			return;
@@ -234,6 +234,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, greaterWidget.getWidth() , Screen._screenHeight , 16, 0, 0, 0, 0);
 				setWidth(greaterWidget.getWidth());
 			}
+			hiddenMenuGraphics.setTarget(background);
 			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight())));
 		
 		} catch (SDLException e) {

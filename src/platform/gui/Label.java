@@ -56,10 +56,7 @@ public class Label extends PlatformWidget implements MouseListener {
 			if(textFont instanceof CalibriFont){
 				synchronized(this){
 					try {
-						System.out.println("shift: " + shift);
-						System.out.println("String: " + descriptiveText.substring(shiftIndex));
-						System.out.println("shift Index: " + shiftIndex);
-						
+												
 						if(shift < ((CalibriFont)textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex)) && shiftIndex==0 ){
 							((CalibriFont)textFont).drawStringBlended(graphics, descriptiveText, getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
 						}
