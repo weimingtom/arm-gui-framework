@@ -92,6 +92,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			if(widget.equals(theWidget)){
 				
 				try {
+					System.out.println(new SDLRect( widget.getX() + getX(), widget.getY() + getY(), widget.getWidth(), widget.getHeight()).toString() );
 					putRegionToUpdate( new WidgetUpdate( this, new SDLRect( widget.getX() + getX(), widget.getY() + getY(), widget.getWidth(), widget.getHeight()) ) );
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
