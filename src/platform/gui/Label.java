@@ -18,8 +18,8 @@ public class Label extends PlatformWidget implements MouseListener {
 	protected String headText;
 	protected String descriptiveText;
 	protected Font textFont;
-	protected int shift;
-	protected boolean effectInProcess = false;
+	protected int shift, shiftIndex=0;
+	protected boolean shiftEnded = false;
 	
 	public Label(String head, int width, int height) throws SDLException {
 		this(head, "", width, height);
@@ -54,7 +54,33 @@ public class Label extends PlatformWidget implements MouseListener {
 		
 		if(descriptiveText.length()!=0){
 			if(textFont instanceof CalibriFont){
-				((CalibriFont)textFont).drawStringBlended(graphics, descriptiveText, getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
+				synchronized(this){
+					try {
+						System.out.println("shift: " + shift);
+						System.out.println("String: " + descriptiveText.substring(shiftIndex));
+						System.out.println("shift Index: " + shiftIndex);
+						
+						if(shift < ((CalibriFont)textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex)) && shiftIndex==0 ){
+							((CalibriFont)textFont).drawStringBlended(graphics, descriptiveText, getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
+						}
+						else if(shift < ((CalibriFont)textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex))){
+							((CalibriFont)textFont).drawStringBlended(graphics, descriptiveText.substring(shiftIndex), getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
+						}
+						else{
+							shift -= ((CalibriFont)textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex));
+							
+							if(shiftIndex +1 != descriptiveText.length()){ ; //% (descriptiveText.length());
+								shiftIndex ++;
+								((CalibriFont)textFont).drawStringBlended(graphics, descriptiveText.substring(shiftIndex), getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
+							}
+							
+						}
+						
+					} catch (SDLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 			else{
 			textFont.drawString(graphics, descriptiveText, getX() + 10, getY() + (int)(getHeight() * 0.6) );
@@ -92,7 +118,7 @@ public class Label extends PlatformWidget implements MouseListener {
 
 	public void mouseClick(int x, int y, int button, int count)
 			throws GUIException {
-		System.out.println("Mouse click");
+		
 		new Thread(){
 			
 			public void run(){
@@ -101,16 +127,22 @@ public class Label extends PlatformWidget implements MouseListener {
 				int textWidth = textFont.getWidth(descriptiveText);
 				try{
 					
-					for(int i = 0 ; i < textWidth + 15 ; i+=5 ){
-							shift = i;
+					for(int i = 0 ; i < textWidth ; i+=5 ){
+						synchronized(Label.this){
+							shift +=5 ;
+						}
 							updateListener.putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( getX(), getY(), getWidth(), getHeight())));
 							Thread.sleep(100);
-						}
+					}
+					
 					Thread.sleep(100);
-					shift=0;
+					synchronized(Label.this){
+						shift=0;
+						shiftIndex=0;
+					}
 					updateListener.putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( Label.this.getX(), Label.this.getY(), Label.this.getWidth(), Label.this.getHeight())));
 					Thread.sleep(50);
-				
+					
 				}  catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
