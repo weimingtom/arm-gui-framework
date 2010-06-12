@@ -250,10 +250,10 @@ public class Area extends PlatformWidget implements UpdateListener{
 	public void delete() throws GUIException{
 		
 		for( PlatformWidget theWidget: widgetMap.keySet()){
-			theWidget.delete();		
-			widgetMap.remove(theWidget);
+							theWidget.delete();		
 		}
 		
+		widgetMap.clear();
 		try {
 			surface.freeSurface();
 			originalSurface.freeSurface();

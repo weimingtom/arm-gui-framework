@@ -67,19 +67,20 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 	@Override
 	public void add(PlatformWidget widget, int offset) throws GUIException{
 		widgetList.add(widget);
-				
-		if(direction == Direction.NORTH || direction == Direction.SOUTH){
-						
-			widget.setPosition((widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10, 2 );
-		}
-		else{
-			widget.setPosition(2, (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
-			
-		}
-		widget.setUpdateListener(this);
+		
 		if(widget.getWidth() > getWidth() || widget.getHeight() > getHeight()){
 			adjustSize(widget);
 		}
+			
+		if(direction == Direction.NORTH || direction == Direction.SOUTH){
+						
+			widget.setPosition((widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10, (getHeight()-widget.getHeight())/2 );
+		}
+		else{
+			widget.setPosition( (getWidth() - widget.getWidth())/2 , (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
+			
+		}
+		widget.setUpdateListener(this);
 	}
 
 	@Override
@@ -119,9 +120,10 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 	public void delete() throws GUIException{
 		
 		for( PlatformWidget theWidget: widgetList){
+			
 			theWidget.delete();		
-			widgetList.remove(theWidget);
 		}
+		widgetList.clear();
 		
 		try {
 			slider.freeSurface();
