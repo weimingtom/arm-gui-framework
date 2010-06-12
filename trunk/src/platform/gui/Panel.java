@@ -221,10 +221,9 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			e.printStackTrace();
 		}
 		for (Widget widget: widgetList){
-			
 			widget.delete();
-			widgetList.remove(widget);
 		}
+		widgetList.clear();
 		super.delete();
 		
 	}
