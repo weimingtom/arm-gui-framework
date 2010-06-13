@@ -178,13 +178,14 @@ public class Area extends PlatformWidget implements UpdateListener{
 	public void setAlpha(int alphaIndex) {
 		
 		try {
+			originalSurface.setAlpha(Screen._alphaFlags, alphaIndex);
 			surface.setAlpha(Screen._alphaFlags, alphaIndex);
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
-				
+		
 	}
 		
 	@Override
@@ -197,6 +198,7 @@ public class Area extends PlatformWidget implements UpdateListener{
 				//TODO check this
 				widget.draw(surfaceGraphics);
 			}
+									
 			screenGraphics.beginDraw();
 			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
 			screenGraphics.endDraw();
@@ -223,7 +225,7 @@ public class Area extends PlatformWidget implements UpdateListener{
 		try {
 			
 			UnifiedGraphics screenGraphics = Screen.getScreen().getGraphics();
-			
+								
 			screenGraphics.beginDraw();
 			screenGraphics.drawSDLSurface(surface, rect, rect);
 			screenGraphics.endDraw();
@@ -250,7 +252,7 @@ public class Area extends PlatformWidget implements UpdateListener{
 	public void delete() throws GUIException{
 		
 		for( PlatformWidget theWidget: widgetMap.keySet()){
-							theWidget.delete();		
+			theWidget.delete();		
 		}
 		
 		widgetMap.clear();

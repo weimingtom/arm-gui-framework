@@ -26,6 +26,8 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	protected Integer xFormat, yFormat;
 	protected UnifiedGraphics panelGraphics;
+	protected boolean alphaSet=false;
+	protected int alpha;
 	
 	private final int horizontalPixelShift = 3;
 	private final int verticalPixelShift = 10;
@@ -109,14 +111,23 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
-		
+
+		if(alphaSet){
+			
+			try {
+				frame.setAlpha(Screen._alphaFlags, alpha);
+			} catch (SDLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		panelGraphics.beginDraw();
 		for ( PlatformWidget widget : widgetList){
 			widget.draw(panelGraphics);
 		}
 		panelGraphics.endDraw();
-		
+				
 		drawBorder(graphics);
 	}
 
@@ -134,8 +145,18 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	
 	@Override
 	public void setAlpha(int alphaIndex) {
+		
+		if(alphaIndex < 255){
+			alphaSet=true;
+			alpha=alphaIndex;
+			
+		}
+		else{
+			alphaSet=false;
+			alpha=255;
+		}
 		try {
-			frame.setAlpha(Screen._alphaFlags, alphaIndex);
+			frame.setAlpha(Screen._alphaFlags, alpha);
 			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
@@ -144,7 +165,6 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	public void setWidgetsFocusHandler(FocusHandler focusHandler) throws GUIException{

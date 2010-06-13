@@ -31,16 +31,16 @@ public class SimpleFlipEffectHandlerTest {
 			
 			screen=Screen.getScreen();
 			
-			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "black.png" ));
-		    Area backgroundArea = new Area( image ,5,5);
-		    
-			Area foregroundArea = new Area( new SDLColor(0,0,0) ,5,5);
-		    		    			    
-			foregroundArea.setAlpha(0);
-		    
-		  
+			Image white = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "white.png" ));
+			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "tree_small.png" ));
+			
+			Area backgroundArea = new Area( white, 5,5);
+			backgroundArea.setAlpha(0);
+			
+			Area foregroundArea = new Area( image ,5,5);
+			  
 		   screen.setAreas(backgroundArea, foregroundArea);
-			Thread.sleep(200);
+			
 		   new FlipEffectHandler(backgroundArea);
 			while(screen.isRunning()){
 											
