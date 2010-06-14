@@ -1,13 +1,9 @@
 package platform.thread;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import platform.gui.Area;
 import platform.gui.PlatformIcon;
-import platform.gui.PlatformWidget;
 import platform.gui.Screen;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
@@ -31,8 +27,7 @@ public class CurveMotionHandler extends Thread {
 	
 	public CurveMotionHandler(Area area, List<PlatformIcon> list) throws GUIException, SDLException {
 		super();
-		int x=241;
-		motionArea = ( Screen.getScreen().getBackground().equals(area) ) ? Screen.getScreen().getForeground() : Screen.getScreen().getBackground() ;
+		motionArea = area;
 		
 		updateListener = (UpdateListener) motionArea;
 
@@ -42,49 +37,10 @@ public class CurveMotionHandler extends Thread {
 			throw new GUIException(
 					"CurveMotionHandler can operate only on Area with 5x5 grid!");
 		}
-		while( x > 0){
-			
-			try {
-				area.setAlpha(x);
-				Thread.sleep(50);
-				
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			x-=12;
-		}
-		x = 241;
-		while( x > 0){
-			motionArea.setAlpha(250 - x);
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			x -=12;
-			
-		}
-		
 		fillCurveCellsArray(motionArea.getxCellDimension(), motionArea.getyCellDimension());
-
-		//Map<PlatformWidget, Set<Integer>> tempMap = area.getWidgetMap();
 
 		iconList = list;
 		
-		/*int value = 0;
-		iconIndex = new Integer[tempMap.keySet().size()];
-		for (PlatformWidget widget : tempMap.keySet()) {
-
-			if (widget instanceof PlatformIcon) {
-				iconList.add((PlatformIcon) widget);
-
-				value++;
-			}
-
-		}*/
-
 		iconIndex = new Integer[list.size()];
 		for (int i = 0; i < iconIndex.length; i++) {
 			iconIndex[i] = i;
@@ -100,12 +56,11 @@ public class CurveMotionHandler extends Thread {
 
 			int a = (widthRelation < heightRelation) ? adjustSize(widget,widthRelation) : adjustSize(widget, heightRelation);
 		}
-			
+		displayArea(area);
 		start();
 	}
 
 	public void run(){
-		System.out.println("Start");
 		int b, i=0;
 		double a,sizeGrowth;
 				
@@ -247,45 +202,34 @@ public class CurveMotionHandler extends Thread {
 	}
 
 	private void clean() throws SDLException, GUIException, InterruptedException{
-		int x=241;
 		
 		temp.freeSurface();
-		Screen.getScreen().setRunning(false);
-		/*for(PlatformIcon icon: iconList){
-			icon.deleteIconModifiedImage();
-			updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(icon.getX(), icon.getY(), icon.getWidth() ,icon.getHeight() )));
-			//iconList.remove(icon);
-			//icon.delete();
-		}*/
-		
+		for(PlatformIcon icon: iconList){
+			icon.delete();
+		}
+		iconList.clear();
+
 		Area displayArea = ( Screen.getScreen().getBackground().equals(motionArea) ) ? Screen.getScreen().getForeground() : Screen.getScreen().getBackground() ;
+
+		displayArea(displayArea);
+				
+	}
+	
+	private void displayArea(Area display){
+		int x=241;
 		
 		while( x > 0){
-			motionArea.setAlpha(x);
+			
 			try {
+				display.setAlpha(255-x);
 				Thread.sleep(100);
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			x -=12;
-			
+			x-=12;
 		}
-		x=241;
-		while( x > 0){
-			displayArea.setAlpha(250 - x);
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			x -=12;
-			
-		}
-		
-		
-		//iconList.clear();
 	}
 }
 

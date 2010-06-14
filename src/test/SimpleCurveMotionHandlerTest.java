@@ -10,7 +10,6 @@ import platform.gui.Screen;
 import platform.thread.CurveMotionHandler;
 import sdljava.SDLException;
 import sdljava.SDLMain;
-import sdljava.video.SDLColor;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
@@ -49,27 +48,22 @@ public class SimpleCurveMotionHandlerTest {
 		   PlatformIcon icon3 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "youtube.png")));
 		   PlatformIcon icon4 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "camera.png")));
 		   PlatformIcon icon5 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "dial.png")));
-		  /* PlatformIcon icon6 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "calendar.png")));
+		   PlatformIcon icon6 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "calendar.png")));
 		   PlatformIcon icon7 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "calculator.png")));
-		   PlatformIcon icon8 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "browser.png")));*/
+		   PlatformIcon icon8 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "browser.png")));
 		   
 		   iconList.add(icon1);
 		   iconList.add(icon2);
 		   iconList.add(icon3); 
 		   iconList.add(icon4);
 		   iconList.add(icon5);
-		   /*backgroundArea.add(icon1,5);
-		   backgroundArea.add(icon2,10);
-		   backgroundArea.add(icon3,15); 
-		   backgroundArea.add(icon4,16);
-		   backgroundArea.add(icon5,21);*/
-		  /*backgroundArea.add(icon6,9);
-		  backgroundArea.add(icon7,14);
-		  backgroundArea.add(icon8,8);*/
+		   iconList.add(icon6);
+		   iconList.add(icon7);
+		   iconList.add(icon8);
 		  
 		   screen.setAreas(backgroundArea, foregroundArea);
 			
-		   new CurveMotionHandler(backgroundArea,iconList);
+		   new CurveMotionHandler(foregroundArea,iconList);
 			while(screen.isRunning()){
 											
 				Thread.sleep(1500);
