@@ -74,6 +74,7 @@ public class FlipEffectHandler extends Thread{
 			
 			destSurface = new SDLSurface(originalSurface.getSwigSurface());
 			updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(xCenter - maxHorizontalRadius, yCenter - maxVerticalRadius, maxHorizontalRadius *2, maxVerticalRadius * 2 )));
+			Thread.sleep(1000);
 		}
 		catch(InterruptedException e){
 			e.printStackTrace();
@@ -83,20 +84,21 @@ public class FlipEffectHandler extends Thread{
 	}
 	
 	private void displayArea(Area display){
-		int x=241;
+		int x=250;
 		
-		while( x > 0){
+		while( x > 100){
 			
 			try {
 				display.setAlpha(255-x);
-				Thread.sleep(100);
+				Thread.sleep(300);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			x-=12;
+			x-=5;
 		}
+		display.setAlpha(255);
 	}
 	
 }

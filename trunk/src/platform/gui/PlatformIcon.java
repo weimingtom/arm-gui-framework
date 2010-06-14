@@ -68,7 +68,6 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	@Override
 	public void setAlpha(int alphaIndex) {
 		try {
-			System.out.println("Alpha" + alphaIndex);
 			((SDLSurface)iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
 			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
 		} catch (SDLException e) {
@@ -129,7 +128,6 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 	
 	public void mouseClick(int arg0, int y, int button, int count)
 			throws GUIException {
-		System.out.println("Mouse click");
 			setAlpha((clicked == false) ? 0 : 255 );
 			clicked = !clicked;
 		
