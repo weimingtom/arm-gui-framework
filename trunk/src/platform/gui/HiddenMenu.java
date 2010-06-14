@@ -28,6 +28,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 
 	protected SDLSurface slider;
 	protected SDLSurface background;
+	protected SDLColor color;
 	protected UnifiedGraphics hiddenMenuGraphics;
 	protected int transition=0;
 	protected Direction direction;
@@ -46,8 +47,8 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, (int)(Screen._screenWidth * 0.25) , Screen._screenHeight , 16, 0, 0, 0, 0);
 			
 		}
-		
-		background.fillRect(background.mapRGB(clr.getRed(), clr.getGreen(), clr.getBlue()));
+		color = clr;
+		background.fillRect(background.mapRGB(color.getRed(), color.getGreen(), color.getBlue()));
 		
 		//TODO change pixel format here?
 		slider = SDLGfx.rotozoomSurface(slider, 90* dir.ordinal(), 1, true);
@@ -236,6 +237,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, greaterWidget.getWidth() , Screen._screenHeight , 16, 0, 0, 0, 0);
 				setWidth(greaterWidget.getWidth());
 			}
+			background.fillRect(background.mapRGB(color.getRed(), color.getGreen(), color.getBlue()));
 			hiddenMenuGraphics.setTarget(background);
 			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight())));
 		
