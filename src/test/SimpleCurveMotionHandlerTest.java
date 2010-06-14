@@ -1,6 +1,8 @@
 package test;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import platform.gui.Area;
 import platform.gui.PlatformIcon;
@@ -37,32 +39,37 @@ public class SimpleCurveMotionHandlerTest {
 			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
 		    Area backgroundArea = new Area( image,5,5);
 		    
-			Area foregroundArea = new Area( new SDLColor(0,0,0) ,5,5);
+			Area foregroundArea = new Area( new String("resource" + File.separator + "wallpapers" + File.separator + "black.png" ) ,5,5);
 		    		    			    
 			foregroundArea.setAlpha(0);
-		    
+			List<PlatformIcon> iconList = new ArrayList<PlatformIcon>();
 		   
-		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "gmail.png")));
-		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "music.png")));	
-		   PlatformIcon icon3 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube.png")));
-		   PlatformIcon icon4 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "camera.png")));
-		   PlatformIcon icon5 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "dial.png")));
+		   PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "gmail.png")));
+		   PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "music.png")));	
+		   PlatformIcon icon3 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "youtube.png")));
+		   PlatformIcon icon4 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "camera.png")));
+		   PlatformIcon icon5 = new PlatformIcon(new Image(new String("resource" + File.separator + "images_not_optimal" + File.separator + "dial.png")));
 		  /* PlatformIcon icon6 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "calendar.png")));
 		   PlatformIcon icon7 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "calculator.png")));
 		   PlatformIcon icon8 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "browser.png")));*/
 		   
-		   backgroundArea.add(icon1,5);
-		  backgroundArea.add(icon2,10);
-		  backgroundArea.add(icon3,15); 
-		  backgroundArea.add(icon4,20);
-		  backgroundArea.add(icon5,4);
+		   iconList.add(icon1);
+		   iconList.add(icon2);
+		   iconList.add(icon3); 
+		   iconList.add(icon4);
+		   iconList.add(icon5);
+		   /*backgroundArea.add(icon1,5);
+		   backgroundArea.add(icon2,10);
+		   backgroundArea.add(icon3,15); 
+		   backgroundArea.add(icon4,16);
+		   backgroundArea.add(icon5,21);*/
 		  /*backgroundArea.add(icon6,9);
 		  backgroundArea.add(icon7,14);
 		  backgroundArea.add(icon8,8);*/
 		  
 		   screen.setAreas(backgroundArea, foregroundArea);
 			
-		   new CurveMotionHandler(backgroundArea);
+		   new CurveMotionHandler(backgroundArea,iconList);
 			while(screen.isRunning()){
 											
 				Thread.sleep(1500);

@@ -23,13 +23,13 @@ public class CurveMotionHandler extends Thread {
 	private double[] resizeFactor = { 0.48, 0.48, 0.61, 0.74, 0.87, 1.0, 0.87, 0.74, 0.61, 0.48 }; // 0.5 , 0.8, 1.0,
 															// 1.0, 0.8, 0.5
 	private SDLRect[] curveCells = new SDLRect[resizeFactor.length];
-	private List<PlatformIcon> iconList = new ArrayList<PlatformIcon>();
+	private List<PlatformIcon> iconList ;//= new ArrayList<PlatformIcon>();
 	private Integer[] iconIndex;
 	private Area motionArea;
 	private UpdateListener updateListener;
 	private SDLSurface temp;
 	
-	public CurveMotionHandler(Area area) throws GUIException, SDLException {
+	public CurveMotionHandler(Area area, List<PlatformIcon> list) throws GUIException, SDLException {
 		super();
 		int x=241;
 		motionArea = ( Screen.getScreen().getBackground().equals(area) ) ? Screen.getScreen().getForeground() : Screen.getScreen().getBackground() ;
@@ -69,9 +69,11 @@ public class CurveMotionHandler extends Thread {
 		
 		fillCurveCellsArray(motionArea.getxCellDimension(), motionArea.getyCellDimension());
 
-		Map<PlatformWidget, Set<Integer>> tempMap = area.getWidgetMap();
+		//Map<PlatformWidget, Set<Integer>> tempMap = area.getWidgetMap();
 
-		int value = 0;
+		iconList = list;
+		
+		/*int value = 0;
 		iconIndex = new Integer[tempMap.keySet().size()];
 		for (PlatformWidget widget : tempMap.keySet()) {
 
@@ -81,9 +83,9 @@ public class CurveMotionHandler extends Thread {
 				value++;
 			}
 
-		}
+		}*/
 
-		iconIndex = new Integer[value];
+		iconIndex = new Integer[list.size()];
 		for (int i = 0; i < iconIndex.length; i++) {
 			iconIndex[i] = i;
 		}
@@ -144,6 +146,7 @@ public class CurveMotionHandler extends Thread {
 						updateListener.putRegionToUpdate(new WidgetUpdate(icon, new SDLRect(xPos, yPos, icon.getWidth() ,icon.getHeight() )));
 						
 					}
+				
 					//Thread.sleep(50); sufficient for an ARm with 2 icons
 					//Thread.sleep(100); sufficient for ARM to make it smoothly with 4, 50 -> too short
 					Thread.sleep(iconList.size() * 25);
