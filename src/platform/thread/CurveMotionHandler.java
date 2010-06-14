@@ -16,8 +16,7 @@ import sdljavax.guichan.GUIException;
 public class CurveMotionHandler extends Thread {
 
 	private final int transitionNr=4;
-	private double[] resizeFactor = { 0.48, 0.48, 0.61, 0.74, 0.87, 1.0, 0.87, 0.74, 0.61, 0.48 }; // 0.5 , 0.8, 1.0,
-															// 1.0, 0.8, 0.5
+	private double[] resizeFactor = { 0.48, 0.48, 0.61, 0.74, 0.87, 1.0, 0.87, 0.74, 0.61, 0.48 };
 	private SDLRect[] curveCells = new SDLRect[resizeFactor.length];
 	private List<PlatformIcon> iconList ;//= new ArrayList<PlatformIcon>();
 	private Integer[] iconIndex;
@@ -66,7 +65,7 @@ public class CurveMotionHandler extends Thread {
 				
 		try {
 			
-			while( (i++) < 25){
+			while( (i++) < 4){
 				
 				Integer[] newIconIndex = new Integer[iconIndex.length]; 
 		
@@ -202,17 +201,17 @@ public class CurveMotionHandler extends Thread {
 	}
 
 	private void clean() throws SDLException, GUIException, InterruptedException{
-		
+			
 		temp.freeSurface();
 		for(PlatformIcon icon: iconList){
 			icon.delete();
 		}
 		iconList.clear();
 
+		
 		Area displayArea = ( Screen.getScreen().getBackground().equals(motionArea) ) ? Screen.getScreen().getForeground() : Screen.getScreen().getBackground() ;
-
 		displayArea(displayArea);
-				
+		
 	}
 	
 	private void displayArea(Area display){
@@ -228,7 +227,7 @@ public class CurveMotionHandler extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			x-=12;
+			x-=3;
 		}
 	}
 }

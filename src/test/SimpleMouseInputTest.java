@@ -37,7 +37,7 @@ public class SimpleMouseInputTest {
 		    Area foregroundArea = new Area( image,5,4);
 		    foregroundArea.setAlpha(0);
 		    
-		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator);
+		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator, 0);
 		    backgroundArea.add(playButton, 6);
 		    		    
 			screen.setAreas(backgroundArea, foregroundArea);

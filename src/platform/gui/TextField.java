@@ -29,6 +29,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 	protected int stepsFromBorder;
 	protected SDLColor cursorColor;
 	protected ElementChanged elementChanged;
+	protected TextField.FlickeringCursorHandler flickeringCursorHandler;
 	
 	public TextField() throws GUIException, SDLException{				
 		this("");
@@ -50,6 +51,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		elementChanged = ElementChanged.ALL;
 		
 				
+		flickeringCursorHandler = new FlickeringCursorHandler(false);
 		addKeyListener(this);
 		
 	}
@@ -61,7 +63,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				drawBorder(graphics);
 				drawText(graphics);
 				drawCursor(graphics);
-				new FlickeringCursorHandler();
+				
 			break;
 			
 			case TEXT:
@@ -85,7 +87,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				
 		}
 		
-		elementChanged = ElementChanged.NONE;
+		elementChanged = ElementChanged.ALL;
 	}
 	
 	public void eraseCursor(Graphics graphics) throws GUIException{
@@ -281,31 +283,55 @@ public class TextField extends PlatformWidget implements  KeyListener{
 	}
 	enum ElementChanged { TEXT, CURSOR_ON, CURSOR_OFF , NONE, ALL };
 	
+	
+	@Override
+	public void mouseInMessage() throws GUIException {
+		// TODO Auto-generated method stub
+		super.mouseInMessage();
+		flickeringCursorHandler.setRunning(true);
+	}
+
+	@Override
+	public void mouseOutMessage() {
+		// TODO Auto-generated method stub
+		super.mouseOutMessage();
+		flickeringCursorHandler.setRunning(false);
+	}
+
+
 	class FlickeringCursorHandler extends Thread{
 		
 		boolean visible=false;
+		boolean running;
 		
-		FlickeringCursorHandler(){
+		FlickeringCursorHandler(boolean run){
+			running = run;
 			start();
 		}
 		
 		public void run(){
 			
 			while(true){
-				
 				try {
-					elementChanged = (visible == true ) ? ElementChanged.CURSOR_ON : ElementChanged.CURSOR_OFF;
-					updateListener.putRegionToUpdate(new WidgetUpdate(TextField.this,new SDLRect(onScreenCursorPosition, getYTextPosition(), 1, textFont.getHeight() + 1 )));
-					visible=!visible;
-					Thread.sleep(1000);
-					
+					if(running){
+							elementChanged = (visible == true ) ? ElementChanged.CURSOR_ON : ElementChanged.CURSOR_OFF;
+							updateListener.putRegionToUpdate(new WidgetUpdate(TextField.this,new SDLRect(onScreenCursorPosition, getYTextPosition(), 1, textFont.getHeight() + 1 )));
+							visible=!visible;
+							Thread.sleep(1000);
+					}
+					else{
+						Thread.sleep(1000);
+					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 			
+		}
+		
+		public void setRunning(boolean run){
+			running = run;
 		}
 	}
 	

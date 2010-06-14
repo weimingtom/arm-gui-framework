@@ -51,7 +51,7 @@ public class GUITest {
 		    Panel panel= new Panel(4,1);
 	     	backgroundArea.add(panel, 10);
 		    
-		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator);
+		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator, 1);
 		    Label label = new Label ("Flip Effect", "Two ellipses flipping", 160, 35);
 		    panel.add(playButton,0);
 		    panel.add(label, 1);
