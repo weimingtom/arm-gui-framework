@@ -40,7 +40,7 @@ public class SimpleTextFieldTest {
 			
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "tree_small.png" ),4,4);
 		    		    			    
-			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "islands_small.png" ));
+			Image image = new Image(new String("resource" + File.separator + "wallpapers" + File.separator + "black.png" ));
 		    Area foregroundArea = new Area( image,4,4);
 		    foregroundArea.setAlpha(i);
 		    TextField googleSearch = new TextField("google");
@@ -51,7 +51,7 @@ public class SimpleTextFieldTest {
 		     	
 		    backgroundArea.add(panel, 8);
 		    
-		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator);
+		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator,0);
 		    Label label = new Label ("David Guetta", "One Love", 160, 35);
 		    panel.add(playButton,0);
 		    panel.add(label, 1);	    

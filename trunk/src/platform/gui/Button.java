@@ -1,5 +1,7 @@
 package platform.gui;
 
+import platform.buttons.ClickedDemo2PlayButton;
+import platform.buttons.ClickedDemoPlayButton;
 import platform.buttons.ClickedPlayButton;
 import platform.buttons.DefaultPlayButton;
 import platform.buttons.SelectedPlayButton;
@@ -17,13 +19,21 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	
 	ButtonState currentState;
 		
-	public Button(String resourceDir) throws GUIException{
+	public Button(String resourceDir, int demoNr) throws GUIException{
 		super();
 		
 		defaultButton = new DefaultPlayButton(resourceDir + "music_button_default.png", this , this);
-		clickedButton = new ClickedPlayButton(resourceDir + "music_button_pressed.png", this, this);
 		selectedButton = new SelectedPlayButton(resourceDir + "music_button_selected.png", this, this);
 		
+		if(demoNr == 0){
+			clickedButton = new ClickedPlayButton(resourceDir + "music_button_pressed.png", this, this);
+		}
+		if(demoNr == 1){
+			clickedButton = new ClickedDemoPlayButton(resourceDir + "music_button_pressed.png", this, this);
+		}
+		else if(demoNr == 2){
+			clickedButton = new ClickedDemo2PlayButton(resourceDir + "music_button_pressed.png", this, this);
+		}
 		currentState = defaultButton;
 		
 		setWidth(defaultButton.getWidth());
