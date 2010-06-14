@@ -38,13 +38,13 @@ public class GUITest2 {
 				
 			screen=Screen.getScreen();
 				
-			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "islands_small.png" ),5,4);
+			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "android-wallpapers-320-240-dailymobile008.png" ),5,4);
 		    		    			    
 			Area foregroundArea = new Area( new String("resource" + File.separator + "wallpapers" + File.separator + "black.png" ),5,5);
 		    foregroundArea.setAlpha(0);
 		    
 		    Panel panel= new Panel(4,1);
-		    backgroundArea.add(panel, 10);
+		    backgroundArea.add(panel, 15);
 		    
 		    Button playButton = new Button("resource" + File.separator + "PNG" + File.separator,2);
 		    Label label = new Label ("Curve motion effect", "Imaginary curve", 160, 35);
@@ -56,6 +56,12 @@ public class GUITest2 {
 		    TextField googleSearch = new TextField("google");
 		    backgroundArea.add(googleSearch,0);
 		    
+		    PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "settings.png")));
+			PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "messaging.png")));	
+			
+			backgroundArea.add(icon1, 10);
+			backgroundArea.add(icon2, 11);
+			
 		    screen.setAreas(backgroundArea, foregroundArea);		
 			while(screen.isRunning()){
 				Thread.sleep(1500);

@@ -65,7 +65,7 @@ public class CurveMotionHandler extends Thread {
 				
 		try {
 			
-			while( (i++) < 4){
+			while( (i++) < 20){
 				
 				Integer[] newIconIndex = new Integer[iconIndex.length]; 
 		
@@ -100,10 +100,10 @@ public class CurveMotionHandler extends Thread {
 						updateListener.putRegionToUpdate(new WidgetUpdate(icon, new SDLRect(xPos, yPos, icon.getWidth() ,icon.getHeight() )));
 						
 					}
-				
-					//Thread.sleep(50); sufficient for an ARm with 2 icons
-					//Thread.sleep(100); sufficient for ARM to make it smoothly with 4, 50 -> too short
-					Thread.sleep(iconList.size() * 25);
+					//With GUI Test it seems
+					//Thread.sleep(iconList.size() * 50); sufficient for an ARM with 4 icons -> 200ms of delay to perform calculations
+					Thread.sleep(iconList.size() * 50);
+					
 				}
 				for(int j=0 ; j< iconIndex.length; j++){
 						PlatformIcon icon = iconList.get(j);
@@ -119,8 +119,9 @@ public class CurveMotionHandler extends Thread {
 				}
 				
 				iconIndex = newIconIndex.clone();
-				Thread.sleep(1000);
+				Thread.sleep(1200);
 			}
+			Thread.sleep(1000);
 			clean();
 		}
 		catch (SDLException e) {
@@ -215,20 +216,23 @@ public class CurveMotionHandler extends Thread {
 	}
 	
 	private void displayArea(Area display){
-		int x=241;
+		int x=250;
 		
-		while( x > 0){
+		while( x > 100){
 			
 			try {
+				
+				//300 ms is good to switch areas smoothly
 				display.setAlpha(255-x);
-				Thread.sleep(100);
+				Thread.sleep(300);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			x-=3;
+			x-=5;
 		}
+		display.setAlpha(255);
 	}
 }
 
