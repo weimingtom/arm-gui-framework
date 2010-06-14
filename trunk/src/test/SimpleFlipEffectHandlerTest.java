@@ -7,7 +7,6 @@ import platform.gui.Screen;
 import platform.thread.FlipEffectHandler;
 import sdljava.SDLException;
 import sdljava.SDLMain;
-import sdljava.video.SDLColor;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.gfx.ImageLoader;
