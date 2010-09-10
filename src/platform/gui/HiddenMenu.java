@@ -22,9 +22,7 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.widgets.Widget;
 
-
-
-public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateListener, Maintainable{
+public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateListener, Maintainable {
 
 	protected SDLSurface slider;
 	protected SDLSurface background;
@@ -34,18 +32,16 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 	protected Direction direction;
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	
-	public HiddenMenu(SDLColor clr, Direction dir) throws SDLException, InterruptedException{
-		
+	public HiddenMenu(SDLColor clr, Direction dir) throws SDLException, InterruptedException {
 		direction = dir;
 		slider = SDLImage.load("resource" + File.separator + "images" + File.separator + "slider.png");
 		
-		if( direction == Direction.SOUTH || direction == Direction.NORTH){
-			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, (int)(Screen._screenHeight * 0.25) , 16, 0, 0, 0, 0);
-			
-		}
-		else {
-			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, (int)(Screen._screenWidth * 0.25) , Screen._screenHeight , 16, 0, 0, 0, 0);
-			
+		if (direction == Direction.SOUTH || direction == Direction.NORTH) {
+			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, 
+												   (int) (Screen._screenHeight * 0.25), 16, 0, 0, 0, 0);
+		} else {
+			background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, (int) (Screen._screenWidth * 0.25),
+												   Screen._screenHeight, 16, 0, 0, 0, 0);
 		}
 		color = clr;
 		background.fillRect(background.mapRGB(color.getRed(), color.getGreen(), color.getBlue()));
@@ -62,66 +58,53 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 		hiddenMenuGraphics.setTarget(background);
 		
 		addMouseListener(this);
-					
 	}	
 	
 	@Override
-	public void add(PlatformWidget widget, int offset) throws GUIException{
+	public void add(PlatformWidget widget, int offset) throws GUIException {
 		widgetList.add(widget);
 		
-		if(widget.getWidth() > getWidth() || widget.getHeight() > getHeight()){
+		if (widget.getWidth() > getWidth() || widget.getHeight() > getHeight()) {
 			adjustSize(widget);
 		}
 			
-		if(direction == Direction.NORTH || direction == Direction.SOUTH){
-						
-			widget.setPosition((widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10, (getHeight()-widget.getHeight())/2 );
-		}
-		else{
-			widget.setPosition( (getWidth() - widget.getWidth())/2 , (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
-			
+		if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+			widget.setPosition((widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10,
+							   (getHeight()-widget.getHeight())/2 );
+		} else {
+			widget.setPosition((getWidth() - widget.getWidth())/2,
+							   (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
 		}
 		widget.setUpdateListener(this);
 	}
 
-	@Override
-	public void draw(UnifiedGraphics graphics) throws GUIException {
+	protected void adjustSize(PlatformWidget greaterWidget) {
+		try {
+			background.freeSurface();
 				
-		if(!m_bVisible){
-			drawBorder(graphics);
-			return;
+			if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth,
+													   greaterWidget.getHeight() , 16, 0, 0, 0, 0);
+				setHeight(greaterWidget.getHeight());
+			} else {
+				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, greaterWidget.getWidth(),
+													   Screen._screenHeight , 16, 0, 0, 0, 0);
+				setWidth(greaterWidget.getWidth());
+			}
+			background.fillRect(background.mapRGB(color.getRed(), color.getGreen(), color.getBlue()));
+			hiddenMenuGraphics.setTarget(background);
+			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight())));
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		hiddenMenuGraphics.beginDraw();		
-		for ( PlatformWidget widget : widgetList){
-			widget.draw(hiddenMenuGraphics);
-		}
-		hiddenMenuGraphics.endDraw();
-		drawBorder(graphics);
-		
-		
 	}
 	
-	@Override
-	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
-	
-			try {
-				
-				if(!m_bVisible ){
-					graphics.drawSDLSurface(slider, slider.getRect(), graphics.getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110, getY() + (direction.ordinal() %2) * 60  ));
-				}
-				else{
-					graphics.drawSDLSurface(background, hiddenMenuGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(),getY()));
-				}
-			} catch (SDLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-	}
-	
-	public void delete() throws GUIException{
-		
-		for( PlatformWidget theWidget: widgetList){
-			
+	public void delete() throws GUIException {
+		for (PlatformWidget theWidget: widgetList) {
 			theWidget.delete();		
 		}
 		widgetList.clear();
@@ -134,18 +117,46 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
 	}
-	public void mouseClick(int x, int y, int button, int count)
-			throws GUIException {
-		try {
+	
+	@Override
+	public void draw(UnifiedGraphics graphics) throws GUIException {
+		if (! m_bVisible) {
+			drawBorder(graphics);
+			return;
+		}
+		hiddenMenuGraphics.beginDraw();		
+		for (PlatformWidget widget : widgetList) {
+			widget.draw(hiddenMenuGraphics);
+		}
+		hiddenMenuGraphics.endDraw();
+		drawBorder(graphics);
+	}
+	
+	@Override
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
+			try {
+				if (! m_bVisible) {
+					graphics.drawSDLSurface(slider, slider.getRect(), graphics.getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110,
+											getY() + (direction.ordinal() %2) * 60  ));
+				} else {
+					graphics.drawSDLSurface(background, hiddenMenuGraphics.getTarget().getRect(), 
+											graphics.getTarget().getRect(getX(),getY()));
+				}
+			} catch (SDLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+	}
 
-			if(m_bVisible){
-				for( Widget widget : widgetList){
+	public void mouseClick(int x, int y, int button, int count) throws GUIException {
+		try {
+			if (m_bVisible) {
+				for (Widget widget : widgetList) {
 					
-					if(widget instanceof MouseListener){
+					if (widget instanceof MouseListener) {
 						if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() && y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY()){
-							((MouseListener)widget).mouseClick(x, y, button, count);
+							((MouseListener) widget).mouseClick(x, y, button, count);
 							return;
 						}
 					}
@@ -156,30 +167,24 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 				//TODO is that safe at all platforms? we 're waiting till TransitionHandler finishes his job
 				Thread.sleep(300);
 				putRegionToUpdate( new WidgetUpdate (this,new SDLRect(getX(),getY(),background.getWidth(), background.getHeight() ) ) );		
-			}
-			
-			else {
+			} else {
 				new TransitionEffectHandler(this, updateListener, direction, !m_bVisible);
 				m_bVisible = !m_bVisible;
 			}
-		}catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		}
 	}
-
 
 	public void mouseIn() throws GUIException {
 		m_bHasMouse =  true;
 		requestFocus();		
 	}
 
-
 	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
-
 
 	public void mouseOut() {
 		m_bHasMouse =  false;
@@ -189,64 +194,26 @@ public class HiddenMenu extends PlatformWidget implements MouseListener,UpdateLi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-
 
 	public void mousePress(int x, int y, int button) throws GUIException {
-		
-				
+		// TODO Auto-generated method stub	
 	}
-
 
 	public void mouseRelease(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
-
 
 	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
-
 
 	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
 
-
-	public void putRegionToUpdate(WidgetUpdate updateInfo)
-			throws InterruptedException {
-		
+	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		SDLRect region = updateInfo.getWidgetRegion();
 		updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height)));
-	}
-
-	protected void adjustSize(PlatformWidget greaterWidget) {
-		
-		try {
-			background.freeSurface();
-				
-			if(direction == Direction.NORTH || direction == Direction.SOUTH){
-				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, greaterWidget.getHeight() , 16, 0, 0, 0, 0);
-				setHeight(greaterWidget.getHeight());
-			}
-			else{
-				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, greaterWidget.getWidth() , Screen._screenHeight , 16, 0, 0, 0, 0);
-				setWidth(greaterWidget.getWidth());
-			}
-			background.fillRect(background.mapRGB(color.getRed(), color.getGreen(), color.getBlue()));
-			hiddenMenuGraphics.setTarget(background);
-			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight())));
-		
-		} catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

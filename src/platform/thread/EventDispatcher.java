@@ -11,17 +11,17 @@ import sdljavax.guichan.evt.KeyInput;
 import sdljavax.guichan.evt.MouseInput;
 import sdljavax.guichan.widgets.Widget;
 
-public class EventDispatcher extends Thread{
+public class EventDispatcher extends Thread {
 
 	boolean eventTriggered;
 	private ExtendedInput inputSource;
 	private Area background;
 	private Area foreground;
 	private Active activeArea;
-	private Widget widgetWithMouse= null;
+	private Widget widgetWithMouse = null;
 	
-	public EventDispatcher(ExtendedInput input) throws SDLException{
-		super("EventDispatcher");
+	public EventDispatcher(ExtendedInput input) throws SDLException {
+		super ("EventDispatcher");
 		eventTriggered = false;
 		inputSource = input;
 		
@@ -33,11 +33,10 @@ public class EventDispatcher extends Thread{
 	}
 	
 	public void run(){
-		
 		try{
-			while(Screen.getScreen().isRunning()){
+			while (Screen.getScreen().isRunning()) {
 				synchronized(this){		
-					while(eventTriggered == false){ 	//waiting for an event to be triggered
+					while (eventTriggered == false) { 	//waiting for an event to be triggered
 						wait(); 
 					}
 					eventTriggered = false;
@@ -45,7 +44,6 @@ public class EventDispatcher extends Thread{
 				
 				inputSource.pollInput();
 				Area active = (activeArea == Active.BACKGROUND) ? background : foreground;
-				
 				
 				while (false == inputSource.isKeyQueueEmpty()) {	
 					KeyInput ki = inputSource.dequeueKeyInput();
@@ -56,8 +54,7 @@ public class EventDispatcher extends Thread{
 						} else {
 							active.getFocusHandler().tabNext();
 						}
-					} 
-					else {
+					} else {
 						// Send key inputs to the focused widgets
 						if (null != active.getFocusHandler().getFocused()) {
 							if (active.getFocusHandler().getFocused().isFocusable()) {
@@ -68,58 +65,39 @@ public class EventDispatcher extends Thread{
 							}
 						}
 					}
-
 					active.getFocusHandler().applyChanges();
 				}
 				
-				
 				while (false == inputSource.isMouseQueueEmpty()) {
-					
 					MouseInput mi = inputSource.dequeueMouseInput();
-
-						
-					if (mi.x > 0 && mi.y > 0 ){
+					if (mi.x > 0 && mi.y > 0 ) {
 						if(widgetWithMouse != null){
-								
-							if(!widgetWithMouse.getDimension().isPointInRect(mi.x, mi.y)){
-								
+							if (! widgetWithMouse.getDimension().isPointInRect(mi.x, mi.y)) {
 								widgetWithMouse.mouseOutMessage();
 								
 								widgetWithMouse = null;
-													
-							}
-							else{
-								
+							} else{
 								widgetWithMouse.mouseInputMessage(mi);
 								continue;
 							}
 						}
 						
-						for(Widget widget: active.getWidgetMap().keySet()){
-																			
-							if( widget.getDimension().isPointInRect(mi.x, mi.y) ) {
+						for (Widget widget : active.getWidgetMap().keySet()) {
+							if (widget.getDimension().isPointInRect(mi.x, mi.y)) {
 								widgetWithMouse = widget;
-								
 								if (false == widgetWithMouse.hasMouse()) {
-									
 									widgetWithMouse.mouseInMessage();
 									continue;
-								
 								}
-								
 								widgetWithMouse.mouseInputMessage(mi);
-								
 							}	
 						}
 					}
-				
 					active.getFocusHandler().applyChanges();
-				
 				}
 				Thread.sleep(200);
 			}
-			
-		} catch(InterruptedException e){
+		} catch(InterruptedException e) {
 			e.printStackTrace();
 		} catch (GUIException e) {
 			// TODO Auto-generated catch block
@@ -127,10 +105,8 @@ public class EventDispatcher extends Thread{
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 }

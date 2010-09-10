@@ -16,10 +16,43 @@ import sdljavax.guichan.gfx.Color;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 
-public class TextField extends PlatformWidget implements  KeyListener{
+public class TextField extends PlatformWidget implements  KeyListener {
 
-	protected final int MAX_STEPS_FROM_BORDER = 10;
+	enum ElementChanged { TEXT, CURSOR_ON, CURSOR_OFF , NONE, ALL }
 	
+	class FlickeringCursorHandler extends Thread {
+		boolean visible = false;
+		boolean running;
+		
+		FlickeringCursorHandler(boolean run) {
+			running = run;
+			start();
+		}
+		
+		public void run() {
+			while (true) {
+				try {
+					if (running) {
+							elementChanged = (visible == true ) ? ElementChanged.CURSOR_ON : ElementChanged.CURSOR_OFF;
+							updateListener.putRegionToUpdate(new WidgetUpdate(TextField.this, 
+																			  new SDLRect(onScreenCursorPosition, getYTextPosition(), 1, textFont.getHeight() + 1) ));
+							visible=!visible;
+							Thread.sleep(1000);
+					} else {
+						Thread.sleep(1000);
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void setRunning(boolean run) {
+			running = run;
+		}
+	}
+	protected final int MAX_STEPS_FROM_BORDER = 10;
 	protected Image textField;
 	protected String displayedText;
 	protected Font textFont;
@@ -28,14 +61,16 @@ public class TextField extends PlatformWidget implements  KeyListener{
 	protected int onScreenCursorPosition;
 	protected int stepsFromBorder;
 	protected SDLColor cursorColor;
+	
 	protected ElementChanged elementChanged;
+	
 	protected TextField.FlickeringCursorHandler flickeringCursorHandler;
 	
 	public TextField() throws GUIException, SDLException{				
 		this("");
 	}
 	
-	public TextField(String text) throws GUIException, SDLException{
+	public TextField(String text) throws GUIException, SDLException {
 		displayedText = text;
 		textField = new Image("resource" + File.separator + "images" + File.separator + "google_search.png");
 		cursorColor = new SDLColor(255,255,255,0);
@@ -43,18 +78,22 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		setWidth(textField.getWidth());
 		setHeight(textField.getHeight());
 		
-
 		cursorPosition = text.length();
 		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(displayedText) ; 
 		prevOnScreenCursorPosition=onScreenCursorPosition;
 		stepsFromBorder= MAX_STEPS_FROM_BORDER - text.length();
 		elementChanged = ElementChanged.ALL;
 		
-				
 		flickeringCursorHandler = new FlickeringCursorHandler(false);
 		addKeyListener(this);
-		
 	}
+			
+	public void delete() throws GUIException {
+		textField.delete();
+		textFont.delete();
+		super.delete();
+	}
+	
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		
@@ -63,7 +102,6 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				drawBorder(graphics);
 				drawText(graphics);
 				drawCursor(graphics);
-				
 			break;
 			
 			case TEXT:
@@ -84,44 +122,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 			
 			case NONE:	
 			break;
-				
 		}
-		
 		elementChanged = ElementChanged.ALL;
-	}
-	
-	public void eraseCursor(Graphics graphics) throws GUIException{
-		
-		if(prevOnScreenCursorPosition!=0){
-			graphics.setColor(new Color(0, 0, 0, 255));
-			graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
-			//graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
-		}
-		prevOnScreenCursorPosition=onScreenCursorPosition;
-	}
-			
-	public void drawText(Graphics graphics) throws GUIException{
-		//System.out.println(cursorPosition);
-		if(displayedText.length() != 0){
-		
-			if(displayedText.length() < MAX_STEPS_FROM_BORDER  + 1){
-				
-				textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
-			}
-			else if(displayedText.length() - cursorPosition > MAX_STEPS_FROM_BORDER){
-				textFont.drawString(graphics, displayedText.substring(cursorPosition, cursorPosition+MAX_STEPS_FROM_BORDER), getXTextPosition(), getYTextPosition() );
-				
-			}
-			else{
-				textFont.drawString(graphics, displayedText.substring(displayedText.length()-MAX_STEPS_FROM_BORDER, displayedText.length()), getXTextPosition(), getYTextPosition() );
-			}
-		}
-	}
-	
-	public void drawTextLine(Graphics graphics) throws GUIException{
-		//TODO change an argument 150 for visible text length
-		graphics.drawImage(textField, (int)(getWidth() * 0.2) , (int)(getHeight() * 0.3), getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ); 
-		
 	}
 	
 	@Override
@@ -129,63 +131,80 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		graphics.drawImage(textField, getX(), getY());
 	}
 
-	
-	public void drawCursor(Graphics graphics) throws GUIException{
-		
+	public void drawCursor(Graphics graphics) throws GUIException {
 		graphics.setColor(new Color(cursorColor.getRed(), cursorColor.getGreen(), cursorColor.getBlue(), 255));
-		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
+		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition,
+						  getYTextPosition() + textFont.getHeight());
 		
+	}
+	
+	public void drawText(Graphics graphics) throws GUIException {
+		//System.out.println(cursorPosition);
+		if (displayedText.length() != 0) {
+			if (displayedText.length() < MAX_STEPS_FROM_BORDER + 1) {
+				textFont.drawString(graphics, displayedText, getXTextPosition(), getYTextPosition() );
+			} else if (displayedText.length() - cursorPosition > MAX_STEPS_FROM_BORDER) {
+				textFont.drawString(graphics, displayedText.substring(cursorPosition, cursorPosition+MAX_STEPS_FROM_BORDER), getXTextPosition(), getYTextPosition() );
+			} else {
+				textFont.drawString(graphics, displayedText.substring(displayedText.length()-MAX_STEPS_FROM_BORDER, displayedText.length()), getXTextPosition(), getYTextPosition() );
+			}
+		}
+	}
+
+	public void drawTextLine(Graphics graphics) throws GUIException {
+		//TODO change an argument 150 for visible text length
+		graphics.drawImage(textField, (int) (getWidth() * 0.2), (int) (getHeight() * 0.3),
+						   getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ); 
+	}
+	
+	public void eraseCursor(Graphics graphics) throws GUIException {
+		if (prevOnScreenCursorPosition != 0) {
+			graphics.setColor(new Color(0, 0, 0, 255));
+			graphics.drawLine(onScreenCursorPosition, getYTextPosition(), 
+							  onScreenCursorPosition, getYTextPosition() + textFont.getHeight() );
+			//graphics.drawLine(prevOnScreenCursorPosition, getYTextPosition(), prevOnScreenCursorPosition, getYTextPosition() +  textFont.getHeight());
+		}
+		prevOnScreenCursorPosition=onScreenCursorPosition;
 	}
 	
 	public String getDisplayedText() {
 		return displayedText;
 	}
 
-	public void setDisplayedText(String displayedText) {
-		this.displayedText = displayedText;
-		elementChanged = ElementChanged.TEXT;
-	}
-	
 	public int getXTextPosition(){
-		return getX() + (int)(getWidth() * 0.2 );
-	}
-	
-	public int getYTextPosition(){
-		return getY() + (int)(getHeight() * 0.3);
+		return getX() + (int) (getWidth() * 0.2);
 	}
 
-	public void keyPress(Key key) throws GUIException{
-		
+	public int getYTextPosition(){
+		return getY() + (int) (getHeight() * 0.3);
+	}
+	
+	public void keyPress(Key key) throws GUIException {
 		try {
 			if (key.getValue() == Key.LEFT && cursorPosition > 0) {
-				if(displayedText.length() - cursorPosition > MAX_STEPS_FROM_BORDER){
+				if (displayedText.length() - cursorPosition > MAX_STEPS_FROM_BORDER) {
 					elementChanged = ElementChanged.TEXT;
-				}
-				else{
-				onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
+				} else {
+				onScreenCursorPosition-=((CalibriFont) textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
 				
-					if(stepsFromBorder<10){
+					if (stepsFromBorder < 10) {
 						stepsFromBorder++;
 					}
 					elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR;
 				}
 				cursorPosition--;
-			}
-			else if (key.getValue() == Key.RIGHT && cursorPosition < displayedText.length()) {
-				if(stepsFromBorder > 0){
-					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition));
+			} else if (key.getValue() == Key.RIGHT && cursorPosition < displayedText.length()) {
+				if (stepsFromBorder > 0) {
+					onScreenCursorPosition+=((CalibriFont) textFont).getCharacterWidth(displayedText.charAt(cursorPosition));
 					stepsFromBorder--;
 					//elementChanged = ElementChanged.CURSOR;
 					elementChanged = ElementChanged.TEXT;
-				}
-				else {
+				} else {
 					elementChanged = ElementChanged.TEXT;
 				}
 				cursorPosition++;
-			}
-			else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
-				
+			} else if (key.getValue() == Key.DELETE && cursorPosition < displayedText.length()) {
 				displayedText = displayedText.substring(0, cursorPosition) + displayedText.substring(cursorPosition + 1);
 								
 				/*if(displayedText.length() > 9 && cursorPosition != 0){
@@ -193,45 +212,36 @@ public class TextField extends PlatformWidget implements  KeyListener{
 					stepsFromBorder--;
 				}*/
 				elementChanged = ElementChanged.TEXT;
-			}
-			else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
+			} else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 				
-				if(cursorPosition< MAX_STEPS_FROM_BORDER + 1 ){
-					onScreenCursorPosition-=((CalibriFont)textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
+				if ( cursorPosition < MAX_STEPS_FROM_BORDER + 1) {
+					onScreenCursorPosition-=((CalibriFont) textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
 					stepsFromBorder++;
 				}
 				displayedText = displayedText.substring(0, cursorPosition - 1) + displayedText.substring(cursorPosition);
 				cursorPosition--;
 				elementChanged = ElementChanged.TEXT;
-			} 
-			else if (key.getValue() == Key.ENTER) {
+			} else if (key.getValue() == Key.ENTER) {
 				generateAction();
-				
-			} 
-			else if (key.getValue() == Key.HOME) {
+			} else if (key.getValue() == Key.HOME) {
 				cursorPosition = 0;
-				stepsFromBorder= MAX_STEPS_FROM_BORDER ;
-				onScreenCursorPosition=getXTextPosition();
+				stepsFromBorder = MAX_STEPS_FROM_BORDER ;
+				onScreenCursorPosition = getXTextPosition();
 				elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR; 
-			} 
-			else if (key.getValue() == Key.END) {
+			} else if (key.getValue() == Key.END) {
 				cursorPosition = displayedText.length();
-				stepsFromBorder=(displayedText.length()>MAX_STEPS_FROM_BORDER) ? 0 : MAX_STEPS_FROM_BORDER-displayedText.length() ;
-				if(cursorPosition<11){
-				onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
-				}
-				else{
+				stepsFromBorder = (displayedText.length()>MAX_STEPS_FROM_BORDER) ? 0 : MAX_STEPS_FROM_BORDER-displayedText.length() ;
+				if (cursorPosition < 11) {
+					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
+				} else {
 					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText.substring(cursorPosition-10, cursorPosition));
-					
 				}
 				elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR;
-			} 
-			//else if (key.isCharacter() || key.isNumber() || key.isNumericPad() || key.isMetaPressed()) {
-			else if(key.getValue() < 127 && key.getValue() > 31){	
+			} else if (key.getValue() < 127 && key.getValue() > 31) {	
 				displayedText = displayedText.substring(0, cursorPosition) + (char) key.getValue() + displayedText.substring(cursorPosition);
-				if(cursorPosition<MAX_STEPS_FROM_BORDER){
+				if (cursorPosition < MAX_STEPS_FROM_BORDER) {
 					stepsFromBorder--;
 					onScreenCursorPosition+=((CalibriFont)textFont).getCharacterWidth((char) key.getValue());
 				}
@@ -239,12 +249,9 @@ public class TextField extends PlatformWidget implements  KeyListener{
 				elementChanged = ElementChanged.TEXT;
 			}
 			
-			if(updateListener != null && elementChanged != ElementChanged.NONE){
-				
+			if (updateListener != null && elementChanged != ElementChanged.NONE) {
 				updateListener.putRegionToUpdate( new WidgetUpdate ( this,new SDLRect(getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ) ) );
 			}
-			
-			
 			/*if(elementChanged == ElementChanged.TEXT){
 				
 				if(updateListener != null){
@@ -262,8 +269,7 @@ public class TextField extends PlatformWidget implements  KeyListener{
 
 				}
 			}*/
-		}
-		catch (SDLException e) {
+		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -271,18 +277,10 @@ public class TextField extends PlatformWidget implements  KeyListener{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void keyRelease(Key key) throws GUIException {
 		// TODO Auto-generated method stub
-	}
-	
-	public void delete() throws GUIException {
-		textField.delete();
-		textFont.delete();
-		super.delete();
-	}
-	enum ElementChanged { TEXT, CURSOR_ON, CURSOR_OFF , NONE, ALL };
-	
+	};
 	
 	@Override
 	public void mouseInMessage() throws GUIException {
@@ -298,41 +296,8 @@ public class TextField extends PlatformWidget implements  KeyListener{
 		flickeringCursorHandler.setRunning(false);
 	}
 
-
-	class FlickeringCursorHandler extends Thread{
-		
-		boolean visible=false;
-		boolean running;
-		
-		FlickeringCursorHandler(boolean run){
-			running = run;
-			start();
-		}
-		
-		public void run(){
-			
-			while(true){
-				try {
-					if(running){
-							elementChanged = (visible == true ) ? ElementChanged.CURSOR_ON : ElementChanged.CURSOR_OFF;
-							updateListener.putRegionToUpdate(new WidgetUpdate(TextField.this,new SDLRect(onScreenCursorPosition, getYTextPosition(), 1, textFont.getHeight() + 1 )));
-							visible=!visible;
-							Thread.sleep(1000);
-					}
-					else{
-						Thread.sleep(1000);
-					}
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-		}
-		
-		public void setRunning(boolean run){
-			running = run;
-		}
+	public void setDisplayedText(String displayedText) {
+		this.displayedText = displayedText;
+		elementChanged = ElementChanged.TEXT;
 	}
-	
 }
