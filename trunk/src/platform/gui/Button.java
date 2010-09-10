@@ -11,7 +11,7 @@ import platform.util.WidgetUpdate;
 import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 
-public class Button extends PlatformWidget implements MouseListener, UpdateListener{
+public class Button extends PlatformWidget implements MouseListener, UpdateListener {
 
 	ButtonState defaultButton;
 	ButtonState clickedButton;
@@ -19,19 +19,17 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	
 	ButtonState currentState;
 		
-	public Button(String resourceDir, int demoNr) throws GUIException{
+	public Button(String resourceDir, int demoNr) throws GUIException {
 		super();
 		
 		defaultButton = new DefaultPlayButton(resourceDir + "music_button_default.png", this , this);
 		selectedButton = new SelectedPlayButton(resourceDir + "music_button_selected.png", this, this);
 		
-		if(demoNr == 0){
+		if (demoNr == 0) {
 			clickedButton = new ClickedPlayButton(resourceDir + "music_button_pressed.png", this, this);
-		}
-		if(demoNr == 1){
+		} else if (demoNr == 1) {
 			clickedButton = new ClickedDemoPlayButton(resourceDir + "music_button_pressed.png", this, this);
-		}
-		else if(demoNr == 2){
+		} else if (demoNr == 2) {
 			clickedButton = new ClickedDemo2PlayButton(resourceDir + "music_button_pressed.png", this, this);
 		}
 		currentState = defaultButton;
@@ -43,6 +41,14 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	}
 	
 	@Override
+	public void delete() throws GUIException {
+		defaultButton.delete();
+		clickedButton.delete();
+		selectedButton.delete();
+		super.delete();
+	}
+
+	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		graphics.drawImage(currentState.getImage(), getX(), getY());
 	}
@@ -50,31 +56,36 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	public void mouseClick(int x, int y, int button, int count)
-			throws GUIException {
-		
-		//buttonState=ButtonStates.DEFAULT;
+	public ButtonState getClickedButton() {
+		return clickedButton;
+	}
+
+	public ButtonState getDefaultButton() {
+		return defaultButton;
+	}
+
+	public ButtonState getSelectedButton() {
+		return selectedButton;
+	}
+
+	public void mouseClick(int x, int y, int button, int count)	throws GUIException {
+		//buttonState=ButtonStates.DEFAULT;	
 	}
 
 	public void mouseIn() throws GUIException {
-	
 		currentState.mouseIn();
-		
 	}
 
 	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
-
 
 	public void mouseOut() {
 		currentState.mouseOut();
 	}
-
+	
 	public void mousePress(int x, int y, int button) throws GUIException {
 		currentState.mousePress();
 	}
@@ -85,43 +96,17 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 
 	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void delete() throws GUIException {
-		defaultButton.delete();
-		clickedButton.delete();
-		selectedButton.delete();
-		super.delete();
 	}
 
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		updateListener.putRegionToUpdate(updateInfo);
-
-		
-	}
-
-	public ButtonState getDefaultButton() {
-		return defaultButton;
-	}
-
-	public ButtonState getClickedButton() {
-		return clickedButton;
-	}
-
-	public ButtonState getSelectedButton() {
-		return selectedButton;
 	}
 
 	public void setCurrentState(ButtonState currentState) {
 		this.currentState = currentState;
 	}
-	
-	
 }

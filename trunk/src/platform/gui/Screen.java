@@ -21,91 +21,29 @@ public class Screen {
 	
 	private static Screen _soleInstance = null;
  	
+	public static Screen getScreen() throws SDLException {	
+		if (_soleInstance == null) {
+			synchronized (Screen.class) {
+				if (_soleInstance == null) {
+					_soleInstance = new Screen();
+				}
+			}
+		}
+			return _soleInstance;
+	}
+	
 	private Area foreground;
 	private Area background;
 	private Active active;
 	private ExtendedInput inputSource;
 	private SDLSurface target;
 	private UnifiedGraphics graphics;
+	
 	private volatile boolean running;
 	
-	public static Screen getScreen() throws SDLException{	
-		if(_soleInstance == null){
-			
-			synchronized(Screen.class){
-				if(_soleInstance == null){
-					_soleInstance = new Screen();
-				}
-			}
-			
-		}
-			return _soleInstance;
-	}
-	public synchronized void refresh() throws SDLException{
-		target.flip();
-	}
-
-	public void setAreas(Area background, Area foreground) throws SDLException{		
-		this.background = background;
-		this.foreground = foreground;
-		
-		startEventHandling();
-	}
-				
-	public UnifiedGraphics getGraphics() {
-		return graphics;
-	}
-
-	public void setGraphics(UnifiedGraphics graphics) {
-		this.graphics = graphics;
-	}
-
-	public void setForeground(Area foreground) {
-		this.foreground = foreground;
-	}
-
-	public Area getForeground() {
-		return foreground;
-	}
-
-	public void setBackground(Area background) {
-		this.background = background;
-	}
-
-	public Area getBackground() {
-		return background;
-	}
-
-	public boolean isRunning() {
-		return running;
-	}
-
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-
-	
-	public void setActive(Active active) {
-		this.active = active;
-	}
-	
-	public Active getActive() {
-		return active;
-	}
-	public void delete() throws SDLException, GUIException{
-		target.freeSurface();
-		foreground.delete();
-		background.delete();
-	}
-	
-	private void startEventHandling() throws SDLException{
-		EventDispatcher eventDispatcher = new EventDispatcher(inputSource );
-		new EventCapturer(inputSource, eventDispatcher);
-	}
-	
-	private Screen() throws SDLException{	
+	private Screen() throws SDLException {	
 		//TODO change that for normal variables ?
-		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight,0 ,Screen._screenflags	);
+		target = SDLVideo.setVideoMode(Screen._screenWidth, Screen._screenHeight, 0, Screen._screenflags);
 		graphics = new SDLGraphics();
 		graphics.setTarget(target);
 		
@@ -113,6 +51,66 @@ public class Screen {
 		running = true;
 		active = Active.BACKGROUND;
 	}
+
+	public void delete() throws SDLException, GUIException {
+		target.freeSurface();
+		foreground.delete();
+		background.delete();
+	}
+				
+	public Active getActive() {
+		return active;
+	}
+
+	public Area getBackground() {
+		return background;
+	}
+
+	public Area getForeground() {
+		return foreground;
+	}
+
+	public UnifiedGraphics getGraphics() {
+		return graphics;
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public synchronized void refresh() throws SDLException {
+		target.flip();
+	}
+
+	public void setActive(Active active) {
+		this.active = active;
+	}
+
+	public void setAreas(Area background, Area foreground) throws SDLException {		
+		this.background = background;
+		this.foreground = foreground;
+		
+		startEventHandling();
+	}
+
+	public void setBackground(Area background) {
+		this.background = background;
+	}
 	
+	public void setForeground(Area foreground) {
+		this.foreground = foreground;
+	}
 	
+	public void setGraphics(UnifiedGraphics graphics) {
+		this.graphics = graphics;
+	}
+	
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+	
+	private void startEventHandling() throws SDLException {
+		EventDispatcher eventDispatcher = new EventDispatcher(inputSource );
+		new EventCapturer(inputSource, eventDispatcher);
+	}
 }

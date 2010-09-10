@@ -10,7 +10,7 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Image;
 
-public class PlatformIcon extends PlatformWidget implements MouseListener{
+public class PlatformIcon extends PlatformWidget implements MouseListener {
 	
 	private Image iconImage;
 	private Image modified = null;
@@ -26,8 +26,6 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		setWidth(image.getWidth());
 		
 		addMouseListener(this);
-		
-				
 	}
 	
 	/*public PlatformIcon(String imagePath) throws GUIException{
@@ -41,51 +39,12 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		
 				
 	}*/
-	@Override
-	public void draw(UnifiedGraphics graphics) throws GUIException {
-		
-		/*try {
-			graphics.drawSDLSurface(iconImage, iconImage.getRect(), graphics.getTarget().getRect(getX(), getY()));
-		} catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
-		if(!drawModified){
-			graphics.drawImage(iconImage, getX(), getY());
-		}
-		else{
-			
-			graphics.drawImage(modified, getX(), getY());	
-		}
-	}
-
-	@Override
-	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void setAlpha(int alphaIndex) {
-		try {
-			((SDLSurface)iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
-			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
-		} catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
 	
 	@Override
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
 		iconImage.delete();
-		if(modified != null){
+		if (modified != null) {
 			modified.delete();
 		}
 		/*try {
@@ -96,10 +55,83 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		}*/
 		super.delete();
 	}
+
+	public void deleteIconModifiedImage() throws GUIException, InterruptedException {
+		modified.delete();
+		drawModified = false;
+		//updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
+	}
+	
+	@Override
+	public void draw(UnifiedGraphics graphics) throws GUIException {
+		/*try {
+			graphics.drawSDLSurface(iconImage, iconImage.getRect(), graphics.getTarget().getRect(getX(), getY()));
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		if (! drawModified) {
+			graphics.drawImage(iconImage, getX(), getY());
+		} else {
+			graphics.drawImage(modified, getX(), getY());	
+		}
+	}
+		
+	@Override
+	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
+		// TODO Auto-generated method stub
+	}
 	
 	
 	public SDLSurface getIconImage() {
-		return ((SDLSurface)iconImage.getData());
+		return ((SDLSurface) iconImage.getData());
+	}
+	
+	public void mouseClick(int arg0, int y, int button, int count) throws GUIException {
+			setAlpha((clicked == false) ? 0 : 255);
+			clicked = !clicked;
+	}
+	
+	public void mouseIn() throws GUIException {
+		
+	}
+	
+	public void mouseMotion(int x, int y) throws GUIException {
+		// TODO Auto-generated method stub
+	}
+	
+	public void mouseOut() {
+		// TODO Auto-generated method stub
+	}
+	
+	public void mousePress(int x, int y, int button) throws GUIException {
+		// TODO Auto-generated method stub
+	}
+	
+	public void mouseRelease(int x, int y, int button) throws GUIException {
+		// TODO Auto-generated method stub
+	}
+	
+	public void mouseWheelDown(int x, int y) throws GUIException {
+		// TODO Auto-generated method stub
+	}
+	
+	public void mouseWheelUp(int x, int y) throws GUIException {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void setAlpha(int alphaIndex) {
+		try {
+			((SDLSurface) iconImage.getData()).setAlpha(Screen._alphaFlags, alphaIndex);
+			updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight() )));
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void setIconImage(Object icon, int width, int height) throws GUIException {
@@ -109,59 +141,13 @@ public class PlatformIcon extends PlatformWidget implements MouseListener{
 		setHeight(height);
 	}
 	
-	public void deleteIconModifiedImage() throws GUIException, InterruptedException{
-		modified.delete();
-		drawModified = false;
-		//updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
-	}
-	
 	public void setIconModifiedImage(Object modifiedIcon, int width, int height) throws GUIException {
 		drawModified = true;
-		if(modified == null){
+		if (modified == null) {
 			modified = new Image(modifiedIcon, width, height);
-		}
-		else{
+		} else {
 			modified.delete();
 			modified = new Image(modifiedIcon, width, height);
 		}
 	}
-	
-	public void mouseClick(int arg0, int y, int button, int count)
-			throws GUIException {
-			setAlpha((clicked == false) ? 0 : 255 );
-			clicked = !clicked;
-		
-	}
-	
-	
-	public void mouseIn() throws GUIException {
-		
-	}
-	public void mouseMotion(int x, int y) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	public void mouseOut() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void mousePress(int x, int y, int button) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	public void mouseRelease(int x, int y, int button) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	public void mouseWheelDown(int x, int y) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	public void mouseWheelUp(int x, int y) throws GUIException {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-
 }

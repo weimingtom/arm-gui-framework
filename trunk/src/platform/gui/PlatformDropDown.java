@@ -14,12 +14,12 @@ import sdljavax.guichan.widgets.ListBox;
 import sdljavax.guichan.widgets.ListModel;
 import sdljavax.guichan.widgets.ScrollArea;
 
-public class PlatformDropDown extends DropDown implements UpdateListener, Maintainable{
+public class PlatformDropDown extends DropDown implements UpdateListener, Maintainable {
 
 	ListBox listBox; 
 	ScrollArea scrollArea; 
 	
-	public PlatformDropDown(ListModel list) throws GUIException, SDLException{
+	public PlatformDropDown(ListModel list) throws GUIException, SDLException {
 		super(list);
 		
 		//setBaseColor(new Color(128,128,144, 255));
@@ -41,12 +41,8 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 	    super.setListBox(listBox);
 		super.setScrollArea(scrollArea); ///It will adjust height automatically
 		//super.logic(); 
-				
-		
 	}
 	
-	
-
 	@Override
 	public void delete() throws GUIException {
 		listBox.delete();
@@ -54,12 +50,9 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 		super.delete();
 	}
 
-
-
 	@Override
 	public void mousePress(int x, int y, int button) throws GUIException {
-		// TODO Auto-generated method stub
-			
+		// TODO Auto-generated method stub			
 		try {
 			logic();
 			
@@ -67,7 +60,6 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 				m_bPushed = true;
 				dropDown();
 				putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), super.getWidth(), super.getHeight())));
-				
 			}
 			// Fold up the listbox if the upper part is clicked after fold down
 			else if (button == MouseInput.LEFT  && hasMouse() && m_bDroppedDown && y < m_nOldH) {
@@ -89,7 +81,6 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 				putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), width, height )));
 			}
 		//	System.out.println("Mouse pressed on dropdown");
-			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -109,10 +100,8 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 		}
 	}
 	
-	public void putRegionToUpdate(WidgetUpdate updateInfo)
-			throws InterruptedException {
+	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		// TODO Auto-generated method stub
 		updateListener.putRegionToUpdate(updateInfo);
 	}
-	
 }

@@ -14,50 +14,80 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.font.Font;
 import sdljavax.guichan.gfx.Graphics;
 
-public class CalibriFont implements Font{
+public class CalibriFont implements Font {
 
 	protected SDLTrueTypeFont calibriFont;
 	protected String text;
 	protected SDLColor fontColor;
 	
-	public CalibriFont(int size , SDLColor color, boolean bold) throws SDLException{
-		
-		if(bold){
-		calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "Calibri Bold.ttf", size); 
-		}
-		else{
+	public CalibriFont(int size, SDLColor color, boolean bold) throws SDLException {
+		if (bold) {
+			calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "Calibri Bold.ttf", size); 
+		} else {
 			calibriFont = SDLTTF.openFont( "fonts"+ File.separator + "calibri.ttf", size); 
 		}
 		text = new String("");
 		fontColor = color; 
 	}
 	
-	public void drawString(UnifiedGraphics graphics, String string, int x, int y)throws GUIException {
-		
+	public void delete() throws GUIException {
 		try {
-			SDLSurface textSurface = calibriFont.renderTextSolid(string, fontColor);
-			graphics.drawSDLSurface(textSurface, textSurface.getRect(), graphics.getTarget().getRect(x,y));
-		
+			calibriFont.closeFont();
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void drawStringBlended(UnifiedGraphics graphics, String string, int x, int y)throws GUIException {
+	public void drawString(Graphics graphics, String string, int x, int y) throws GUIException {
+		if(graphics instanceof SDLGraphics){
+			try {
+				SDLSurface textSurface = calibriFont.renderTextSolid(string, fontColor);
+				((SDLGraphics) graphics).drawSDLSurface(textSurface, textSurface.getRect(),
+														((SDLGraphics) graphics).getTarget().getRect(x,y));
+			} catch (SDLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void drawString(UnifiedGraphics graphics, String string, int x, int y) throws GUIException {
 		try {
-			SDLSurface textSurface = calibriFont.renderTextBlended(string, fontColor);
-			graphics.drawSDLSurface(textSurface, textSurface.getRect(), graphics.getTarget().getRect(x,y));
-		
+			SDLSurface textSurface = calibriFont.renderTextSolid(string, fontColor);
+			graphics.drawSDLSurface(textSurface, textSurface.getRect(),
+									graphics.getTarget().getRect(x,y));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	public void drawStringBlended(UnifiedGraphics graphics, String string, int x, int y) throws GUIException {
+		try {
+			SDLSurface textSurface = calibriFont.renderTextBlended(string, fontColor);
+			graphics.drawSDLSurface(textSurface, textSurface.getRect(),
+									graphics.getTarget().getRect(x,y));
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public int getCharacterWidth(char character) throws SDLException {		
+		GlyphMetrics glyphMetrics = calibriFont.glyphMetrics(character);
+		
+		return glyphMetrics.getMaxX() - glyphMetrics.getMinX() + 2;
+	}
+	
+	public SDLColor getColor(){	
+		return fontColor;
+	}
+
 	public int getHeight() {
 		return calibriFont.fontHeight();
 	}
-
+	
 	public int getStringIndexAt(String strText, int x) {
 		int size = 0;
 		
@@ -74,12 +104,6 @@ public class CalibriFont implements Font{
 		}
 		return strText.length();
 	}
-
-	public int getCharacterWidth(char character) throws SDLException{		
-		GlyphMetrics glyphMetrics = calibriFont.glyphMetrics(character);
-		
-		return glyphMetrics.getMaxX() - glyphMetrics.getMinX() + 2;
-	}
 	
 	public int getWidth(String string) {
 		int width=0;
@@ -88,7 +112,7 @@ public class CalibriFont implements Font{
 		for( char character: stringChars ){
 			try {
 				width+= getCharacterWidth(character);
-			}catch (SDLException e) {
+			} catch (SDLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -99,33 +123,4 @@ public class CalibriFont implements Font{
 		fontColor = color;
 		return;
 	}
-	
-	public SDLColor getColor(){	
-		return fontColor;
-	}
-	
-	public void delete() throws GUIException {
-		try {
-			calibriFont.closeFont();
-		} catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void drawString(Graphics graphics, String string, int x, int y)
-			throws GUIException {
-		if(graphics instanceof SDLGraphics)
-		
-		try {
-			SDLSurface textSurface = calibriFont.renderTextSolid(string, fontColor);
-			((SDLGraphics)graphics).drawSDLSurface(textSurface, textSurface.getRect(), ((SDLGraphics)graphics).getTarget().getRect(x,y));
-		
-		} catch (SDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
 }

@@ -14,9 +14,8 @@ public class EventCapturer extends Thread{
 	private EventDispatcher eventDispatcher;
 	private boolean eventCaptured;
 	
-	public EventCapturer(ExtendedInput input, EventDispatcher dispatcher) throws SDLException{
-		
-		super("EventCapturer");
+	public EventCapturer(ExtendedInput input, EventDispatcher dispatcher) throws SDLException {
+		super ("EventCapturer");
 		inputSource = input;
 		eventDispatcher = dispatcher;
 		// We want unicode
@@ -28,9 +27,8 @@ public class EventCapturer extends Thread{
 	}
 	
 	public void run(){
-
 		try {
-			while(!Thread.interrupted()){
+			while (! Thread.interrupted()) {
 					/*
 					 * Poll SDL events
 					 */
@@ -40,20 +38,18 @@ public class EventCapturer extends Thread{
 											Screen.getScreen().setRunning(false);
 											return;
 								}		
-						} 
-						else if (event.getType() == SDLEvent.SDL_QUIT) {
+						} else if (event.getType() == SDLEvent.SDL_QUIT) {
 							Screen.getScreen().setRunning(false);	
 							return;
 						}
-						
 							/*
 							 * Now that we are done polling and using SDL events we pass the leftovers to the
 							 * SDLInput object to later be handled by the Gui.
 							 */
 						eventCaptured = true;
-						 inputSource.pushInput(event);
-						}
-					if(eventCaptured){
+						inputSource.pushInput(event);
+					}
+					if (eventCaptured) {
 						eventCaptured = false;
 						
 						synchronized(eventDispatcher){
@@ -61,11 +57,9 @@ public class EventCapturer extends Thread{
 							eventDispatcher.notify();
 						}
 					}
-					
 					Thread.sleep(200);
 			}
-		}	
-		catch (SDLException e) {
+		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -73,6 +67,5 @@ public class EventCapturer extends Thread{
 			e.printStackTrace();
 		}	
 	}
-
 }	
 
