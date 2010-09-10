@@ -106,12 +106,12 @@ public class CalibriFont implements Font {
 	}
 	
 	public int getWidth(String string) {
-		int width=0;
+		int width = 0;
 		char [] stringChars = string.toCharArray();
 			
 		for( char character: stringChars ){
 			try {
-				width+= getCharacterWidth(character);
+				width += getCharacterWidth(character);
 			} catch (SDLException e) {
 				e.printStackTrace();
 			}

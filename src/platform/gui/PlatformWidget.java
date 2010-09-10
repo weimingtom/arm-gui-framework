@@ -6,7 +6,7 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.widgets.Widget;
 
-public abstract class PlatformWidget extends Widget{
+public abstract class PlatformWidget extends Widget {
 
 	protected UpdateListener updateListener = null;
 	protected PlatformWidget parentWidget = null;
@@ -34,15 +34,15 @@ public abstract class PlatformWidget extends Widget{
 		throw new UnsupportedOperationException();
 	}
 	
-	public void setAlpha(int alphaIndex){
+	public void setAlpha(int alphaIndex) {
 		throw new UnsupportedOperationException();
 	}
 	
-	public void setUpdateListener(UpdateListener listener){
+	public void setUpdateListener(UpdateListener listener) {
 		updateListener = listener;
 	}
 	
-	public UpdateListener getUpdateListener(){
+	public UpdateListener getUpdateListener() {
 		return updateListener;
 	}
 	
@@ -54,7 +54,7 @@ public abstract class PlatformWidget extends Widget{
 		this.parentWidget = parentWidget;
 	}
 	
-	public void setMouseEnabled(boolean value){
+	public void setMouseEnabled(boolean value) {
 		m_bHasMouse = value;
 	}
 }

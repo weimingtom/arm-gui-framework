@@ -28,7 +28,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 	protected SDLSurface background;
 	protected SDLColor color;
 	protected UnifiedGraphics hiddenMenuGraphics;
-	protected int transition=0;
+	protected int transition = 0;
 	protected Direction direction;
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	
@@ -72,7 +72,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 			widget.setPosition((widget.getWidth() + 10) * ( widgetList.size() -1 ) + 10,
 							   (getHeight()-widget.getHeight())/2 );
 		} else {
-			widget.setPosition((getWidth() - widget.getWidth())/2,
+			widget.setPosition((getWidth() - widget.getWidth()) / 2,
 							   (widget.getHeight() + 10) * ( widgetList.size() -1 ) + 10 );
 		}
 		widget.setUpdateListener(this);
@@ -84,16 +84,16 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 				
 			if (direction == Direction.NORTH || direction == Direction.SOUTH) {
 				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth,
-													   greaterWidget.getHeight() , 16, 0, 0, 0, 0);
+													   greaterWidget.getHeight(), 16, 0, 0, 0, 0);
 				setHeight(greaterWidget.getHeight());
 			} else {
 				background = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, greaterWidget.getWidth(),
-													   Screen._screenHeight , 16, 0, 0, 0, 0);
+													   Screen._screenHeight, 16, 0, 0, 0, 0);
 				setWidth(greaterWidget.getWidth());
 			}
 			background.fillRect(background.mapRGB(color.getRed(), color.getGreen(), color.getBlue()));
 			hiddenMenuGraphics.setTarget(background);
-			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight())));
+			putRegionToUpdate(new WidgetUpdate(this, new SDLRect( getX(), getY(), getWidth(), getHeight() )));
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,7 +104,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 	}
 	
 	public void delete() throws GUIException {
-		for (PlatformWidget theWidget: widgetList) {
+		for (PlatformWidget theWidget : widgetList) {
 			theWidget.delete();		
 		}
 		widgetList.clear();
@@ -137,11 +137,11 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 			try {
 				if (! m_bVisible) {
-					graphics.drawSDLSurface(slider, slider.getRect(), graphics.getTarget().getRect(getX()+ ((direction.ordinal()+1) % 2) * 110,
-											getY() + (direction.ordinal() %2) * 60  ));
+					graphics.drawSDLSurface(slider, slider.getRect(), graphics.getTarget().getRect(getX() + ((direction.ordinal() + 1) % 2) * 110,
+											getY() + (direction.ordinal() % 2) * 60  ));
 				} else {
 					graphics.drawSDLSurface(background, hiddenMenuGraphics.getTarget().getRect(), 
-											graphics.getTarget().getRect(getX(),getY()));
+											graphics.getTarget().getRect(getX(), getY()));
 				}
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
@@ -155,7 +155,8 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 				for (Widget widget : widgetList) {
 					
 					if (widget instanceof MouseListener) {
-						if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() && y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY()){
+						if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() 
+								&& y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY()){
 							((MouseListener) widget).mouseClick(x, y, button, count);
 							return;
 						}

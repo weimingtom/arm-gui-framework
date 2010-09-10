@@ -29,8 +29,8 @@ public class ClickedDemoPlayButton extends ButtonState {
 		parentButton.setCurrentState(parentButton.getDefaultButton());
 		
 		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton, 
-															  new SDLRect(parentButton.getX(), parentButton.getY(), buttonImage.getWidth(), buttonImage.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton, new SDLRect(parentButton.getX(), parentButton.getY(),
+																	      				buttonImage.getWidth(), buttonImage.getHeight() )));
 			
 			new FlipEffectHandler(Screen.getScreen().getForeground());
 		} catch (InterruptedException e) {

@@ -40,8 +40,8 @@ public abstract class ButtonState {
 		parentButton.setMouseEnabled(false);
 		parentButton.setCurrentState(parentButton.getDefaultButton());
 		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton,
-															  new SDLRect(parentButton.getX(),parentButton.getY(), buttonImage.getWidth(), buttonImage.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton, new SDLRect(parentButton.getX(),parentButton.getY(),
+																						buttonImage.getWidth(), buttonImage.getHeight())));
 			parentButton.lostFocus();
 		} catch (GUIException e) {
 			// TODO Auto-generated catch block

@@ -42,7 +42,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 						while (widgetUpdateInfo.size() > 0) {
 							surfaceGraphics.beginDraw();
 							
-								if ((widgetToUpdate= widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null) {
+								if ((widgetToUpdate = widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null) {
 									drawOriginal(widgetToUpdate.getWidgetRegion());
 									drawWidgets(widgetToUpdate.getWidgetRegion(), widgetToUpdate.getWidget());
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
@@ -61,7 +61,6 @@ public class Area extends PlatformWidget implements UpdateListener {
 						}
 						Thread.sleep(20);
 				}
-				
 				
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
@@ -128,7 +127,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 			setHeight(surface.getHeight());
 			
 			startAreaUpdateHandler();
-			widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
+			widgetUpdateInfo.add(new WidgetUpdate(this, new SDLRect(0, 0, getWidth(), getHeight() )));
 		} catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to create surface from color");
@@ -137,7 +136,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 	
 	public Area(String filename, int... args ) throws GUIException {
 		try {
-			originalSurface= SDLImage.load(filename);
+			originalSurface = SDLImage.load(filename);
 			surface = SDLImage.load(filename);
 			
 			surfaceGraphics = new SDLGraphics();
@@ -149,7 +148,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 			setHeight(surface.getHeight());
 			
 			startAreaUpdateHandler();
-			widgetUpdateInfo.add(new WidgetUpdate(this , new SDLRect(0, 0, getWidth(), getHeight() )));
+			widgetUpdateInfo.add(new WidgetUpdate(this, new SDLRect(0, 0, getWidth(), getHeight() )));
 		}  catch (SDLException e) {
 			e.printStackTrace();
 			throw new GUIException("Unable to load image");
@@ -175,8 +174,8 @@ public class Area extends PlatformWidget implements UpdateListener {
 		Set<Integer> cellsNr = new HashSet<Integer>();
 		
 		//TODO check here if cells are not reserved
-		for (int xIndex=offset; xIndex<= offset+xCellNeeded; xIndex ++) {	
-			for (int yIndex= 0; yIndex<= yCellNeeded; yIndex++) {
+		for (int xIndex = offset; xIndex <= offset+xCellNeeded; xIndex++) {	
+			for (int yIndex = 0; yIndex <= yCellNeeded; yIndex++) {
 				cellsNr.add(new Integer(yIndex*grid[0] + xIndex));
 			}
 		}
@@ -193,7 +192,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 			widget.setFocusable(true);
 			//widget.requestFocus();
 		//}	
-		widget.setPosition( (offset % grid[0]) * xCellDimension ,(offset / grid[1] ) * yCellDimension);
+		widget.setPosition( (offset % grid[0]) * xCellDimension, (offset / grid[1] ) * yCellDimension);
 		widget.setUpdateListener(this);
 		
 		widgetUpdateInfo.add(new WidgetUpdate(widget, new SDLRect(widget.getX(), widget.getY(),
@@ -201,8 +200,8 @@ public class Area extends PlatformWidget implements UpdateListener {
 	}
 	
 	private void calculateCellDimension() {		
-		xCellDimension = Screen._screenWidth / grid[0] ;
-		yCellDimension = Screen._screenHeight / grid[1] ;	
+		xCellDimension = Screen._screenWidth / grid[0];
+		yCellDimension = Screen._screenHeight / grid[1];	
 	}
 	
 	public void delete() throws GUIException {
@@ -274,7 +273,8 @@ public class Area extends PlatformWidget implements UpdateListener {
 	public void drawWidgets(SDLRect rect, PlatformWidget widgetNotToDraw) throws GUIException {
 		for (PlatformWidget widget : widgetMap.keySet()) {
 			if (! widget.equals(widgetNotToDraw)) {
-				if (widget.getX() >= rect.x && widget.getX() <= rect.x + rect.width && widget.getY() >= rect.y && widget.getY() <= rect.y + rect.height) {
+				if (widget.getX() >= rect.x && widget.getX() <= rect.x + rect.width 
+						&& widget.getY() >= rect.y && widget.getY() <= rect.y + rect.height) {
 					widget.draw(surfaceGraphics);
 				}
 			}

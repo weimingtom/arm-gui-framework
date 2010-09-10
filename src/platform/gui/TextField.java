@@ -36,7 +36,7 @@ public class TextField extends PlatformWidget implements  KeyListener {
 							elementChanged = (visible == true ) ? ElementChanged.CURSOR_ON : ElementChanged.CURSOR_OFF;
 							updateListener.putRegionToUpdate(new WidgetUpdate(TextField.this, 
 																			  new SDLRect(onScreenCursorPosition, getYTextPosition(), 1, textFont.getHeight() + 1) ));
-							visible=!visible;
+							visible = !visible;
 							Thread.sleep(1000);
 					} else {
 						Thread.sleep(1000);
@@ -80,7 +80,7 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		
 		cursorPosition = text.length();
 		onScreenCursorPosition= getXTextPosition() + textFont.getWidth(displayedText) ; 
-		prevOnScreenCursorPosition=onScreenCursorPosition;
+		prevOnScreenCursorPosition = onScreenCursorPosition;
 		stepsFromBorder= MAX_STEPS_FROM_BORDER - text.length();
 		elementChanged = ElementChanged.ALL;
 		
@@ -215,7 +215,7 @@ public class TextField extends PlatformWidget implements  KeyListener {
 			} else if (key.getValue() == Key.BACKSPACE && cursorPosition > 0) {
 				
 				if ( cursorPosition < MAX_STEPS_FROM_BORDER + 1) {
-					onScreenCursorPosition-=((CalibriFont) textFont).getCharacterWidth(displayedText.charAt(cursorPosition-1));
+					onScreenCursorPosition-=((CalibriFont) textFont).getCharacterWidth(displayedText.charAt(cursorPosition - 1));
 					stepsFromBorder++;
 				}
 				displayedText = displayedText.substring(0, cursorPosition - 1) + displayedText.substring(cursorPosition);
@@ -235,7 +235,7 @@ public class TextField extends PlatformWidget implements  KeyListener {
 				if (cursorPosition < 11) {
 					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText);
 				} else {
-					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText.substring(cursorPosition-10, cursorPosition));
+					onScreenCursorPosition = getXTextPosition() + textFont.getWidth(displayedText.substring(cursorPosition - 10, cursorPosition));
 				}
 				elementChanged = ElementChanged.TEXT;
 				//elementChanged = ElementChanged.CURSOR;

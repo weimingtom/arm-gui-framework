@@ -21,8 +21,8 @@ public class SelectedPlayButton extends ButtonState {
 		parentButton.setCurrentState(parentButton.getClickedButton());
 		
 		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton,
-															  new SDLRect(parentButton.getX(), parentButton.getY(), buttonImage.getWidth(), buttonImage.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton, new SDLRect(parentButton.getX(), parentButton.getY(),
+																						buttonImage.getWidth(), buttonImage.getHeight() )));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
