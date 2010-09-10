@@ -25,7 +25,7 @@ public class CurveMotionHandler extends Thread {
 	private SDLSurface temp;
 	
 	public CurveMotionHandler(Area area, List<PlatformIcon> list) throws GUIException, SDLException {
-		super();
+		super ();
 		motionArea = area;
 		updateListener = (UpdateListener) motionArea;
 
@@ -159,7 +159,8 @@ public class CurveMotionHandler extends Thread {
 						int yPos;
 						int curveIndex = iconIndex[iconList.indexOf(icon)];
 						
-						updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(icon.getX(),icon.getY(),icon.getWidth() + 2, icon.getHeight()+2)));
+						updateListener.putRegionToUpdate(new WidgetUpdate(motionArea, new SDLRect(icon.getX(),icon.getY(),
+																								  icon.getWidth() + 2, icon.getHeight() + 2)));
 						
 						if (iconIndex[iconList.indexOf(icon)] + 1 < curveCells.length) {
 							a = (double) (curveCells[curveIndex+1].y - curveCells[curveIndex].y) / (curveCells[curveIndex+1].x - curveCells[curveIndex].x);
@@ -167,13 +168,13 @@ public class CurveMotionHandler extends Thread {
 							xPos = curveCells[curveIndex].x + k * (curveCells[curveIndex+1].x - curveCells[curveIndex].x) / transitionNr;
 							yPos = (int) (xPos * a + b);
 						
-							sizeGrowth = resizeFactor[curveIndex+1] - resizeFactor[curveIndex]; 
+							sizeGrowth = resizeFactor[curveIndex + 1] - resizeFactor[curveIndex]; 
 							temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, resizeFactor[curveIndex]+ sizeGrowth/ transitionNr*k, true);
 							icon.setIconModifiedImage(temp, temp.getWidth(), temp.getHeight() );
 						} else {
-							a = (double) (curveCells[curveIndex].y - curveCells[curveIndex-1].y) / (curveCells[curveIndex].x - curveCells[curveIndex-1].x);
+							a = (double) (curveCells[curveIndex].y - curveCells[curveIndex - 1].y) / (curveCells[curveIndex].x - curveCells[curveIndex-1].x);
 							b = (int) (curveCells[curveIndex].y - a * curveCells[curveIndex].x);
-							xPos = curveCells[curveIndex].x + k*(curveCells[curveIndex].x - curveCells[curveIndex-1].x)/transitionNr;
+							xPos = curveCells[curveIndex].x + k*(curveCells[curveIndex].x - curveCells[curveIndex - 1].x)/transitionNr;
 							yPos = (int) (xPos * a + b);
 						}
 						icon.setPosition(xPos, yPos);

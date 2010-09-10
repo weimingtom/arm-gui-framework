@@ -27,7 +27,7 @@ public class Label extends PlatformWidget implements MouseListener {
 	}
 	
 	public Label(String head, String description, int width, int height) throws SDLException {
-		super();
+		super ();
 		headText = head;
 		descriptiveText = description;
 		
@@ -60,25 +60,25 @@ public class Label extends PlatformWidget implements MouseListener {
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		drawBorder(graphics);
-		textFont.drawString(graphics, headText, getX() + 10 , getY() + (int) (getHeight() * 0.05) );	
+		textFont.drawString(graphics, headText, getX() + 10, getY() + (int) (getHeight() * 0.05) );	
 		
 		if (descriptiveText.length() != 0) {
 			if (textFont instanceof CalibriFont) {
 				synchronized (this) {
 					try {
-						if (shift < ((CalibriFont)textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex)) && shiftIndex==0 ) {
+						if (shift < ((CalibriFont) textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex)) && shiftIndex==0 ) {
 							((CalibriFont) textFont).drawStringBlended(graphics, descriptiveText, 
-																	   getX()+10 - shift, getY()+ (int) (getHeight() * 0.5) );
-						} else if (shift < ((CalibriFont)textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex))) {
+																	   getX() + 10 - shift, getY() + (int) (getHeight() * 0.5) );
+						} else if (shift < ((CalibriFont) textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex))) {
 							((CalibriFont) textFont).drawStringBlended(graphics, descriptiveText.substring(shiftIndex),
-																	  getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
+																	  getX() + 10 - shift, getY() + (int)(getHeight() * 0.5) );
 						} else {
 							shift -= ((CalibriFont) textFont).getCharacterWidth(descriptiveText.charAt(shiftIndex));
 							
-							if (shiftIndex +1 != descriptiveText.length()) { ; //% (descriptiveText.length());
+							if (shiftIndex + 1 != descriptiveText.length()) { ; //% (descriptiveText.length());
 								shiftIndex ++;
 								((CalibriFont) textFont).drawStringBlended(graphics, descriptiveText.substring(shiftIndex),
-																		   getX()+10 - shift, getY()+ (int)(getHeight() * 0.5) );
+																		   getX() + 10 - shift, getY() + (int)(getHeight() * 0.5) );
 							}
 						}
 					} catch (SDLException e) {
@@ -110,7 +110,7 @@ public class Label extends PlatformWidget implements MouseListener {
 				try{
 					for (int i = 0 ; i < textWidth; i+=5) {
 						synchronized(Label.this){
-							shift +=5 ;
+							shift+=5 ;
 						}
 						updateListener.putRegionToUpdate(new WidgetUpdate(Label.this, new SDLRect(getX(), getY(), getWidth(), getHeight())));
 						Thread.sleep(100);
@@ -118,10 +118,11 @@ public class Label extends PlatformWidget implements MouseListener {
 					
 					Thread.sleep(100);
 					synchronized(Label.this){
-						shift=0;
-						shiftIndex=0;
+						shift = 0;
+						shiftIndex = 0;
 					}
-					updateListener.putRegionToUpdate( new WidgetUpdate( Label.this , new SDLRect( Label.this.getX(), Label.this.getY(), Label.this.getWidth(), Label.this.getHeight())));
+					updateListener.putRegionToUpdate( new WidgetUpdate( Label.this, new SDLRect(Label.this.getX(), Label.this.getY(),
+																								Label.this.getWidth(), Label.this.getHeight())));
 					Thread.sleep(50);
 					
 				}  catch (InterruptedException e) {

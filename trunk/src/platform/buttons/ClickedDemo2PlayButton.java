@@ -36,17 +36,17 @@ public class ClickedDemo2PlayButton extends ButtonState {
 		parentButton.setCurrentState(parentButton.getDefaultButton());
 	
 		try {
-			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton, 
-															  new SDLRect(parentButton.getX(),parentButton.getY(), buttonImage.getWidth(), buttonImage.getHeight())));
+			updateListener.putRegionToUpdate(new WidgetUpdate(parentButton, new SDLRect(parentButton.getX(),parentButton.getY(),
+																						buttonImage.getWidth(), buttonImage.getHeight())));
 					
-			PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" 
-																		+ File.separator + "images" + File.separator + "gmail.png")));
-			PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" 
-																		+ File.separator + "images" + File.separator + "music.png")));	
-			PlatformIcon icon3 = new PlatformIcon(new Image(new String("resource" 
-																		+ File.separator + "images" + File.separator + "youtube.png")));
-			PlatformIcon icon4 = new PlatformIcon(new Image(new String("resource" 
-																		+ File.separator + "images" + File.separator + "camera.png")));
+			PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator 
+																		+ "images" + File.separator + "gmail.png")));
+			PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator 
+																		+ "images" + File.separator + "music.png")));	
+			PlatformIcon icon3 = new PlatformIcon(new Image(new String("resource" + File.separator 
+																		+ "images" + File.separator + "youtube.png")));
+			PlatformIcon icon4 = new PlatformIcon(new Image(new String("resource" + File.separator 
+																		+ "images" + File.separator + "camera.png")));
 			
 			iconList.add(icon1);
 			iconList.add(icon2);
