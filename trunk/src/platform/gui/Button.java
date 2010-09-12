@@ -33,7 +33,7 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 
 /**
- * Class representing button , class changes beahvior according to internal state
+ * Class representing button, class changes behavior according to internal state
  * @author Bartosz Kędra
  * @author bartosz.kedra@gmail.com 
  */
@@ -48,7 +48,7 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	ButtonState selectedButton;
 
 	/**
-	 * Current button state, the class behaved differently according to that state
+	 * Current button state, the class behaves differently according to that state
 	 */
 	ButtonState currentState;
 		
@@ -94,7 +94,7 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	}
 
 	/**
-	 * Draws button on the surface - method overridden 
+	 * Draws button on the surface  
 	 * @param graphics
 	 * 			used for drawing button on target surface
 	 * @throws GUIException
@@ -105,7 +105,7 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 	}
 
 	/**
-	 * Draws border - method overridden, not used
+	 * Not used
 	 * @throws GUIException
 	 */
 	@Override
@@ -138,42 +138,77 @@ public class Button extends PlatformWidget implements MouseListener, UpdateListe
 		return selectedButton;
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseClick(int x, int y, int button, int count)	throws GUIException {
 		//buttonState=ButtonStates.DEFAULT;	
 	}
 
+	/**
+	 * MouseListener interface implementation, calls the same method on currentState object
+	 */
 	public void mouseIn() throws GUIException {
 		currentState.mouseIn();
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * MouseListener interface implementation, calls the same method on currentState object
+	 */
 	public void mouseOut() {
 		currentState.mouseOut();
 	}
 	
+	/**
+	 * MouseListener interface implementation, calls the same method on currentState object
+	 */
 	public void mousePress(int x, int y, int button) throws GUIException {
 		currentState.mousePress();
 	}
 
+	/**
+	 * MouseListener interface implementation, calls the same method on currentState object
+	 */
 	public void mouseRelease(int x, int y, int button) throws GUIException {
 		currentState.mouseRelease();
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Passes request for an update to the enclosing container
+	 * @param updateInfo
+	 * 			<code> WidgetUpdate </code> update information
+	 * @throws InterruptedException
+	 */
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		updateListener.putRegionToUpdate(updateInfo);
 	}
 
+	/**
+	 * Set current button state
+	 * @param currentState
+	 * 			current button state
+	 */
 	public void setCurrentState(ButtonState currentState) {
 		this.currentState = currentState;
 	}

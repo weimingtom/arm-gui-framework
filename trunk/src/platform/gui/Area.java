@@ -219,7 +219,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 			//surface.fillRect( surface.mapRGBA(color.getRed(),color.getGreen(), color.getBlue(), 255));
 			originalSurface.fillRect(originalSurface.mapRGBA(color.getRed(),color.getGreen(),color.getBlue(), 255));
 			
-			surface =SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, 
+			surface = SDLVideo.createRGBSurface(SDLVideo.SDL_HWSURFACE, Screen._screenWidth, 
 											   Screen._screenHeight, 16 , 0, 0, 0, 0);
 			surface.fillRect(originalSurface.mapRGB(color.getRed(),color.getGreen(),color.getBlue()));
 			
@@ -369,7 +369,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 
 	
 	/**
-	 * Draws whole surface on the screen - method overridden 
+	 * Draws whole surface on the screen 
 	 * @param graphics
 	 * 			not used here
 	 * @throws GUIException
@@ -394,7 +394,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 	}
 
 	/**
-	 * Draws border - method overridden ,not used
+	 * Not used
 	 */
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
@@ -421,7 +421,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 	}
 	
 	/**
-	 * Draws all widgets that are found in the rect argumnt
+	 * Draws all widgets that are found in the rect argument
 	 * @param rect
 	 * 			<code> SDLRect </code> specifying rectangle to look for widgets
 	 * @param widgetNotToDraw
