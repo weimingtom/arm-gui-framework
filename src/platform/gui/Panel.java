@@ -1,5 +1,25 @@
 package platform.gui;
 
+/**
+*  arm-gui-framework -Java GUI based on sdljava for omap5912 board
+*  Copyright (C) 2010  Bartosz Kędra (bartosz.kedra@gmail.com)
+* 
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 3.0 of the License, or (at your option) any later version.
+* 
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+* 
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+*  USA
+*
+*/
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,20 +38,68 @@ import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Image;
 import sdljavax.guichan.widgets.Widget;
 
+/**
+ * Class representing panel ( container for other widgets)
+ * @author Bartosz Kędra
+ * @author bartosz.kedra@gmail.com
+ *
+ */
 public class Panel extends PlatformWidget implements MouseListener, UpdateListener {
 
-	//protected Image frame;
+	/**
+	 * Frame - background for panel
+	 */
 	protected SDLSurface frame;
+	
+	/**
+	 * List of panel widgets
+	 */
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
+	
+	/**
+	 * x panel format
+	 */
 	protected Integer xFormat;
+	
+	/**
+	 * y panel format
+	 */
 	protected Integer yFormat;
+	
+	/**
+	 * Surface drawing object
+	 */
 	protected UnifiedGraphics panelGraphics;
+	
+	/**
+	 * Flag indicating whether transparency is set
+	 */
 	protected boolean alphaSet=false;
+	
+	/**
+	 * Transparency coefficient
+	 */
 	protected int alpha;
 	
+	/**
+	 * Shift added to every widget position for correct positioning
+	 */
 	private final int horizontalPixelShift = 3;
+	
+	/**
+	 * Shift added to every widget for correct positioning
+	 */
 	private final int verticalPixelShift = 10;
 	
+	/**
+	 * Constructor 
+	 * @param xFormat
+	 * 			panel x format
+	 * @param yFormat
+	 * 			panel y format
+	 * @throws GUIException
+	 * @throws SDLException
+	 */
 	public Panel(int xFormat, int yFormat) throws GUIException, SDLException {		
 		super();
 		
@@ -52,6 +120,14 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		addMouseListener(this);
 	}
 	
+	/**
+	 * Adds widget on the position specified by offset from the (0,0) cell
+	 * @param widget
+	 * 			widget to add
+	 * @param offset
+	 * 			offset from the beginning
+	 * @throws GUIException
+	 */
 	@Override
 	public void add(PlatformWidget widget, int offset) throws GUIException {
 		if (widget == null) {
@@ -84,6 +160,10 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 	}
 	
+	/**
+	 * Cleans any dynamically reserved memory areas in C style 
+	 * @throws GUIException
+	 */
 	@Override
 	public void delete() throws GUIException {
 		// TODO Auto-generated method stub
@@ -100,6 +180,12 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		super.delete();
 	}
 	
+	/**
+	 * Draws menu on the surface 
+	 * @param graphics
+	 * 			used for drawing menu on target surface
+	 * @throws GUIException
+	 */
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		if (alphaSet) {
@@ -119,6 +205,12 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		drawBorder(graphics);
 	}
 
+	/**
+	 * Draws background of the panel
+	 * @param graphics
+	 * 			used for drawing background on target surface
+	 * @throws GUIException
+	 */
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		try {
@@ -130,7 +222,9 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		//graphics.drawImage(frame, getX(), getY() );
 	}
 
-	
+	/**
+	 * MouseListener implementation - calls the same method on the appropriate widget
+	 */
 	public void mouseClick(int x, int y, int b, int ts) throws GUIException {
 		for (Widget widget : widgetList) {
 			if (widget instanceof MouseListener) {
@@ -142,18 +236,30 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseIn() throws GUIException {
 		// TODO Auto-generated method stub
 	}
 	
+	/**
+	 * Not used
+	 */
 	public void mouseMotion(int arg0, int arg1) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseOut() {
 		// TODO Auto-generated method stub
 	}
-
+	
+	/**
+	 * MouseListener implementation - calls the same method on the appropriate widget
+	 */
 	public void mousePress(int x, int y, int b) throws GUIException {
 		for (Widget widget : widgetList) {
 			if (widget instanceof MouseListener) {
@@ -165,6 +271,9 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 	}
 
+	/**
+	 * MouseListener implementation - calls the same method on the appropriate widget
+	 */
 	public void mouseRelease(int x, int y, int b) throws GUIException {
 		for (Widget widget : widgetList) {
 			if (widget instanceof MouseListener) {
@@ -176,14 +285,26 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Passes request for an update to the higher container
+	 * @param updateInfo
+	 * 			<code> WidgetUpdate </code> update information
+	 * @throws InterruptedException
+	 */
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		SDLRect region = updateInfo.getWidgetRegion();
 		updateListener.putRegionToUpdate(new WidgetUpdate(this, new SDLRect(region.x + getX(), region.y + getY(), 
@@ -191,12 +312,17 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		//updateListener.putRegionToUpdate(updateInfo);
 	}
 
+	/**
+	 * Removes widget from panel
+	 * @param widget
+	 * 			widget to be removed
+	 */
 	@Override
 	public void remove(PlatformWidget widget) throws GUIException {
 		for (Widget theWidget : widgetList) {
 			if (widget.equals(theWidget)) {
 				try {
-					System.out.println(new SDLRect( widget.getX() + getX(), widget.getY() + getY(), widget.getWidth(), widget.getHeight()).toString() );
+					
 					putRegionToUpdate(new WidgetUpdate(this, new SDLRect(widget.getX() + getX(), widget.getY() + getY(),
 																		 widget.getWidth(), widget.getHeight() )));
 				} catch (InterruptedException e) {
@@ -212,6 +338,11 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		throw new GUIException("No such widget in this panel");
 	}
 
+	/**
+	 * Set transparency coefficient for working surface
+	 * @parem alphaIndex
+	 * 			transparency index to be set - 0 is totally transparent, 255 means no transparency 
+	 */
 	@Override
 	public void setAlpha(int alphaIndex) {
 		if (alphaIndex < 255) {
@@ -234,6 +365,12 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 	}
 
+	/**
+	 * Set focus handler for panel
+	 * @param focusHandler
+	 * 			focus handler for panel
+	 * @throws GUIException
+	 */
 	public void setWidgetsFocusHandler(FocusHandler focusHandler) throws GUIException {
 		for (Widget widget : widgetList) {
 			widget.setFocusHandler(focusHandler);

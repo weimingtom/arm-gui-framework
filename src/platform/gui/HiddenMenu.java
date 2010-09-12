@@ -1,5 +1,26 @@
 package platform.gui;
 
+/**
+*  arm-gui-framework -Java GUI based on sdljava for omap5912 board
+*  Copyright (C) 2010  Bartosz Kędra (bartosz.kedra@gmail.com)
+* 
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 3.0 of the License, or (at your option) any later version.
+* 
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+* 
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+*  USA
+*
+*/
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +43,58 @@ import sdljavax.guichan.GUIException;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.widgets.Widget;
 
+/**
+ * Class representing menu (container for other widgets) that is hidden by default and can appear and then hide again
+ * @author Bartosz Kędra
+ * @author bartosz.kedra@gmail.com
+ *
+ */
 public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateListener, Maintainable {
 
+	/**
+	 * Slider button surface
+	 */
 	protected SDLSurface slider;
+	
+	/**
+	 * Background surface
+	 */
 	protected SDLSurface background;
+	
+	/**
+	 * Background surface color
+	 */
 	protected SDLColor color;
+	
+	/**
+	 * Surface drawing object
+	 */
 	protected UnifiedGraphics hiddenMenuGraphics;
+
+	/**
+	 * 
+	 */
 	protected int transition = 0;
+	
+	/**
+	 * Orientation of menu
+	 */
 	protected Direction direction;
+	
+	/**
+	 * List of widgets in menu
+	 */
 	protected List<PlatformWidget> widgetList = new ArrayList<PlatformWidget>();
 	
+	/**
+	 * Constructor
+	 * @param clr
+	 * 			background surface color
+	 * @param dir
+	 * 			menu orientation
+	 * @throws SDLException
+	 * @throws InterruptedException
+	 */
 	public HiddenMenu(SDLColor clr, Direction dir) throws SDLException, InterruptedException {
 		direction = dir;
 		slider = SDLImage.load("resource" + File.separator + "images" + File.separator + "slider.png");
@@ -60,6 +123,14 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		addMouseListener(this);
 	}	
 	
+	/**
+	 * Adds widget on the position specified by offset from the (0,0) cell
+	 * @param widget
+	 * 			widget to add
+	 * @param offset
+	 * 			offset from the beginning
+	 * @throws GUIException
+	 */
 	@Override
 	public void add(PlatformWidget widget, int offset) throws GUIException {
 		widgetList.add(widget);
@@ -78,6 +149,11 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		widget.setUpdateListener(this);
 	}
 
+	/**
+	 * Adjust size of menu when widget size exceeds those of menu
+	 * @param greaterWidget
+	 * 			widget with sizes greater than menu
+	 */
 	protected void adjustSize(PlatformWidget greaterWidget) {
 		try {
 			background.freeSurface();
@@ -103,6 +179,10 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		}
 	}
 	
+	/**
+	 * Cleans any dynamically reserved memory areas in C style 
+	 * @throws GUIException
+	 */
 	public void delete() throws GUIException {
 		for (PlatformWidget theWidget : widgetList) {
 			theWidget.delete();		
@@ -119,6 +199,12 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		} 
 	}
 	
+	/**
+	 * Draws menu on the target surface 
+	 * @param graphics
+	 * 			used for drawing menu on target surface
+	 * @throws GUIException
+	 */
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		if (! m_bVisible) {
@@ -133,6 +219,12 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		drawBorder(graphics);
 	}
 	
+	/**
+	 * Draws background
+	 * @param graphics
+	 * 			used for drawing background on target surface
+	 * @throws GUIException
+	 */
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 			try {
@@ -149,6 +241,11 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 			} 
 	}
 
+	/**
+	 * MouseListener implementation - calls the same method on the appropriate widget if menu is visible
+	 * In case menu is invisible it appears in a while, menu can become hidden when user clicks on the menu surface 
+	 * outside any widget that menu contains
+	 */
 	public void mouseClick(int x, int y, int button, int count) throws GUIException {
 		try {
 			if (m_bVisible) {
@@ -163,7 +260,7 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 					}
 				}
 				m_bVisible = !m_bVisible;
-				new TransitionEffectHandler(this,updateListener, direction, m_bVisible );
+				new TransitionEffectHandler(this, updateListener, direction, m_bVisible );
 			
 				//TODO is that safe at all platforms? we 're waiting till TransitionHandler finishes his job
 				Thread.sleep(300);
@@ -177,16 +274,25 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Acknowledges mouse over menu
+	 */
 	public void mouseIn() throws GUIException {
 		m_bHasMouse =  true;
 		requestFocus();		
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseMotion(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Acknowledges mouse leaving menu
+	 */
 	public void mouseOut() {
 		m_bHasMouse =  false;
 		try {
@@ -197,22 +303,41 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 		}
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mousePress(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub	
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseRelease(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseWheelDown(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Not used
+	 */
 	public void mouseWheelUp(int x, int y) throws GUIException {
 		// TODO Auto-generated method stub
 	}
 
+
+	/**
+	 * Passes request for an update to the higher container
+	 * @param updateInfo
+	 * 			<code> WidgetUpdate </code> update information
+	 * @throws InterruptedException
+	 */
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		SDLRect region = updateInfo.getWidgetRegion();
 		updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height)));
