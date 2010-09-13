@@ -1,4 +1,24 @@
 package platform.gui;
+/**
+*  arm-gui-framework -Java GUI based on sdljava for omap5912 board
+*  Copyright (C) 2010  Bartosz Kędra (bartosz.kedra@gmail.com)
+* 
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 3.0 of the License, or (at your option) any later version.
+* 
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+* 
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+*  USA
+*
+*/
 
 import java.io.File;
 
@@ -16,19 +36,47 @@ import sdljavax.guichan.gfx.Color;
 import sdljavax.guichan.gfx.Graphics;
 import sdljavax.guichan.gfx.Image;
 
-public class TextField extends PlatformWidget implements  KeyListener {
+/**
+ * Class representing text field - widget we can write to with keyboard
+ * @author Bartosz Kędra
+ * @author bartosz.kedra@gmail.com
+ *
+ */
+public class TextField extends PlatformWidget implements KeyListener {
 
 	enum ElementChanged { TEXT, CURSOR_ON, CURSOR_OFF , NONE, ALL }
 	
+	/**
+	 * Class used for flickering cursors handling 
+	 * @author Bartosz Kędra
+	 * @author bartosz.kedra@gmail.com
+	 *
+	 */
 	class FlickeringCursorHandler extends Thread {
+		
+		/**
+		 * Flag indicating whether cursor is currently visible
+		 */
 		boolean visible = false;
+		
+		/**
+		 * Flag indicating whether cursor must be flickering or not
+		 */
 		boolean running;
 		
+		/**
+		 * Constructor
+		 * @param run
+		 * 		active status flag
+		 */
 		FlickeringCursorHandler(boolean run) {
 			running = run;
 			start();
 		}
 		
+		/**
+		 * Changes visibility of cursor every 1 sec if cursor must be active
+		 */
 		public void run() {
 			while (true) {
 				try {
@@ -48,28 +96,84 @@ public class TextField extends PlatformWidget implements  KeyListener {
 			}
 		}
 		
+		/**
+		 * Set running status
+		 * @param run
+		 * 			status
+		 */
 		public void setRunning(boolean run) {
 			running = run;
 		}
 	}
+	
+	/**
+	 * Maximum number of characters displayed
+	 */
 	protected final int MAX_STEPS_FROM_BORDER = 10;
+	
+	/**
+	 * Text field background surface
+	 */
 	protected Image textField;
+	
+	/**
+	 * Displayed string
+	 */
 	protected String displayedText;
+	
+	/**
+	 * Font used to draw text
+	 */
 	protected Font textFont;
+	
+	/**
+	 * Cursor position on the text field
+	 */
 	protected int cursorPosition;
+	
+	/**
+	 * Previous on screen cursor position - in pixels
+	 */
 	protected int prevOnScreenCursorPosition;
+	
+	/**
+	 * On screen cursor position - in pixels
+	 */
 	protected int onScreenCursorPosition;
+	
+	/**
+	 * Number of steps form border
+	 */
 	protected int stepsFromBorder;
+	
+	/**
+	 * Cursor color
+	 */
 	protected SDLColor cursorColor;
 	
 	protected ElementChanged elementChanged;
 	
+	/**
+	 * Flickering cursor handler
+	 */
 	protected TextField.FlickeringCursorHandler flickeringCursorHandler;
 	
+	/**
+	 * Constructor with no text displayed
+	 * @throws GUIException
+	 * @throws SDLException
+	 */
 	public TextField() throws GUIException, SDLException{				
 		this("");
 	}
 	
+	/**
+	 * Constructor with text displayed
+	 * @param text
+	 * 			string to be displayed
+	 * @throws GUIException
+	 * @throws SDLException
+	 */
 	public TextField(String text) throws GUIException, SDLException {
 		displayedText = text;
 		textField = new Image("resource" + File.separator + "images" + File.separator + "google_search.png");
@@ -87,13 +191,23 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		flickeringCursorHandler = new FlickeringCursorHandler(false);
 		addKeyListener(this);
 	}
-			
+	
+	/**
+	 * Cleans any dynamically reserved memory areas in C style 
+	 * @throws GUIException
+	 */
 	public void delete() throws GUIException {
 		textField.delete();
 		textFont.delete();
 		super.delete();
 	}
 	
+	/**
+	 * Draws text field on the surface 
+	 * @param graphics
+	 * 			used for drawing label on target surface
+	 * @throws GUIException
+	 */
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		
@@ -126,11 +240,24 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		elementChanged = ElementChanged.ALL;
 	}
 	
+	/**
+	 * Draws border - background on the target surface
+	 * @param graphics
+	 * 			used for drawing background on target surface
+	 * @throws GUIException
+	 */
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		graphics.drawImage(textField, getX(), getY());
 	}
 
+	
+	/**
+	 * Draws cursors on position specified by on Screen cursor position
+	 * @param graphics
+	 * 			object capable of drawing
+	 * @throws GUIException
+	 */
 	public void drawCursor(Graphics graphics) throws GUIException {
 		graphics.setColor(new Color(cursorColor.getRed(), cursorColor.getGreen(), cursorColor.getBlue(), 255));
 		graphics.drawLine(onScreenCursorPosition, getYTextPosition(), onScreenCursorPosition,
@@ -138,6 +265,12 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		
 	}
 	
+	/**
+	 * Draws text or part on text field surface depending on cursor position
+	 * @param graphics
+	 * 			object capable of drawing
+	 * @throws GUIException
+	 */
 	public void drawText(Graphics graphics) throws GUIException {
 		//System.out.println(cursorPosition);
 		if (displayedText.length() != 0) {
@@ -151,12 +284,24 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		}
 	}
 
+	/**
+	 * Draws only part of the background surface, the text line not to refresh whole widget
+	 * @param graphics
+	 * 			object capable of drawing
+	 * @throws GUIException
+	 */
 	public void drawTextLine(Graphics graphics) throws GUIException {
 		//TODO change an argument 150 for visible text length
 		graphics.drawImage(textField, (int) (getWidth() * 0.2), (int) (getHeight() * 0.3),
 						   getXTextPosition(), getYTextPosition(), 160, textFont.getHeight() + 1 ); 
 	}
 	
+	/**
+	 * Erases cursor from its position
+	 * @param graphics
+	 * 			object capable of drawing
+	 * @throws GUIException
+	 */
 	public void eraseCursor(Graphics graphics) throws GUIException {
 		if (prevOnScreenCursorPosition != 0) {
 			graphics.setColor(new Color(0, 0, 0, 255));
@@ -167,18 +312,36 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		prevOnScreenCursorPosition=onScreenCursorPosition;
 	}
 	
+	/**
+	 * Get displayed text
+	 * @return
+	 * 		displayed text
+	 */
 	public String getDisplayedText() {
 		return displayedText;
 	}
 
+	/**
+	 * Get X position of text on the screen
+	 * @return
+	 * 		X position of text on the screen
+	 */
 	public int getXTextPosition(){
 		return getX() + (int) (getWidth() * 0.2);
 	}
 
+	/**
+	 * Get Y position of text on the screen
+	 * @return
+	 * 		Y position of text on the screen
+	 */
 	public int getYTextPosition(){
 		return getY() + (int) (getHeight() * 0.3);
 	}
 	
+	/**
+	 * Takes action after key press, called internally by gui
+	 */
 	public void keyPress(Key key) throws GUIException {
 		try {
 			if (key.getValue() == Key.LEFT && cursorPosition > 0) {
@@ -278,10 +441,16 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		}
 	}
 	
+	/**
+	 * Not used
+	 */
 	public void keyRelease(Key key) throws GUIException {
 		// TODO Auto-generated method stub
 	};
 	
+	/**
+	 * Acknowledges mouse over text field, starts flickering cursor
+	 */
 	@Override
 	public void mouseInMessage() throws GUIException {
 		// TODO Auto-generated method stub
@@ -289,6 +458,9 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		flickeringCursorHandler.setRunning(true);
 	}
 
+	/**
+	 * Acknowledges mouse leaving text field, stops flickering cursor
+	 */
 	@Override
 	public void mouseOutMessage() {
 		// TODO Auto-generated method stub
@@ -296,6 +468,11 @@ public class TextField extends PlatformWidget implements  KeyListener {
 		flickeringCursorHandler.setRunning(false);
 	}
 
+	/**
+	 * Set text to be displayed
+	 * @param displayedText
+	 * 			text to be displayed
+	 */
 	public void setDisplayedText(String displayedText) {
 		this.displayedText = displayedText;
 		elementChanged = ElementChanged.TEXT;

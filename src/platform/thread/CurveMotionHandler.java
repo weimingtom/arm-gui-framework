@@ -1,5 +1,24 @@
 package platform.thread;
-
+/**
+*  arm-gui-framework -Java GUI based on sdljava for omap5912 board
+*  Copyright (C) 2010  Bartosz Kędra (bartosz.kedra@gmail.com)
+* 
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 3.0 of the License, or (at your option) any later version.
+* 
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+* 
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+*  USA
+*
+*/
 import java.util.List;
 
 import platform.gui.Area;
@@ -13,17 +32,62 @@ import sdljava.video.SDLSurface;
 import sdljavax.gfx.SDLGfx;
 import sdljavax.guichan.GUIException;
 
+/**
+ * Thread prepared for showing capabilities of library, it shows icons
+ * moving on imaginary path 
+ * @author Bartosz Kędra
+ * @author bartosz.kedra@gmail.com
+ *
+ */
 public class CurveMotionHandler extends Thread {
 
+	/**
+	 * Nr of transitions on the screens
+	 */
 	private final int transitionNr = 4;
+	
+	/**
+	 * Resize factors, each icons gets resized while moving to next point
+	 */
 	private double[] resizeFactor = { 0.48, 0.48, 0.61, 0.74, 0.87, 1.0, 0.87, 0.74, 0.61, 0.48 };
+	
+	/**
+	 * Coordinates of cells by which icons are moving
+	 */
 	private SDLRect[] curveCells = new SDLRect[resizeFactor.length];
+	
+	/**
+	 * List of icons 
+	 */
 	private List<PlatformIcon> iconList ;//= new ArrayList<PlatformIcon>();
+	
+	
 	private Integer[] iconIndex;
+	
+	/**
+	 * Area where the movement takes place
+	 */
 	private Area motionArea;
+	
+	/**
+	 * Object processing update requests
+	 */
 	private UpdateListener updateListener;
+	
+	/**
+	 * Temporary surface used for setting resized icon image
+	 */
 	private SDLSurface temp;
 	
+	/**
+	 * Constructor. also starts the thread
+	 * @param area
+	 * 			Area where a motion takes place
+	 * @param list
+	 * 			List of icons
+	 * @throws GUIException
+	 * @throws SDLException
+	 */
 	public CurveMotionHandler(Area area, List<PlatformIcon> list) throws GUIException, SDLException {
 		super ();
 		motionArea = area;
@@ -57,6 +121,12 @@ public class CurveMotionHandler extends Thread {
 		start();
 	}
 
+	/**
+	 * Adjusts size of icons
+	 * @param icon
+	 * @param factor
+	 * @return
+	 */
 	private int adjustSize(PlatformIcon icon, double factor) {
 		try {
 			SDLSurface temp = SDLGfx.rotozoomSurface(icon.getIconImage(), 1.0, factor, true);
@@ -72,6 +142,10 @@ public class CurveMotionHandler extends Thread {
 		return 1;
 	}
 
+	/**
+	 * Cleans any dynamically reserved memory areas in C style 
+	 * @throws GUIException
+	 */
 	private void clean() throws SDLException, GUIException, InterruptedException {
 		temp.freeSurface();
 		for (PlatformIcon icon : iconList) {
@@ -83,6 +157,10 @@ public class CurveMotionHandler extends Thread {
 		displayArea(displayArea);
 	}
 
+	/**
+	 * Displays an area after task completion
+	 * @param display
+	 */
 	private void displayArea(Area display) {
 		int x = 250;
 		
@@ -100,6 +178,12 @@ public class CurveMotionHandler extends Thread {
 		display.setAlpha(255);
 	}
 
+	/**
+	 * Fills the rectangle array that are situated on the path
+	 * and which are main points of movement
+	 * @param width
+	 * @param height
+	 */
 	private void fillCurveCellsArray(int width, int height) {
 		curveCells[0] = new SDLRect((int) (0.4 * width),
 									0, (int) (0.65 * width),
@@ -142,6 +226,9 @@ public class CurveMotionHandler extends Thread {
 									(int) (0.65 * height));
 	}
 	
+	/**
+	 * Main thread function, each icon is resized and moved to next curve cell position
+	 */
 	public void run(){
 		int b;
 		int i = 0;

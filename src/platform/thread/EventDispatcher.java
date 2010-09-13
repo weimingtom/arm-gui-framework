@@ -1,5 +1,25 @@
 package platform.thread;
 
+/**
+*  arm-gui-framework -Java GUI based on sdljava for omap5912 board
+*  Copyright (C) 2010  Bartosz Kędra (bartosz.kedra@gmail.com)
+* 
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 3.0 of the License, or (at your option) any later version.
+* 
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+* 
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+*  USA
+*
+*/
 import platform.evt.ExtendedInput;
 import platform.gui.Area;
 import platform.gui.Screen;
@@ -11,15 +31,50 @@ import sdljavax.guichan.evt.KeyInput;
 import sdljavax.guichan.evt.MouseInput;
 import sdljavax.guichan.widgets.Widget;
 
+/**
+ * Class serving as constantly running thread that dispatches events to appropriate widgets
+ * @author Bartosz Kędra
+ * @author bartosz.kedra@gmail.com
+ *
+ */
 public class EventDispatcher extends Thread {
 
+	/**
+	 * Flag indicating whether an event was triggered
+	 */
 	boolean eventTriggered;
+	
+	/**
+	 * Input event source
+	 */
 	private ExtendedInput inputSource;
+	
+	/**
+	 * Background area of screen
+	 */
 	private Area background;
+	
+	/**
+	 * Foreground area of screen
+	 */
 	private Area foreground;
+	
+	/**
+	 * Enum indicating which area is active
+	 */
 	private Active activeArea;
+	
+	/**
+	 * Widget that currently has mouse over
+	 */
 	private Widget widgetWithMouse = null;
 	
+	/**
+	 * Constructor that starts the thread
+	 * @param input
+	 * 			Input event source
+	 * @throws SDLException
+	 */
 	public EventDispatcher(ExtendedInput input) throws SDLException {
 		super ("EventDispatcher");
 		eventTriggered = false;
@@ -32,6 +87,11 @@ public class EventDispatcher extends Thread {
 		start();
 	}
 	
+	/**
+	 * Thread once notified of new event polls for this event 
+	 * and dispatches it to the appropriate widget depending on area that is active and 
+	 * widget that is focused
+	 */
 	public void run(){
 		try{
 			while (Screen.getScreen().isRunning()) {
