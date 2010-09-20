@@ -103,7 +103,7 @@ public class EventDispatcher extends Thread {
 				}
 				
 				inputSource.pollInput();
-				Area active = (activeArea == Active.BACKGROUND) ? background : foreground;
+				Area active = (Screen.getScreen().getActive() == Active.BACKGROUND) ? background : foreground;
 				
 				while (false == inputSource.isKeyQueueEmpty()) {	
 					KeyInput ki = inputSource.dequeueKeyInput();
@@ -155,7 +155,7 @@ public class EventDispatcher extends Thread {
 					}
 					active.getFocusHandler().applyChanges();
 				}
-				Thread.sleep(200);
+				Thread.sleep(100);
 			}
 		} catch(InterruptedException e) {
 			e.printStackTrace();

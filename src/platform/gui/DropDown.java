@@ -79,7 +79,17 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 	 */
 	public DropDown(ListModel listModel, ScrollArea scrollArea, ListBox listBox) throws GUIException {
 		super();
-		setWidth(100);
+		int maxWidth = 0;
+		
+		for(int i = 0; i < listModel.getNumberOfElements(); i++){
+			int stringWidth;
+			
+			stringWidth = getFont().getWidth(listModel.getElementAt(i));
+			
+			maxWidth = ( maxWidth > stringWidth) ? maxWidth : stringWidth;
+			
+		}
+		setWidth(maxWidth);
 		setFocusable(true);
 		m_bDroppedDown = false;
 		m_bPushed = false;

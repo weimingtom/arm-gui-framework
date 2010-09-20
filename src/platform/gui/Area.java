@@ -87,10 +87,14 @@ public class Area extends PlatformWidget implements UpdateListener {
 									
 									drawOriginal(widgetToUpdate.getWidgetRegion());
 									
-									drawWidgets(widgetToUpdate.getWidgetRegion(), widgetToUpdate.getWidget());
+									if (Area.this !=  widgetToUpdate.getWidget()) {
+										drawWidgets(widgetToUpdate.getWidgetRegion(), widgetToUpdate.getWidget());
+									}
 									widgetToUpdate.getWidget().draw(surfaceGraphics);
 									
-									draw(widgetToUpdate.getWidgetRegion());
+									if (Area.this !=  widgetToUpdate.getWidget()) {
+										draw(widgetToUpdate.getWidgetRegion());
+									}
 									//draw(surfaceGraphics);
 									
 									needsUpdate = true;
@@ -121,6 +125,10 @@ public class Area extends PlatformWidget implements UpdateListener {
 		}
 	}
 	
+	/**
+	 * flag indicating whether this Area is currently displayed
+	 */
+	protected boolean isActive = true;
 	/**
 	 * grid dimensions table
 	 */
@@ -278,7 +286,9 @@ public class Area extends PlatformWidget implements UpdateListener {
 	 */
 	@Override
 	public void add(PlatformWidget widget, int offset) throws GUIException {
-		int returnValue,xCellNeeded,yCellNeeded;
+		int returnValue;
+		int xCellNeeded;
+		int yCellNeeded;
 		
 		if (widget == null) {	
 			throw new GUIException("Widget doesn't exist");
@@ -297,7 +307,8 @@ public class Area extends PlatformWidget implements UpdateListener {
 		//TODO check here if cells are not reserved
 		for (int xIndex = offset; xIndex <= offset+xCellNeeded; xIndex++) {	
 			for (int yIndex = 0; yIndex <= yCellNeeded; yIndex++) {
-				cellsNr.add(new Integer(yIndex*grid[0] + xIndex));
+				cellsNr.add(new Integer(yIndex*grid[1] + xIndex));
+				//cellsNr.add(new Integer(xIndex));
 			}
 		}
 		
@@ -313,7 +324,8 @@ public class Area extends PlatformWidget implements UpdateListener {
 			widget.setFocusable(true);
 			//widget.requestFocus();
 		//}	
-		widget.setPosition( (offset % grid[0]) * xCellDimension, (offset / grid[1] ) * yCellDimension);
+		
+		widget.setPosition( (offset % grid[0]) * xCellDimension, (offset / grid[0] ) * yCellDimension);
 		widget.setUpdateListener(this);
 		
 		widgetUpdateInfo.add(new WidgetUpdate(widget, new SDLRect(widget.getX(), widget.getY(),
@@ -355,6 +367,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 	 * @throws GUIException
 	 */
 	public void draw(SDLRect rect) throws GUIException {
+		
 		try {
 			UnifiedGraphics screenGraphics = Screen.getScreen().getGraphics();
 								
@@ -365,7 +378,8 @@ public class Area extends PlatformWidget implements UpdateListener {
 			e.printStackTrace();
 			throw new GUIException("Exception while drawing on target surface");
 		}
-	}
+	}	
+
 
 	
 	/**
@@ -376,14 +390,16 @@ public class Area extends PlatformWidget implements UpdateListener {
 	 */
 	@Override
 	public void draw(UnifiedGraphics graphics) throws GUIException {
+		
 		try {
 			UnifiedGraphics screenGraphics = Screen.getScreen().getGraphics();
 			
+			
 			for (PlatformWidget widget : widgetMap.keySet()) {
-				//TODO check this
-				widget.draw(surfaceGraphics);
+					//TODO check this
+					widget.draw(surfaceGraphics);
 			}
-									
+			
 			screenGraphics.beginDraw();
 			screenGraphics.drawSDLSurface(surface, surface.getRect(), screenGraphics.getTarget().getRect());
 			screenGraphics.endDraw();
@@ -598,6 +614,19 @@ public class Area extends PlatformWidget implements UpdateListener {
 		this.surface = surface;
 	}
 
+	/**
+	 * Set active flag
+	 * @param value flag value
+	 */
+	public void setActive(boolean value){
+		isActive = value;
+		
+		if (isActive == false) {
+			
+			widgetUpdateInfo.clear();
+			System.out.println(widgetUpdateInfo.isEmpty());
+		}
+	}
 	/**
 	 * Starts handler responsible for updating screen on request
 	 */

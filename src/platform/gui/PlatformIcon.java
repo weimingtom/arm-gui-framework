@@ -21,11 +21,13 @@ package platform.gui;
 *
 */
 import platform.gfx.UnifiedGraphics;
+import platform.util.Active;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
 import sdljava.video.SDLRect;
 import sdljava.video.SDLSurface;
 import sdljavax.guichan.GUIException;
+import sdljavax.guichan.evt.ActionListener;
 import sdljavax.guichan.evt.MouseListener;
 import sdljavax.guichan.gfx.Image;
 
@@ -51,12 +53,6 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 	 * Flag indicating whether draw or not modified icon image
 	 */
 	private boolean drawModified=false;
-	//private SDLSurface iconImage;
-	
-	/**
-	 * Flag indicating whether icon was clicked or not
-	 */
-	private boolean clicked = false;
 	
 	/**
 	 * Constructor
@@ -66,26 +62,38 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 	 */
 	public PlatformIcon(Image image) throws GUIException{
 		super();
-	//	iconImage =(SDLSurface)image.getData();
 		iconImage = image;
 		setHeight(image.getHeight());
 		setWidth(image.getWidth());
-		
+
 		addMouseListener(this);
 	}
 	
-	/*public PlatformIcon(String imagePath) throws GUIException{
-		super();
-	//	iconImage =(SDLSurface)image.getData();
-		//iconImage = SDLImage.load(imagePath);
-		setHeight(image.getHeight());
-		setWidth(image.getWidth());
-		
-		addMouseListener(this);
-		
-				
-	}*/
-	
+	public void addDemoActionListener(){
+		addActionListener(new ActionListener(){
+			public void action(String strEventId) throws GUIException{
+				int x = 250;
+				Area display = null;
+				try {
+					display = Screen.getScreen().getForeground();
+					while (x > 100) {
+							//300 ms is good to switch areas smoothly
+							display.setAlpha(255-x);
+							Thread.sleep(300);
+							x -= 15;
+					}
+					display.setAlpha(255);
+					Screen.getScreen().setActive(Active.FOREGROUND);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SDLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	/**
 	 * Cleans any dynamically reserved memory areas in C style 
 	 * @throws GUIException
@@ -161,8 +169,7 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 	 * MouseListener implementation - icon gets transparent when clicked
 	 */
 	public void mouseClick(int arg0, int y, int button, int count) throws GUIException {
-			setAlpha((clicked == false) ? 0 : 255);
-			clicked = !clicked;
+			generateAction();
 	}
 	
 	/**
