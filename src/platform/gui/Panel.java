@@ -51,6 +51,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	 */
 	protected SDLSurface frame;
 	
+	protected SDLSurface originalSurface;
 	/**
 	 * List of panel widgets
 	 */
@@ -110,6 +111,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		String frameName = "resource" + File.separator+ "PNG" + File.separator + this.xFormat.toString() + "x" + this.yFormat.toString() + commonFramesName;
 		
 		frame = (SDLSurface) (new Image(frameName)).getData();
+		originalSurface = (SDLSurface) (new Image(frameName)).getData();
 		setHeight(frame.getHeight());
 		setWidth(frame.getWidth());
 		
@@ -142,6 +144,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		//int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
 		
 		widgetList.add(widget);
+		
 		widget.setPosition(verticalShift, horizontalShift);
 		widget.setUpdateListener(this);
 		
@@ -152,7 +155,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 		
 		try {
-			putRegionToUpdate( new WidgetUpdate(this, new SDLRect(widget.getX() + getX(), widget.getY() + getY(),
+			updateListener.putRegionToUpdate( new WidgetUpdate(this, new SDLRect(widget.getX() + getX(), widget.getY() + getY(),
 																  widget.getWidth(), widget.getHeight() )));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -198,6 +201,12 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 		
 		panelGraphics.beginDraw();
+		try {
+			panelGraphics.drawSDLSurface(originalSurface, panelGraphics.getTarget().getRect(), panelGraphics.getTarget().getRect());
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (PlatformWidget widget : widgetList) {
 			widget.draw(panelGraphics);
 		}
@@ -214,14 +223,16 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		try {
+			graphics.drawSDLSurface(originalSurface, panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
 			graphics.drawSDLSurface(frame, panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
+			
 		} catch (SDLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 		}
 		//graphics.drawImage(frame, getX(), getY() );
 	}
-
+	
 	/**
 	 * MouseListener implementation - calls the same method on the appropriate widget
 	 */

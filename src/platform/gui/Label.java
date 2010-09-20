@@ -113,7 +113,11 @@ public class Label extends PlatformWidget implements MouseListener {
 		setHeight(height);
 		
 		if (descriptiveText.length() != 0) {
+			if ((int) (getHeight() * 0.45) > 20){
+				textFont = new CalibriFont(20, new SDLColor(10,10,10), true);
+			} else {
 			textFont = new CalibriFont((int) (getHeight() * 0.45), new SDLColor(10,10,10), true);
+			}
 		} else {
 			textFont = new CalibriFont((int) (getHeight() * 0.7), new SDLColor(10,10,10), true);
 		}
@@ -187,6 +191,7 @@ public class Label extends PlatformWidget implements MouseListener {
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		try {
+			
 			graphics.drawSDLSurface(labelSurface, labelSurface.getRect(),
 									graphics.getTarget().getRect(getX(), getY()));
 		} catch (SDLException e) {

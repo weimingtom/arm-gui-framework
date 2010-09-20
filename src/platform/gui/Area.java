@@ -84,7 +84,6 @@ public class Area extends PlatformWidget implements UpdateListener {
 							surfaceGraphics.beginDraw();
 							
 								if ((widgetToUpdate = widgetUpdateInfo.poll(5, TimeUnit.MILLISECONDS)) != null) {
-									
 									drawOriginal(widgetToUpdate.getWidgetRegion());
 									
 									if (Area.this !=  widgetToUpdate.getWidget()) {
@@ -624,7 +623,7 @@ public class Area extends PlatformWidget implements UpdateListener {
 		if (isActive == false) {
 			
 			widgetUpdateInfo.clear();
-			System.out.println(widgetUpdateInfo.isEmpty());
+			
 		}
 	}
 	/**
