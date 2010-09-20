@@ -37,7 +37,7 @@ public class GUITest2 {
 			Image.setImageLoader(imageLoader);
 				
 			screen=Screen.getScreen();
-				
+																																					
 			Area backgroundArea = new Area( new String("resource" + File.separator + "wallpapers"+ File.separator + "android-wallpapers-320-240-dailymobile008.png" ),5,4);
 		    		    			    
 			Area foregroundArea = new Area( new String("resource" + File.separator + "wallpapers" + File.separator + "black.png" ),5,5);

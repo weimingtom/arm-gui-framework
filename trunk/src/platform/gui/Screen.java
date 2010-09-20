@@ -128,7 +128,7 @@ public class Screen {
 		
 		inputSource = new SDLInput();
 		running = true;
-		active = Active.BACKGROUND;
+		
 	}
 
 	/**
@@ -190,11 +190,19 @@ public class Screen {
 	}
 
 	/**
-	 * Set which suirface should be active
+	 * Set which surface should be active
 	 * @param active surface name
 	 */
 	public void setActive(Active active) {
 		this.active = active;
+		
+		if (active == Active.BACKGROUND) {
+			background.setActive(true);
+			foreground.setActive(false);
+		} else {
+			background.setActive(false);
+			foreground.setActive(true);
+		}
 	}
 
 	/**
@@ -210,6 +218,7 @@ public class Screen {
 		this.background = background;
 		this.foreground = foreground;
 		
+		setActive(Active.BACKGROUND);
 		startEventHandling();
 	}
 

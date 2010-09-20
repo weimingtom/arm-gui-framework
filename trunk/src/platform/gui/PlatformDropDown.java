@@ -31,11 +31,13 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 		listBox.setBorderSize(1);
 		listBox.setFont(new CalibriFont(20, new SDLColor(0,0,0,0), true));
 		listBox.setBackgroundColor(new Color(255,255,255,128));
+		listBox.setWidth(getWidth());
 		
 		scrollArea = new ScrollArea();
 		scrollArea.setBorderSize(1);
 		scrollArea.setContent(listBox);
 		scrollArea.setBackgroundColor(new Color(255,255,255,128));
+		scrollArea.setWidth(getWidth());
 		
 	    super.setFont(listBox.getFont());
 	    super.setListBox(listBox);
