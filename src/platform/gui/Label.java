@@ -302,11 +302,7 @@ public class Label extends PlatformWidget implements MouseListener, ActionListen
 		}
 	}
 
-	/**
-	 * MouseListener implementation - launches the anonymous thread 
-	 * that makes an effect of text leaving the label 
-	 */
-	public void mouseClick(int x, int y, int button, int count) throws GUIException {
+	protected void moveText(){
 		new Thread(){
 			public void run(){
 				int textWidth = textFont.getWidth(descriptiveText);
@@ -334,6 +330,14 @@ public class Label extends PlatformWidget implements MouseListener, ActionListen
 				}
 			}
 		}.start();
+	}
+	/**
+	 * MouseListener implementation - launches the anonymous thread 
+	 * that makes an effect of text leaving the label 
+	 */
+	public void mouseClick(int x, int y, int button, int count) throws GUIException {
+		//generateAction();
+		moveText();
 	}
 
 	/**
@@ -403,14 +407,14 @@ public class Label extends PlatformWidget implements MouseListener, ActionListen
 				timerHandler.setRunning(true);
 			} else if(actionName.equals("pause")) {
 				timerHandler.setRunning(false);
-			} else if(actionName.equals("next") || actionName.equals("previous")){
+			} else if(actionName.equals("next") || actionName.equals("previous") || actionName.equals("ListBox selection")){
 				timerHandler.zeroTimer();
 			}
 			
 			return;
 		}
 		
-		if (actionName.equals("ListBox selection") || actionName.equals("Start")) {
+		if (actionName.equals("ListBox selection") || actionName.equals("music")) {
 			position = platDropDown.getListModel().getElementAt(platDropDown.listBox.getSelected());
 		} else if(actionName.equals("next")) {
 			platDropDown.listBox.setSelected(platDropDown.listBox.getSelected() + 1);
@@ -422,8 +426,11 @@ public class Label extends PlatformWidget implements MouseListener, ActionListen
 			} else {
 				return;
 			}
-		} else {
+		} else if ( actionName.equals("play")) {
+			moveText();
 			return;
+		}	else {
+				return;
 		}
 	
 		index = position.indexOf('-');
@@ -436,6 +443,7 @@ public class Label extends PlatformWidget implements MouseListener, ActionListen
 		
 		try {
 			updateListener.putRegionToUpdate( new WidgetUpdate( this, new SDLRect(this.getX(), this.getY(), this.getWidth(), this.getHeight())));
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

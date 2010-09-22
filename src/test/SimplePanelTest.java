@@ -42,10 +42,10 @@ public class SimplePanelTest {
 		    backgroundArea.add(panel, 5);
 		    panel.setAlpha(210);
 		    
-		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")));
+		    PlatformIcon icon = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube_small.png")),"");
 		    panel.add(icon, 3);
 		    
-		    PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube.png")));
+		    PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "youtube.png")),"");
 		    backgroundArea.add(icon2,0);
 		    
 			screen.setAreas(backgroundArea, foregroundArea);
