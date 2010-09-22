@@ -24,6 +24,7 @@ import java.util.List;
 import platform.gui.Area;
 import platform.gui.PlatformIcon;
 import platform.gui.Screen;
+import platform.util.Active;
 import platform.util.UpdateListener;
 import platform.util.WidgetUpdate;
 import sdljava.SDLException;
@@ -173,9 +174,19 @@ public class CurveMotionHandler extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			x -= 5;
+			x -= 15;
 		}
 		display.setAlpha(255);
+		try {
+			if(display.equals(Screen.getScreen().getBackground()))
+			Screen.getScreen().setActive(Active.BACKGROUND);
+			
+			else
+			Screen.getScreen().setActive(Active.FOREGROUND);	
+		} catch (SDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -54,18 +54,20 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 	 */
 	private boolean drawModified=false;
 	
+	protected boolean hasAppeared = false;
 	/**
 	 * Constructor
 	 * @param image
 	 * 			icon image
 	 * @throws GUIException
 	 */
-	public PlatformIcon(Image image) throws GUIException{
+	public PlatformIcon(Image image, String actionName) throws GUIException{
 		super();
 		iconImage = image;
 		setHeight(image.getHeight());
 		setWidth(image.getWidth());
 
+		this.m_strEventId = actionName;
 		addMouseListener(this);
 	}
 	
@@ -98,7 +100,9 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 	public void addIconDemoActionListener2(){
 		addActionListener(new ActionListener(){
 			public void action(String strEventId) throws GUIException{
-				for( int alpha = 55 ; alpha < 200 ; alpha += 40 ){
+				
+				if( !PlatformIcon.this.hasAppeared ) {
+					for( int alpha = 55 ; alpha < 200 ; alpha += 40 ){
 					try {
 						for( PlatformWidget widget : Screen.getScreen().getBackground().getWidgetMap().keySet() ){
 							widget.setAlpha(alpha);
@@ -112,7 +116,25 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 						e.printStackTrace();
 					}
 					
-				}
+					} 
+				}	else {
+					for( int alpha = 201 ; alpha > 0 ; alpha -= 40 ){
+						try {
+							for( PlatformWidget widget : Screen.getScreen().getBackground().getWidgetMap().keySet() ){
+								widget.setAlpha(alpha);
+							}
+							Thread.sleep(300);
+						} catch (SDLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	
+					}
+				}	
+				PlatformIcon.this.hasAppeared = !PlatformIcon.this.hasAppeared;
 			}					
 		});
 	}

@@ -56,8 +56,8 @@ public class GUITest2 {
 		    TextField googleSearch = new TextField("google");
 		    backgroundArea.add(googleSearch,0);
 		    
-		    PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "settings.png")));
-			PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "messaging.png")));	
+		    PlatformIcon icon1 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "settings.png")), "");
+			PlatformIcon icon2 = new PlatformIcon(new Image(new String("resource" + File.separator + "images" + File.separator + "messaging.png")), "");	
 			
 			backgroundArea.add(icon1, 10);
 			backgroundArea.add(icon2, 11);
