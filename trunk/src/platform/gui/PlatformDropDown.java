@@ -56,6 +56,7 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 	public void mousePress(int x, int y, int button) throws GUIException {
 		// TODO Auto-generated method stub			
 		try {
+			m_strEventId = new String("ListBox selection");
 			logic();
 			
 			if (button == MouseInput.LEFT && hasMouse() && !m_bDroppedDown) {
@@ -71,12 +72,14 @@ public class PlatformDropDown extends DropDown implements UpdateListener, Mainta
 				putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), super.getWidth(), super.getHeight())));
 				
 				Thread.sleep(300);
+				generateAction();
 				putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), width, height )));
 				
 			} else if (!hasMouse()) {
 				int width=super.getWidth();
 				int height= super.getHeight();
 				foldUp();
+				generateAction();
 				putRegionToUpdate(new WidgetUpdate(this, new SDLRect(getX(), getY(), super.getWidth(), super.getHeight())));
 				
 				Thread.sleep(300);

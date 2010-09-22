@@ -69,7 +69,7 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 		addMouseListener(this);
 	}
 	
-	public void addDemoActionListener(){
+	public void addIconDemoActionListener(){
 		addActionListener(new ActionListener(){
 			public void action(String strEventId) throws GUIException{
 				int x = 250;
@@ -92,6 +92,28 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 					e.printStackTrace();
 				}
 			}
+		});
+	}
+	
+	public void addIconDemoActionListener2(){
+		addActionListener(new ActionListener(){
+			public void action(String strEventId) throws GUIException{
+				for( int alpha = 55 ; alpha < 200 ; alpha += 40 ){
+					try {
+						for( PlatformWidget widget : Screen.getScreen().getBackground().getWidgetMap().keySet() ){
+							widget.setAlpha(alpha);
+						}
+						Thread.sleep(300);
+					} catch (SDLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}					
 		});
 	}
 	/**

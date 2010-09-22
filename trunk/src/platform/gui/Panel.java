@@ -90,7 +90,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	/**
 	 * Shift added to every widget for correct positioning
 	 */
-	private final int verticalPixelShift = 10;
+	private final int verticalPixelShift = 12;
 	
 	/**
 	 * Constructor 
@@ -123,7 +123,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	}
 	
 	/**
-	 * Adds widget on the position specified by offset from the (0,0) cell
+	 * Adds widget on the position specified by offset from the (0,0) cel85
 	 * @param widget
 	 * 			widget to add
 	 * @param offset
@@ -138,7 +138,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 			throw new GUIException("Offset out of range for the panel.");
 		}
 		int verticalShift = (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + verticalPixelShift;  
-		int horizontalShift = (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + (getHeight()- widget.getHeight()) / 2;
+		int horizontalShift = (offset / xFormat.intValue()) * ( (int) (getHeight() * 0.8) / yFormat.intValue()) + (getHeight()/ yFormat.intValue() - widget.getHeight()) / 2 + 2;
 		
 		//int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
 		//int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
@@ -163,6 +163,37 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 		}
 	}
 	
+	public void add(PlatformWidget widget, float offset) throws GUIException {
+		if (widget == null) {
+			throw new GUIException("Widget doesn't exist");
+		}  else if ( offset > xFormat.intValue() * yFormat.intValue() - 1 ){
+			throw new GUIException("Offset out of range for the panel.");
+		}
+		float verticalShift = (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + verticalPixelShift;  
+		int horizontalShift = ((int) offset / xFormat.intValue()) * ( (int) (getHeight() * 0.8) / yFormat.intValue()) + (getHeight()/ yFormat.intValue() - widget.getHeight()) / 2 ;
+		
+		//int horizontalShift = getX() + (offset % xFormat.intValue()) * ( getWidth() / xFormat.intValue() ) + horizontalPixelShift;  
+		//int verticalShift = getY() + (offset / xFormat.intValue()) * ( getHeight() / yFormat.intValue()) + verticalPixelShift;
+		
+		widgetList.add(widget);
+		
+		widget.setPosition((int)verticalShift, horizontalShift);
+		widget.setUpdateListener(this);
+		
+		if (this.getFocusHandler() != null) {	
+			widget.setFocusHandler(getFocusHandler());
+			widget.setFocusable(true);
+			widget.requestFocus();
+		}
+		
+		try {
+			updateListener.putRegionToUpdate( new WidgetUpdate(this, new SDLRect(widget.getX() + getX(), widget.getY() + getY(),
+																  widget.getWidth(), widget.getHeight() )));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Cleans any dynamically reserved memory areas in C style 
 	 * @throws GUIException
@@ -193,6 +224,7 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	public void draw(UnifiedGraphics graphics) throws GUIException {
 		if (alphaSet) {
 			try {
+				//originalSurface.setAlpha(Screen._alphaFlags, alpha);
 				frame.setAlpha(Screen._alphaFlags, alpha);
 			} catch (SDLException e) {
 				// TODO Auto-generated catch block
@@ -223,7 +255,6 @@ public class Panel extends PlatformWidget implements MouseListener, UpdateListen
 	@Override
 	public void drawBorder(UnifiedGraphics graphics) throws GUIException {
 		try {
-			graphics.drawSDLSurface(originalSurface, panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
 			graphics.drawSDLSurface(frame, panelGraphics.getTarget().getRect(), graphics.getTarget().getRect(getX(), getY()));
 			
 		} catch (SDLException e) {

@@ -249,19 +249,20 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 	public void mouseClick(int x, int y, int button, int count) throws GUIException {
 		try {
 			if (m_bVisible) {
+				m_bVisible = !m_bVisible;
+				new TransitionEffectHandler(this, updateListener, direction, m_bVisible );
+				
 				for (Widget widget : widgetList) {
 					
 					if (widget instanceof MouseListener) {
 						if( x >= widget.getX() + getX() && x<= widget.getX() + widget.getWidth() + getX() 
 								&& y>= widget.getY() + getY() && y<= widget.getY() + widget.getHeight() + getY()){
 							((MouseListener) widget).mouseClick(x, y, button, count);
-							return;
+							//return;
 						}
 					}
 				}
-				m_bVisible = !m_bVisible;
-				new TransitionEffectHandler(this, updateListener, direction, m_bVisible );
-			
+							
 				//TODO is that safe at all platforms? we 're waiting till TransitionHandler finishes his job
 				Thread.sleep(300);
 				putRegionToUpdate( new WidgetUpdate (this,new SDLRect(getX(),getY(),background.getWidth(), background.getHeight() ) ) );		
@@ -341,5 +342,11 @@ public class HiddenMenu extends PlatformWidget implements MouseListener, UpdateL
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
 		SDLRect region = updateInfo.getWidgetRegion();
 		updateListener.putRegionToUpdate(new WidgetUpdate(this,new SDLRect(region.x + getX(), region.y + getY(), region.width, region.height)));
+	}
+	
+	@Override
+	public void setAlpha(int alphaIndex) {
+		// TODO Auto-generated method stub
+		//Nothing in here
 	}
 }
