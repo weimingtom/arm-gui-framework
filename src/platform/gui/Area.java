@@ -534,6 +534,9 @@ public class Area extends PlatformWidget implements UpdateListener {
 	 * 			<code> WidgetUpdate </code>
 	 */
 	public void putRegionToUpdate(WidgetUpdate updateInfo) throws InterruptedException {
+		if (isActive == false) {
+			return;
+		}
 		widgetUpdateInfo.offer(updateInfo, 50L, TimeUnit.MILLISECONDS);
 	}
 
@@ -620,11 +623,6 @@ public class Area extends PlatformWidget implements UpdateListener {
 	public void setActive(boolean value){
 		isActive = value;
 		
-		if (isActive == false) {
-			
-			widgetUpdateInfo.clear();
-			
-		}
 	}
 	/**
 	 * Starts handler responsible for updating screen on request
