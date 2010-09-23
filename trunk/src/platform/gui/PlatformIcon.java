@@ -74,15 +74,15 @@ public class PlatformIcon extends PlatformWidget implements MouseListener {
 	public void addIconDemoActionListener(){
 		addActionListener(new ActionListener(){
 			public void action(String strEventId) throws GUIException{
-				int x = 250;
+				int x = 225;
 				Area display = null;
 				try {
 					display = Screen.getScreen().getForeground();
-					while (x > 100) {
+					while (x > 125) {
 							//300 ms is good to switch areas smoothly
 							display.setAlpha(255-x);
-							Thread.sleep(300);
-							x -= 15;
+							Thread.sleep(250);
+							x -= 25;
 					}
 					display.setAlpha(255);
 					Screen.getScreen().setActive(Active.FOREGROUND);

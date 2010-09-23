@@ -113,7 +113,7 @@ public class EventCapturer extends Thread{
 							eventDispatcher.notify();
 						}
 					}
-					Thread.sleep(100);
+					Thread.sleep(200);
 			}
 		} catch (SDLException e) {
 			// TODO Auto-generated catch block
