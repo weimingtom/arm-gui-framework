@@ -155,7 +155,7 @@ public class EventDispatcher extends Thread {
 					}
 					active.getFocusHandler().applyChanges();
 				}
-				Thread.sleep(100);
+				Thread.sleep(200);
 			}
 		} catch(InterruptedException e) {
 			e.printStackTrace();

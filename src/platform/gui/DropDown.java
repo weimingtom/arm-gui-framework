@@ -79,17 +79,7 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 	 */
 	public DropDown(ListModel listModel, ScrollArea scrollArea, ListBox listBox) throws GUIException {
 		super();
-		int maxWidth = 0;
-		
-		for(int i = 0; i < listModel.getNumberOfElements(); i++){
-			int stringWidth;
-			
-			stringWidth = getFont().getWidth(listModel.getElementAt(i));
-			
-			maxWidth = ( maxWidth > stringWidth) ? maxWidth : stringWidth;
-			
-		}
-		setWidth(maxWidth);
+		setWidth(150);
 		setFocusable(true);
 		m_bDroppedDown = false;
 		m_bPushed = false;
@@ -167,7 +157,7 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 				setHeight(h);
 			} else {
 				setHeight(listBoxHeight + h2 + 2);
-				m_scrollArea.setHeight(listBoxHeight / 2);
+				m_scrollArea.setHeight((int)(listBoxHeight / 2));
 			}
 		}
 
@@ -206,6 +196,7 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 	 */
 	
 	public void draw(UnifiedGraphics graphics) throws GUIException {
+		
 		if (null == m_scrollArea || null == m_scrollArea.getContent()) {
 			throw new GUIException("ScrollArea or ListBox is NULL");
 		}
@@ -303,6 +294,7 @@ public class DropDown extends PlatformWidget implements MouseListener, KeyListen
 			shadowColor = faceColor.add(0x303030);
 			shadowColor.a = alpha;
 			offset = 1;
+			m_bPushed =!m_bPushed;
 		} else {
 			faceColor = getBaseColor();
 			faceColor.a = alpha;
