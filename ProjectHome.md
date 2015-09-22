@@ -1,0 +1,1 @@
+This project's purpose is to develop and test the performance of Java GUI based on sdljava on omap5912 board.
